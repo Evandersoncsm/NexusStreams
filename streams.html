@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Streams - Todos os Filmes Populares</title>
+    <title>Nexus Streams - Filmes e Séries Populares</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,123 +14,48 @@
             color: #e1e1e1;
             font-family: 'Inter', sans-serif;
         }
+        /* Estilos dos Cards (mantidos) */
         .content-card {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            background-color: #1f2937;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); background-color: #1f2937; border-radius: 0.5rem;
+            overflow: hidden; transform: perspective(1px) translateZ(0);
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
-            border: 1px solid transparent;
-            display: flex; /* Para alinhar conteúdo interno */
-            flex-direction: column; /* Empilha imagem e conteúdo */
+            border: 1px solid transparent; display: flex; flex-direction: column;
         }
-        .content-card:hover {
-            transform: scale(1.03); /* Reduzido um pouco para muitos itens */
-            box-shadow: 0 8px 15px rgba(229, 9, 20, 0.3);
-            border-color: rgba(229, 9, 20, 0.5);
-        }
-        .content-card img {
-            aspect-ratio: 2/3;
-            object-fit: cover;
-            width: 100%;
-            height: auto;
-        }
+        .content-card:hover { transform: scale(1.03); box-shadow: 0 8px 15px rgba(229, 9, 20, 0.3); border-color: rgba(229, 9, 20, 0.5); }
+        .content-card img { aspect-ratio: 2/3; object-fit: cover; width: 100%; height: auto; }
+        .card-content { background-color: rgba(15, 15, 15, 0.9); padding: 0.75rem; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { color: #e1e1e1; transition: color 0.3s ease-in-out; font-size: 0.875rem; font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 0.5rem; }
+        .content-card:hover .card-title { color: #ffffff; }
+        .card-buttons { margin-top: auto; display: flex; gap: 0.5rem; justify-content: center; }
+        .btn-card { background-color: #374151; color: #e1e1e1; font-size: 0.75rem; font-weight: 500; padding: 0.25rem 0.5rem; border-radius: 0.25rem; border: 1px solid #4b5563; transition: background-color 0.2s ease, color 0.2s ease; cursor: pointer; white-space: nowrap; }
+        .btn-card:hover { background-color: #4b5563; color: #ffffff; }
+        .btn-card svg { display: inline-block; width: 0.75rem; height: 0.75rem; margin-right: 0.25rem; vertical-align: text-bottom; }
 
-        .card-content {
-             background-color: rgba(15, 15, 15, 0.9);
-             padding: 0.75rem; /* 12px */
-             text-align: center;
-             flex-grow: 1; /* Ocupa espaço restante */
-             display: flex;
-             flex-direction: column;
-             justify-content: space-between; /* Empurra botões para baixo */
-        }
-        .card-title {
-            color: #e1e1e1;
-            transition: color 0.3s ease-in-out;
-            font-size: 0.875rem; /* 14px */
-            font-weight: 600; /* semibold */
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-bottom: 0.5rem; /* Espaço antes dos botões */
-        }
-         .content-card:hover .card-title { color: #ffffff; }
+        /* Estilos Botões de Gênero (mantidos) */
+        .btn-genre { transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease; border: 1px solid #4b5563; }
+        .btn-genre:hover { background-color: #374151; transform: translateY(-1px); }
+        .btn-genre.active { background-color: #dc2626; color: #ffffff; border-color: #dc2626; font-weight: 600; }
 
-        .card-buttons {
-            margin-top: auto; /* Empurra para baixo */
-            display: flex;
-            gap: 0.5rem; /* Espaço entre botões */
-            justify-content: center; /* Centraliza botões */
-        }
-        .btn-card {
-            background-color: #374151; /* Cinza escuro */
-            color: #e1e1e1;
-            font-size: 0.75rem; /* 12px */
-            font-weight: 500;
-            padding: 0.25rem 0.5rem; /* Pequeno padding */
-            border-radius: 0.25rem; /* Bordas arredondadas */
-            border: 1px solid #4b5563;
-            transition: background-color 0.2s ease, color 0.2s ease;
+        /* Estilos Navegação */
+        .nav-link {
+            padding: 0.5rem 1rem; border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 500; /* medium */
             cursor: pointer;
-            white-space: nowrap;
         }
-        .btn-card:hover {
-            background-color: #4b5563;
-            color: #ffffff;
-        }
-        .btn-card svg {
-             display: inline-block;
-             width: 0.75rem; /* 12px */
-             height: 0.75rem; /* 12px */
-             margin-right: 0.25rem;
-             vertical-align: text-bottom;
-        }
+        .nav-link:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .nav-link.active { background-color: #dc2626; /* red-600 */ color: #ffffff; }
 
-
-        .btn-genre {
-            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-            border: 1px solid #4b5563;
-        }
-        .btn-genre:hover {
-             background-color: #374151;
-             transform: translateY(-1px);
-        }
-        .btn-genre.active {
-            background-color: #dc2626;
-            color: #ffffff;
-            border-color: #dc2626;
-            font-weight: 600;
-        }
-
-        /* Estilos da barra de rolagem */
+        /* Barra de Rolagem (mantido) */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background-color: #404040; border-radius: 4px; border: 2px solid #1a1a1a; }
         ::-webkit-scrollbar-thumb:hover { background-color: #555; }
 
-        /* Indicador de carregamento */
-        .loader {
-            border: 4px solid #374151;
-            border-left-color: #e50914;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 40px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        #loading-message {
-             text-align: center;
-             margin-top: 1rem;
-             font-style: italic;
-             color: #9ca3af; /* gray-400 */
-        }
+        /* Loading (mantido) */
+        .loader { border: 4px solid #374151; border-left-color: #e50914; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 40px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #loading-message-movies, #loading-message-series { text-align: center; margin-top: 1rem; font-style: italic; color: #9ca3af; }
     </style>
 </head>
 <body class="antialiased">
@@ -138,17 +63,19 @@
     <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
         <nav class="container mx-auto px-0 sm:px-6 flex flex-wrap justify-between items-center">
             <a href="#" class="text-2xl sm:text-3xl font-bold text-red-600 tracking-wide hover:text-red-500 transition duration-300" onclick="window.location.reload();">Nexus Streams</a>
-            <a href="index.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Home</a>
-                <a href="creditos.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Créditos</a>
+            <div class="flex items-center space-x-2 sm:space-x-4 mt-2 sm:mt-0">
+                <button id="nav-movies" class="nav-link text-gray-300 active">Filmes</button>
+                <button id="nav-series" class="nav-link text-gray-300">Séries</button>
+                <a href="creditos.html" class="nav-link text-gray-300 hidden sm:inline-block">Créditos</a> </div>
         </nav>
     </header>
 
     <section class="container mx-auto px-4 sm:px-6 py-8 md:py-12 text-center bg-gray-900/30 rounded-lg mb-10 mt-4 sm:mb-12 shadow-lg border border-gray-800/50">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Filmes Populares</h1>
-        <p class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Explore uma lista extensa de filmes. Use a busca ou filtros de gênero.</p>
+        <h1 id="main-title" class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Filmes Populares</h1>
+        <p id="main-subtitle" class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Explore uma lista extensa de filmes. Use a busca ou filtros de gênero.</p>
         <div class="max-w-lg mx-auto px-2 sm:px-0">
              <div class="relative">
-                  <input type="search" id="search-input" placeholder="Buscar filmes pelo título..." class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
+                  <input type="search" id="search-input" placeholder="Buscar pelo título..." class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
                   <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
              </div>
         </div>
@@ -156,289 +83,350 @@
 
     <main class="container mx-auto px-4 sm:px-6">
 
-        <section id="genre-filters" class="mb-8 sm:mb-10">
-            <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Filtrar por Gênero</h2>
-            <div id="genre-buttons-container" class="flex flex-wrap gap-2 sm:gap-3">
-                <p id="loading-genres" class="text-gray-400">Carregando gêneros...</p>
-            </div>
-        </section>
-
-        <section id="results-section" class="mb-12 sm:mb-16">
-            <h2 id="results-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Carregando Filmes...</h2>
-            <div id="loading-indicator" class="col-span-full">
-                 <div class="loader"></div>
-                 <p id="loading-message">Buscando filmes populares... Isso pode levar um momento.</p>
-            </div>
-            <div id="results-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mt-6" style="display: none;">
+        <div id="movies-section">
+            <section id="genre-filters-movies" class="mb-8 sm:mb-10">
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Filtrar Filme por Gênero</h2>
+                <div id="genre-buttons-container-movies" class="flex flex-wrap gap-2 sm:gap-3">
+                    <p id="loading-genres-movies" class="text-gray-400">Carregando gêneros...</p>
                 </div>
-             <p id="no-results" class="text-gray-400 text-center mt-8 hidden">Nenhum filme encontrado com os critérios selecionados.</p>
-        </section>
+            </section>
 
-        </main>
+            <section id="results-section-movies" class="mb-12 sm:mb-16">
+                <h2 id="results-title-movies" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Carregando Filmes...</h2>
+                <div id="loading-indicator-movies" class="col-span-full">
+                     <div class="loader"></div>
+                     <p id="loading-message-movies">Buscando filmes populares...</p>
+                </div>
+                <div id="results-container-movies" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mt-6" style="display: none;">
+                    </div>
+                 <p id="no-results-movies" class="text-gray-400 text-center mt-8 hidden">Nenhum filme encontrado.</p>
+            </section>
+        </div>
+
+        <div id="series-section" style="display: none;"> <section id="genre-filters-series" class="mb-8 sm:mb-10">
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-white border-l-4 border-blue-600 pl-3 sm:pl-4">Filtrar Série por Gênero</h2> <div id="genre-buttons-container-series" class="flex flex-wrap gap-2 sm:gap-3">
+                    <p id="loading-genres-series" class="text-gray-400">Carregando gêneros...</p>
+                </div>
+            </section>
+
+            <section id="results-section-series" class="mb-12 sm:mb-16">
+                <h2 id="results-title-series" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-600 pl-3 sm:pl-4">Carregando Séries...</h2> <div id="loading-indicator-series" class="col-span-full">
+                     <div class="loader"></div>
+                     <p id="loading-message-series">Buscando séries populares...</p>
+                </div>
+                <div id="results-container-series" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mt-6" style="display: none;">
+                    </div>
+                 <p id="no-results-series" class="text-gray-400 text-center mt-8 hidden">Nenhuma série encontrada.</p>
+            </section>
+        </div>
+
+    </main>
 
     <footer class="bg-black mt-12 sm:mt-16 py-6 sm:py-8 border-t border-gray-800">
         <div class="container mx-auto px-4 sm:px-6 text-center text-gray-500 text-xs sm:text-sm">
-            &copy; <span id="current-year"></span> Nexus Streams. Todos os direitos reservados. Dados fornecidos por <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-red-500">TMDb</a>.
+            © <span id="current-year"></span> Nexus Streams. Todos os direitos reservados. Dados fornecidos por <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-red-500">TMDb</a>.
         </div>
     </footer>
 
     <script>
         // --- Constantes Globais ---
         const TMDb_API_BASE_URL = 'https://api.themoviedb.org/3';
-        const TMDb_API_URL_GENRES = `${TMDb_API_BASE_URL}/genre/movie/list?language=pt-BR`;
+        const TMDb_API_URL_GENRES_MOVIE = `${TMDb_API_BASE_URL}/genre/movie/list?language=pt-BR`;
+        const TMDb_API_URL_GENRES_TV = `${TMDb_API_BASE_URL}/genre/tv/list?language=pt-BR`; // Novo
         const TMDb_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
         const TMDb_PLACEHOLDER_IMAGE = 'https://placehold.co/500x750/374151/9CA3AF?text=Poster+Indispon%C3%ADvel';
         const TMDb_OPTIONS = {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                // IMPORTANTE: Substitua pelo seu Bearer Token V4 ou Chave V3 (Bearer)
                 Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMGU4NjljODc4YzVlYzQ0OTg0NmNjNjhmNTBkOWMwZCIsIm5iZiI6MTc0NTI1OTc2OC4xNTIsInN1YiI6IjY4MDY4Y2Y4YjY1OTgyMjgxMmVlNjhkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Owiv7fvIAoRGKoNE7erZsAypbofV2kJcDhdWmZ4-LX8' // Substitua pelo seu Token real
             }
         };
-        // DEFINE QUANTAS PÁGINAS BUSCAR - CUIDADO AO AUMENTAR!
-        const PAGES_TO_FETCH = 5; // Busca 5 páginas = 100 filmes. Aumente com cautela! (Máx 500 pela API)
+        const PAGES_TO_FETCH = 5; // Busca 5 páginas = 100 itens. Aumente com MUITA cautela!
 
         // --- Variáveis de Estado ---
-        let genres = [];
-        let genreMap = {};
-        let allFetchedMovies = []; // Armazena TODOS os filmes buscados
-        let currentSearchTerm = '';
-        let selectedGenreId = null;
-        let isLoading = false;
+        let currentView = 'movies'; // 'movies' ou 'series'
+        let isLoading = { movies: false, series: false }; // Controla loading por seção
         let searchTimeout = null;
 
+        // Estado para Filmes
+        let movieGenres = [];
+        let movieGenreMap = {};
+        let allFetchedMovies = [];
+        let currentMovieSearchTerm = '';
+        let selectedMovieGenreId = null;
+
+        // Estado para Séries (NOVO)
+        let seriesGenres = [];
+        let seriesGenreMap = {};
+        let allFetchedSeries = [];
+        let currentSeriesSearchTerm = '';
+        let selectedSeriesGenreId = null;
+
+
         // --- Elementos do DOM ---
-        const resultsContainer = document.getElementById('results-container');
-        const resultsTitle = document.getElementById('results-title');
-        const genreButtonsContainer = document.getElementById('genre-buttons-container');
-        const loadingGenresMsg = document.getElementById('loading-genres');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const loadingMessage = document.getElementById('loading-message');
-        const noResultsMsg = document.getElementById('no-results');
+        // Gerais
         const searchInput = document.getElementById('search-input');
         const yearSpan = document.getElementById('current-year');
+        const mainTitle = document.getElementById('main-title');
+        const mainSubtitle = document.getElementById('main-subtitle');
+        const navMoviesBtn = document.getElementById('nav-movies');
+        const navSeriesBtn = document.getElementById('nav-series');
+        const moviesSectionDiv = document.getElementById('movies-section');
+        const seriesSectionDiv = document.getElementById('series-section');
+
+        // Filmes
+        const resultsContainerMovies = document.getElementById('results-container-movies');
+        const resultsTitleMovies = document.getElementById('results-title-movies');
+        const genreButtonsContainerMovies = document.getElementById('genre-buttons-container-movies');
+        const loadingGenresMsgMovies = document.getElementById('loading-genres-movies');
+        const loadingIndicatorMovies = document.getElementById('loading-indicator-movies');
+        const loadingMessageMovies = document.getElementById('loading-message-movies');
+        const noResultsMsgMovies = document.getElementById('no-results-movies');
+
+        // Séries
+        const resultsContainerSeries = document.getElementById('results-container-series');
+        const resultsTitleSeries = document.getElementById('results-title-series');
+        const genreButtonsContainerSeries = document.getElementById('genre-buttons-container-series');
+        const loadingGenresMsgSeries = document.getElementById('loading-genres-series');
+        const loadingIndicatorSeries = document.getElementById('loading-indicator-series');
+        const loadingMessageSeries = document.getElementById('loading-message-series');
+        const noResultsMsgSeries = document.getElementById('no-results-series');
 
         // --- Funções de Busca na API ---
 
-        /** Busca lista de gêneros de filmes */
-        async function fetchGenres() {
-            console.log("Buscando gêneros...");
-            if (loadingGenresMsg) loadingGenresMsg.style.display = 'block';
+        /** Busca lista de gêneros (genérica) */
+        async function fetchGenres(type = 'movie') {
+            const url = type === 'movie' ? TMDb_API_URL_GENRES_MOVIE : TMDb_API_URL_GENRES_TV;
+            const loadingMsgElement = type === 'movie' ? loadingGenresMsgMovies : loadingGenresMsgSeries;
+            console.log(`Buscando gêneros de ${type}...`);
+            if (loadingMsgElement) loadingMsgElement.style.display = 'block';
+
             try {
-                const response = await fetch(TMDb_API_URL_GENRES, TMDb_OPTIONS);
-                if (!response.ok) throw new Error(`Erro HTTP ${response.status} ao buscar gêneros`);
+                const response = await fetch(url, TMDb_OPTIONS);
+                if (!response.ok) throw new Error(`Erro HTTP ${response.status} ao buscar gêneros de ${type}`);
                 const data = await response.json();
                 if (data.genres && data.genres.length > 0) {
-                    genres = data.genres;
-                    genres.forEach(genre => { genreMap[genre.id] = genre.name; });
-                    console.log("Gêneros carregados:", genres);
-                    displayGenreFilters();
-                    if (loadingGenresMsg) loadingGenresMsg.style.display = 'none';
+                    if (type === 'movie') {
+                        movieGenres = data.genres;
+                        movieGenres.forEach(genre => { movieGenreMap[genre.id] = genre.name; });
+                        displayGenreFilters('movie');
+                    } else {
+                        seriesGenres = data.genres;
+                        seriesGenres.forEach(genre => { seriesGenreMap[genre.id] = genre.name; });
+                        displayGenreFilters('series');
+                    }
+                    console.log(`Gêneros de ${type} carregados.`);
+                    if (loadingMsgElement) loadingMsgElement.style.display = 'none';
                 } else {
-                    console.warn('Nenhum gênero encontrado.');
-                    if (loadingGenresMsg) loadingGenresMsg.textContent = 'Não foi possível carregar gêneros.';
+                    console.warn(`Nenhum gênero encontrado para ${type}.`);
+                    if (loadingMsgElement) loadingMsgElement.textContent = `Não foi possível carregar gêneros de ${type}.`;
                 }
             } catch (error) {
-                console.error(`Falha ao buscar/processar gêneros:`, error);
-                if (loadingGenresMsg) {
-                     loadingGenresMsg.textContent = 'Erro ao carregar gêneros.';
-                     loadingGenresMsg.classList.add('text-red-500');
+                console.error(`Falha ao buscar/processar gêneros de ${type}:`, error);
+                if (loadingMsgElement) {
+                     loadingMsgElement.textContent = `Erro ao carregar gêneros de ${type}.`;
+                     loadingMsgElement.classList.add('text-red-500');
                 }
             }
         }
 
        /**
-        * Busca MÚLTIPLAS PÁGINAS de filmes populares ou resultados de busca/gênero.
-        * Agrega todos os resultados em `allFetchedMovies`.
+        * Busca MÚLTIPLAS PÁGINAS de conteúdo (filmes ou séries).
         */
-       async function fetchAllMovies() {
-            if (isLoading) return;
-            isLoading = true;
-            showLoading(true);
-            resultsContainer.style.display = 'none'; // Esconde container enquanto carrega TUDO
-            allFetchedMovies = []; // Limpa lista anterior
-            let currentFetchedPage = 1;
-            let totalFetchedPages = 0; // Será definido pela primeira chamada
+       async function fetchAllContent(type = 'movie') {
+            const isLoadingFlag = isLoading[type];
+            if (isLoadingFlag) return;
+            isLoading[type] = true;
+
+            const resultsContainer = type === 'movie' ? resultsContainerMovies : resultsContainerSeries;
+            const resultsTitleElement = type === 'movie' ? resultsTitleMovies : resultsTitleSeries;
+            const loadingIndicatorElement = type === 'movie' ? loadingIndicatorMovies : loadingIndicatorSeries;
+            const loadingMessageElement = type === 'movie' ? loadingMessageMovies : loadingMessageSeries;
+            const noResultsElement = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
+            let allFetchedContent = type === 'movie' ? [] : []; // Limpa o array correto
+            let searchTerm = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
+            let selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+            const genreMap = type === 'movie' ? movieGenreMap : seriesGenreMap;
+
+            showLoading(true, type);
+            resultsContainer.style.display = 'none';
+
             let fetchPromises = [];
             let endpoint = '';
             let queryParams = { language: 'pt-BR' };
+            const contentTypeText = type === 'movie' ? 'Filmes' : 'Séries';
+            const singularTypeText = type === 'movie' ? 'filme' : 'série';
 
             try {
-                if (currentSearchTerm) {
-                    resultsTitle.textContent = `Buscando por: "${currentSearchTerm}"...`;
-                    loadingMessage.textContent = `Procurando por "${currentSearchTerm}"...`;
-                    endpoint = `${TMDb_API_BASE_URL}/search/movie`;
-                    queryParams.query = currentSearchTerm;
+                if (searchTerm) {
+                    resultsTitleElement.textContent = `Buscando ${contentTypeText} por: "${searchTerm}"...`;
+                    loadingMessageElement.textContent = `Procurando por "${searchTerm}"...`;
+                    endpoint = `${TMDb_API_BASE_URL}/search/${type === 'movie' ? 'movie' : 'tv'}`;
+                    queryParams.query = searchTerm;
                     queryParams.include_adult = 'false';
                 } else if (selectedGenreId) {
                      const genreName = genreMap[selectedGenreId] || 'gênero selecionado';
-                     resultsTitle.textContent = `Buscando filmes de ${genreName}...`;
-                     loadingMessage.textContent = `Carregando filmes de ${genreName}...`;
-                    endpoint = `${TMDb_API_BASE_URL}/discover/movie`;
+                     resultsTitleElement.textContent = `Buscando ${contentTypeText} de ${genreName}...`;
+                     loadingMessageElement.textContent = `Carregando ${contentTypeText} de ${genreName}...`;
+                    endpoint = `${TMDb_API_BASE_URL}/discover/${type === 'movie' ? 'movie' : 'tv'}`;
                     queryParams.with_genres = selectedGenreId.toString();
                     queryParams.sort_by = 'popularity.desc';
                 } else {
-                    resultsTitle.textContent = `Buscando Filmes Populares...`;
-                     loadingMessage.textContent = `Carregando as primeiras ${PAGES_TO_FETCH} páginas de filmes populares...`;
-                    endpoint = `${TMDb_API_BASE_URL}/movie/popular`;
+                    resultsTitleElement.textContent = `Buscando ${contentTypeText} Populares...`;
+                    loadingMessageElement.textContent = `Carregando as primeiras ${PAGES_TO_FETCH} páginas de ${contentTypeText.toLowerCase()} populares...`;
+                    endpoint = `${TMDb_API_BASE_URL}/${type === 'movie' ? 'movie' : 'tv'}/popular`;
                 }
 
-                console.log(`Iniciando busca - Endpoint: ${endpoint}, Páginas: ${PAGES_TO_FETCH}`);
+                console.log(`Iniciando busca ${type} - Endpoint: ${endpoint}, Páginas: ${PAGES_TO_FETCH}`);
 
-                // Faz a primeira chamada para saber o total de páginas (se necessário)
-                // e já iniciar o processo.
                 const firstPageParams = new URLSearchParams({...queryParams, page: '1' });
                 const firstResponse = await fetch(`${endpoint}?${firstPageParams.toString()}`, TMDb_OPTIONS);
-                 if (!firstResponse.ok) throw new Error(`Erro HTTP ${firstResponse.status} na página 1`);
-                 const firstData = await firstResponse.json();
-                 totalFetchedPages = firstData.total_pages || 0;
-                 if (firstData.results) {
-                     allFetchedMovies.push(...firstData.results);
-                 }
-                 console.log(`Página 1 carregada. Total de páginas disponíveis: ${totalFetchedPages}`);
+                if (!firstResponse.ok) throw new Error(`Erro HTTP ${firstResponse.status} na página 1`);
+                const firstData = await firstResponse.json();
+                let totalFetchedPages = firstData.total_pages || 0;
+                if (firstData.results) {
+                    allFetchedContent.push(...firstData.results);
+                }
+                console.log(`Página 1 de ${type} carregada. Total: ${totalFetchedPages}`);
 
-                 // Calcula quantas páginas restantes buscar (limitado por PAGES_TO_FETCH e total real)
-                 const remainingPagesToFetch = Math.min(PAGES_TO_FETCH, totalFetchedPages) - 1;
+                const remainingPagesToFetch = Math.min(PAGES_TO_FETCH, totalFetchedPages) - 1;
 
-                // Cria Promises para buscar as páginas restantes em paralelo (com moderação)
-                 if (remainingPagesToFetch > 0) {
-                     for (let page = 2; page <= remainingPagesToFetch + 1; page++) {
-                         const pageParams = new URLSearchParams({...queryParams, page: page.toString() });
-                         fetchPromises.push(
-                             fetch(`${endpoint}?${pageParams.toString()}`, TMDb_OPTIONS)
-                                 .then(res => {
-                                     if (!res.ok) console.warn(`Erro ${res.status} ao buscar página ${page}`);
-                                     return res.ok ? res.json() : null; // Retorna null em caso de erro para Promise.allSettled
-                                 })
-                         );
-                         // Adiciona um pequeno delay para não sobrecarregar a API (opcional, mas recomendado)
-                         await new Promise(resolve => setTimeout(resolve, 50)); // 50ms de delay
-                     }
+                if (remainingPagesToFetch > 0) {
+                    for (let page = 2; page <= remainingPagesToFetch + 1; page++) {
+                        const pageParams = new URLSearchParams({...queryParams, page: page.toString() });
+                        fetchPromises.push(
+                            fetch(`${endpoint}?${pageParams.toString()}`, TMDb_OPTIONS)
+                                .then(res => res.ok ? res.json() : Promise.reject(`Erro ${res.status} pág ${page}`))
+                        );
+                        await new Promise(resolve => setTimeout(resolve, 50)); // Pequeno delay
+                    }
+                    console.log(`Buscando ${fetchPromises.length} páginas adicionais de ${type}...`);
+                    const results = await Promise.allSettled(fetchPromises);
+                    results.forEach((result, index) => {
+                        if (result.status === 'fulfilled' && result.value && result.value.results) {
+                            allFetchedContent.push(...result.value.results);
+                        } else {
+                             console.warn(`Falha ao carregar página ${index + 2} de ${type}: ${result.reason}`);
+                        }
+                    });
+                }
 
-                     console.log(`Buscando ${fetchPromises.length} páginas adicionais...`);
-                     const results = await Promise.allSettled(fetchPromises);
+                console.log(`Busca ${type} finalizada. Total de ${allFetchedContent.length} itens carregados.`);
 
-                     results.forEach((result, index) => {
-                         if (result.status === 'fulfilled' && result.value && result.value.results) {
-                             allFetchedMovies.push(...result.value.results);
-                             console.log(`Página ${index + 2} carregada.`);
-                         } else {
-                             console.warn(`Falha ao carregar página ${index + 2}: ${result.reason || 'Resposta inválida'}`);
-                         }
-                     });
-                 }
+                // Salva no estado correto
+                if (type === 'movie') {
+                    allFetchedMovies = allFetchedContent;
+                } else {
+                    allFetchedSeries = allFetchedContent;
+                }
 
-                console.log(`Busca finalizada. Total de ${allFetchedMovies.length} filmes carregados.`);
-                // Mapeia para o formato desejado
-                 const moviesToDisplay = allFetchedMovies.map(movie => ({
-                    id: movie.id,
-                    displayName: movie.title || movie.name, // Compatibilidade
-                    poster_path: movie.poster_path,
-                    genre_ids: movie.genre_ids || [],
-                    type: 'movie' // Assumindo sempre filme por enquanto
+                const itemsToDisplay = allFetchedContent.map(item => ({
+                    id: item.id,
+                    displayName: item.title || item.name,
+                    poster_path: item.poster_path,
+                    genre_ids: item.genre_ids || [],
+                    type: type === 'movie' ? 'movie' : 'tv'
                 }));
-                 displayContent(moviesToDisplay); // Exibe todos os filmes de uma vez
+                 displayContent(itemsToDisplay, type);
 
             } catch (error) {
-                console.error(`Falha CRÍTICA ao buscar filmes (${endpoint}):`, error);
-                resultsContainer.innerHTML = `<p class="text-red-500 text-center col-span-full font-semibold">Erro ao carregar filmes: ${error.message}. Tente novamente mais tarde.</p>`;
-                 resultsContainer.style.display = 'block'; // Mostra o erro
-                noResultsMsg.style.display = 'none';
+                console.error(`Falha CRÍTICA ao buscar ${type}:`, error);
+                resultsContainer.innerHTML = `<p class="text-red-500 text-center col-span-full font-semibold">Erro ao carregar ${contentTypeText.toLowerCase()}: ${error.message}.</p>`;
+                resultsContainer.style.display = 'block';
+                noResultsElement.style.display = 'none';
             } finally {
-                isLoading = false;
-                showLoading(false);
-                 resultsContainer.style.display = 'grid'; // Mostra o container (mesmo se vazio ou com erro)
-                updateResultsTitle(); // Atualiza o título final
+                isLoading[type] = false;
+                showLoading(false, type);
+                resultsContainer.style.display = 'grid';
+                updateResultsTitle(type); // Atualiza o título final
             }
        }
 
-       /** Busca detalhes de um filme específico para pegar vídeos */
-       async function fetchMovieDetailsAndShowTrailer(movieId, movieTitle) {
-            const apiUrl = `${TMDb_API_BASE_URL}/movie/${movieId}?language=pt-BR&append_to_response=videos`;
-            console.log(`Buscando detalhes e vídeos para o filme ID: ${movieId}`);
-             // Poderia adicionar um loading visual no botão clicado aqui
+       /** Busca detalhes e trailer (genérico) */
+       async function fetchDetailsAndShowTrailer(itemId, itemTitle, type = 'movie') {
+            const apiUrl = `${TMDb_API_BASE_URL}/${type === 'movie' ? 'movie' : 'tv'}/${itemId}?language=pt-BR&append_to_response=videos`;
+            console.log(`Buscando detalhes (${type}) ID: ${itemId}`);
             try {
                 const response = await fetch(apiUrl, TMDb_OPTIONS);
-                if (!response.ok) throw new Error(`Erro ${response.status} ao buscar detalhes do filme`);
+                if (!response.ok) throw new Error(`Erro ${response.status} ao buscar detalhes`);
                 const data = await response.json();
-
                 const videos = data.videos?.results || [];
-                // Prioriza Trailer Oficial no YouTube
-                const trailer = videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer' && vid.official === true)
-                             || videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer') // Qualquer trailer no YouTube
-                             || videos.find(vid => vid.site === 'YouTube'); // Qualquer vídeo no YouTube
+                const trailer = videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer' && vid.official)
+                             || videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer')
+                             || videos.find(vid => vid.site === 'YouTube');
 
                 if (trailer && trailer.key) {
-                     const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`; // Link padrão do YouTube
-                     console.log(`Trailer encontrado: ${youtubeUrl}`);
-                     window.open(youtubeUrl, '_blank'); // Abre em nova aba
+                     const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
+                     window.open(youtubeUrl, '_blank');
                 } else {
-                    console.warn(`Nenhum trailer do YouTube encontrado para "${movieTitle}"`);
-                    alert(`Desculpe, não foi encontrado um trailer no YouTube para "${movieTitle}".`);
+                    alert(`Nenhum trailer do YouTube encontrado para "${itemTitle}".`);
                 }
             } catch (error) {
-                console.error(`Falha ao buscar trailer para filme ${movieId}:`, error);
-                alert(`Erro ao buscar trailer para "${movieTitle}". Tente novamente mais tarde.`);
-            } finally {
-                 // Remover loading visual do botão aqui
+                console.error(`Falha ao buscar trailer (${type}) ID ${itemId}:`, error);
+                alert(`Erro ao buscar trailer para "${itemTitle}".`);
             }
        }
 
 
         // --- Funções de Manipulação do DOM e Exibição ---
 
-        /** Mostra ou esconde o indicador de carregamento principal */
-        function showLoading(show) {
-             if (loadingIndicator) {
-                 loadingIndicator.style.display = show ? 'block' : 'none';
-             }
-             noResultsMsg.style.display = 'none'; // Sempre esconde no início do carregamento
+        /** Mostra/Esconde loading para um tipo específico */
+        function showLoading(show, type = 'movie') {
+             const indicator = type === 'movie' ? loadingIndicatorMovies : loadingIndicatorSeries;
+             const noResults = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
+             if (indicator) indicator.style.display = show ? 'block' : 'none';
+             if (noResults) noResults.style.display = 'none';
         }
 
-        /** Cria os botões de filtro de gênero */
-        function displayGenreFilters() {
-            // (Mesma função da versão anterior)
-            if (!genreButtonsContainer) return;
-            genreButtonsContainer.innerHTML = '';
+        /** Cria botões de gênero (genérico) */
+        function displayGenreFilters(type = 'movie') {
+            const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
+            const genresList = type === 'movie' ? movieGenres : seriesGenres;
+            let selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+
+            if (!container) return;
+            container.innerHTML = ''; // Limpa
+
+            // Botão "Todos"
             const allButton = document.createElement('button');
             allButton.textContent = 'Todos';
             allButton.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
             if (selectedGenreId === null) allButton.classList.add('active');
-            allButton.onclick = () => handleGenreClick(null, allButton);
-            genreButtonsContainer.appendChild(allButton);
+            allButton.onclick = () => handleGenreClick(null, allButton, type);
+            container.appendChild(allButton);
 
-            genres.forEach(genre => {
+            // Botões de Gênero
+            genresList.forEach(genre => {
                 const button = document.createElement('button');
                 button.textContent = genre.name;
                 button.dataset.genreId = genre.id;
                 button.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
                 if (selectedGenreId === genre.id) button.classList.add('active');
-                button.onclick = () => handleGenreClick(genre.id, button);
-                genreButtonsContainer.appendChild(button);
+                button.onclick = () => handleGenreClick(genre.id, button, type);
+                container.appendChild(button);
             });
         }
 
-        /** Cria o card HTML para um filme com botões */
-        function createContentCard(item) {
+        /** Cria card HTML (genérico) */
+        function createContentCard(item) { // item = { id, displayName, poster_path, type }
             const element = document.createElement('div');
-            element.className = 'content-card group'; // Removido cursor-pointer do card geral
+            element.className = 'content-card group';
 
             const posterUrl = item.poster_path ? `${TMDb_IMAGE_BASE_URL}${item.poster_path}` : TMDb_PLACEHOLDER_IMAGE;
-            const displayName = item.displayName || 'Título Indisponível';
-            const tmdbUrl = `https://www.themoviedb.org/movie/${item.id}?language=pt-BR`;
-
-            // Escapa aspas simples no displayName para o onclick do trailer
-            const escapedDisplayName = displayName.replace(/'/g, "\\'");
+            const tmdbUrl = `https://www.themoviedb.org/${item.type === 'movie' ? 'movie' : 'tv'}/${item.id}?language=pt-BR`;
+            const escapedDisplayName = item.displayName.replace(/'/g, "\\'");
+            const contentTypeText = item.type === 'movie' ? 'Filme' : 'Série';
 
             element.innerHTML = `
                 <div class="relative">
-                    <img src="${posterUrl}" alt="Pôster de ${displayName}" loading="lazy" onerror="this.onerror=null; this.src='${TMDb_PLACEHOLDER_IMAGE}';">
+                    <img src="${posterUrl}" alt="Pôster de ${item.displayName}" loading="lazy" onerror="this.onerror=null; this.src='${TMDb_PLACEHOLDER_IMAGE}';">
+                     <span class="absolute top-2 right-2 ${item.type === 'movie' ? 'bg-red-600' : 'bg-blue-600'} text-white text-xs font-semibold px-1.5 py-0.5 rounded">${contentTypeText}</span>
                 </div>
                 <div class="card-content">
-                    <span class="card-title" title="${displayName}">${displayName}</span>
+                    <span class="card-title" title="${item.displayName}">${item.displayName}</span>
                     <div class="card-buttons">
-                        <button class="btn-card btn-trailer" onclick="fetchMovieDetailsAndShowTrailer(${item.id}, '${escapedDisplayName}')" title="Ver trailer no YouTube">
+                        <button class="btn-card btn-trailer" onclick="fetchDetailsAndShowTrailer(${item.id}, '${escapedDisplayName}', '${item.type}')" title="Ver trailer no YouTube">
                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                             Trailer
                         </button>
@@ -452,35 +440,40 @@
             return element;
         }
 
-        /** Exibe a lista de filmes no container */
-        function displayContent(contentList) {
-             resultsContainer.innerHTML = ''; // Limpa resultados anteriores
+        /** Exibe lista de conteúdo (genérico) */
+        function displayContent(contentList, type = 'movie') {
+             const container = type === 'movie' ? resultsContainerMovies : resultsContainerSeries;
+             const noResults = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
+             container.innerHTML = ''; // Limpa
 
              if (contentList && contentList.length > 0) {
-                 noResultsMsg.style.display = 'none';
+                 noResults.style.display = 'none';
                  contentList.forEach(item => {
-                     if (item.type === 'movie') {
-                          const cardElement = createContentCard(item);
-                          resultsContainer.appendChild(cardElement);
-                     }
+                     const cardElement = createContentCard(item); // Passa o item completo
+                     container.appendChild(cardElement);
                  });
              } else {
-                 noResultsMsg.style.display = 'block'; // Mostra msg "sem resultados"
+                 noResults.style.display = 'block';
              }
-             // Atualiza o título H2 final
-              updateResultsTitle();
+             updateResultsTitle(type); // Atualiza o título da seção específica
         }
 
-         /** Atualiza o título H2 da seção de resultados (considerando o estado final) */
-        function updateResultsTitle() {
-             let title = `Filmes Populares (${allFetchedMovies.length} carregados)`; // Padrão
-             if (currentSearchTerm) {
-                 title = `Resultados para "${currentSearchTerm}" (${allFetchedMovies.length} encontrados)`;
+         /** Atualiza título H2 da seção (genérico) */
+        function updateResultsTitle(type = 'movie') {
+             const titleElement = type === 'movie' ? resultsTitleMovies : resultsTitleSeries;
+             const fetchedItems = type === 'movie' ? allFetchedMovies : allFetchedSeries;
+             const searchTerm = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
+             const selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+             const genreMap = type === 'movie' ? movieGenreMap : seriesGenreMap;
+             const contentTypeText = type === 'movie' ? 'Filmes' : 'Séries';
+
+             let title = `${contentTypeText} Populares (${fetchedItems.length} carregados)`;
+             if (searchTerm) {
+                 title = `Resultados de ${contentTypeText.toLowerCase()} para "${searchTerm}" (${fetchedItems.length} encontrados)`;
              } else if (selectedGenreId && genreMap[selectedGenreId]) {
-                 title = `Filmes de ${genreMap[selectedGenreId]} (${allFetchedMovies.length} carregados)`;
+                 title = `${contentTypeText} de ${genreMap[selectedGenreId]} (${fetchedItems.length} carregados)`;
              }
-             // Garante que o título seja atualizado mesmo se allFetchedMovies estiver vazio após busca/filtro
-             resultsTitle.textContent = title;
+             titleElement.textContent = title;
         }
 
         /** Atualiza o ano no rodapé */
@@ -490,53 +483,124 @@
 
         // --- Manipuladores de Eventos ---
 
-        /** Chamado ao clicar em um botão de gênero */
-        function handleGenreClick(genreId, buttonElement) {
-            // Não faz nada se já estiver carregando ou se for o mesmo gênero
-            if (isLoading || selectedGenreId === genreId) return;
+        /** Troca a visão entre Filmes e Séries */
+        function switchView(viewToShow) {
+             if (viewToShow === currentView) return; // Já está na visão correta
 
-            console.log(`Gênero selecionado: ${genreId ? genreMap[genreId] : 'Todos'} (ID: ${genreId})`);
-            selectedGenreId = genreId;
-            currentSearchTerm = ''; // Limpa busca
-            searchInput.value = '';
+             currentView = viewToShow;
+             console.log("Mudando visão para:", currentView);
 
-            document.querySelectorAll('#genre-buttons-container .btn-genre').forEach(btn => btn.classList.remove('active'));
-            buttonElement.classList.add('active');
+             // Atualiza botões da Nav
+             navMoviesBtn.classList.toggle('active', currentView === 'movies');
+             navSeriesBtn.classList.toggle('active', currentView === 'series');
 
-            fetchAllMovies(); // REBUSCA TUDO com o novo gênero
+             // Atualiza título principal e placeholder da busca
+             const isMovies = currentView === 'movies';
+             mainTitle.textContent = isMovies ? 'Filmes Populares' : 'Séries Populares';
+             mainSubtitle.textContent = `Explore uma lista extensa de ${isMovies ? 'filmes' : 'séries'}. Use a busca ou filtros de gênero.`;
+             searchInput.placeholder = `Buscar ${isMovies ? 'filmes' : 'séries'} pelo título...`;
+             searchInput.value = ''; // Limpa busca ao trocar
+
+             // Limpa filtros/busca da view anterior (opcional, mas recomendado)
+             if (isMovies) {
+                 currentSeriesSearchTerm = '';
+                 selectedSeriesGenreId = null;
+             } else {
+                 currentMovieSearchTerm = '';
+                 selectedMovieGenreId = null;
+             }
+
+             // Mostra/Esconde seções
+             moviesSectionDiv.style.display = isMovies ? 'block' : 'none';
+             seriesSectionDiv.style.display = isMovies ? 'none' : 'block';
+
+             // Busca conteúdo para a nova visão SE NUNCA FOI CARREGADO AINDA
+             const itemsAlreadyFetched = isMovies ? allFetchedMovies.length > 0 : allFetchedSeries.length > 0;
+             if (!itemsAlreadyFetched) {
+                 fetchAllContent(currentView);
+             } else {
+                  // Se já carregou, apenas atualiza o título (caso tenha filtro/busca ativa da outra seção)
+                  updateResultsTitle(currentView);
+                  // Pode ser necessário re-renderizar os filtros se o estado deles não foi resetado
+                  displayGenreFilters(currentView);
+             }
         }
 
-        /** Chamado ao digitar no campo de busca (com debounce) */
+        /** Clique em botão de gênero (genérico) */
+        function handleGenreClick(genreId, buttonElement, type = 'movie') {
+            const isLoadingFlag = isLoading[type];
+            let currentSelectedGenre = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+
+            if (isLoadingFlag || currentSelectedGenre === genreId) return;
+
+            console.log(`Gênero (${type}) selecionado: ${genreId}`);
+
+            // Atualiza estado correto
+            if (type === 'movie') {
+                selectedMovieGenreId = genreId;
+                currentMovieSearchTerm = ''; // Limpa busca
+            } else {
+                selectedSeriesGenreId = genreId;
+                currentSeriesSearchTerm = ''; // Limpa busca
+            }
+             searchInput.value = ''; // Limpa visualmente
+
+            // Atualiza botões da seção correta
+            const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
+            container.querySelectorAll('.btn-genre').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+
+            fetchAllContent(type); // REBUSCA TUDO com o novo gênero
+        }
+
+        /** Input de busca (genérico) */
         function handleSearchInput() {
              clearTimeout(searchTimeout);
 
              searchTimeout = setTimeout(() => {
                   const searchTerm = searchInput.value.trim();
-                  // Só busca se o termo mudou E não estiver carregando
-                  if (currentSearchTerm !== searchTerm && !isLoading) {
-                       console.log(`Termo de busca: "${searchTerm}"`);
-                       currentSearchTerm = searchTerm;
-                       selectedGenreId = null; // Limpa gênero
+                  const type = currentView; // Busca no tipo atual
+                  const isLoadingFlag = isLoading[type];
+                  let currentSearchState = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
 
-                        document.querySelectorAll('#genre-buttons-container .btn-genre').forEach(btn => btn.classList.remove('active'));
-                        const allButton = genreButtonsContainer.querySelector('button:first-child');
-                        if(allButton) allButton.classList.add('active');
+                  if (currentSearchState !== searchTerm && !isLoadingFlag) {
+                       console.log(`Termo de busca (${type}): "${searchTerm}"`);
 
-                       fetchAllMovies(); // REBUSCA TUDO com o termo de busca
+                       // Atualiza estado correto
+                       if (type === 'movie') {
+                           currentMovieSearchTerm = searchTerm;
+                           selectedMovieGenreId = null; // Limpa gênero
+                       } else {
+                           currentSeriesSearchTerm = searchTerm;
+                           selectedSeriesGenreId = null; // Limpa gênero
+                       }
+
+                        // Desmarca botões de gênero da seção ativa
+                        const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
+                         if(container) { // Verifica se o container existe
+                            container.querySelectorAll('.btn-genre').forEach(btn => btn.classList.remove('active'));
+                            const allButton = container.querySelector('button:first-child');
+                            if(allButton) allButton.classList.add('active');
+                        }
+
+                       fetchAllContent(type); // REBUSCA TUDO com o termo
                   }
              }, 500);
         }
 
         // --- Ponto de Entrada Principal ---
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM carregado. Iniciando aplicação Nexus Streams (Versão 'Carregar Tudo')...");
+            console.log("DOM carregado. Iniciando Nexus Streams...");
 
             // Configura listeners
             searchInput.addEventListener('input', handleSearchInput);
+            navMoviesBtn.addEventListener('click', () => switchView('movies'));
+            navSeriesBtn.addEventListener('click', () => switchView('series'));
 
-            // Busca inicial
-            fetchGenres(); // Busca gêneros primeiro
-            fetchAllMovies(); // Busca as primeiras N páginas de filmes populares
+            // Busca inicial (gêneros de ambos, conteúdo da view padrão 'movies')
+            fetchGenres('movie');
+            fetchGenres('series'); // Busca gêneros das séries também
+            fetchAllContent('movies'); // Carrega filmes inicialmente
 
             // Atualiza rodapé
             updateFooterYear();
