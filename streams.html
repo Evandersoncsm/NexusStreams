@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Streams - Explore Filmes</title>
+    <title>Nexus Streams - Todos os Filmes Populares</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,75 +16,120 @@
         }
         .content-card {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            background-color: #1f2937; /* Azul acinzentado escuro */
+            background-color: #1f2937;
             border-radius: 0.5rem;
             overflow: hidden;
             transform: perspective(1px) translateZ(0);
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
             border: 1px solid transparent;
+            display: flex; /* Para alinhar conteúdo interno */
+            flex-direction: column; /* Empilha imagem e conteúdo */
         }
         .content-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 15px rgba(229, 9, 20, 0.3); /* Sombra vermelha */
-            border-color: rgba(229, 9, 20, 0.5); /* Borda vermelha sutil */
+            transform: scale(1.03); /* Reduzido um pouco para muitos itens */
+            box-shadow: 0 8px 15px rgba(229, 9, 20, 0.3);
+            border-color: rgba(229, 9, 20, 0.5);
         }
         .content-card img {
             aspect-ratio: 2/3;
             object-fit: cover;
             width: 100%;
             height: auto;
-            transition: filter 0.3s ease-in-out;
         }
-        .content-card:hover img { filter: brightness(0.75); }
-        .content-card .title-bg { background-color: rgba(15, 15, 15, 0.9); }
-        .content-card .title-text { color: #e1e1e1; transition: color 0.3s ease-in-out; }
-        .content-card:hover .title-text { color: #ffffff; }
+
+        .card-content {
+             background-color: rgba(15, 15, 15, 0.9);
+             padding: 0.75rem; /* 12px */
+             text-align: center;
+             flex-grow: 1; /* Ocupa espaço restante */
+             display: flex;
+             flex-direction: column;
+             justify-content: space-between; /* Empurra botões para baixo */
+        }
+        .card-title {
+            color: #e1e1e1;
+            transition: color 0.3s ease-in-out;
+            font-size: 0.875rem; /* 14px */
+            font-weight: 600; /* semibold */
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 0.5rem; /* Espaço antes dos botões */
+        }
+         .content-card:hover .card-title { color: #ffffff; }
+
+        .card-buttons {
+            margin-top: auto; /* Empurra para baixo */
+            display: flex;
+            gap: 0.5rem; /* Espaço entre botões */
+            justify-content: center; /* Centraliza botões */
+        }
+        .btn-card {
+            background-color: #374151; /* Cinza escuro */
+            color: #e1e1e1;
+            font-size: 0.75rem; /* 12px */
+            font-weight: 500;
+            padding: 0.25rem 0.5rem; /* Pequeno padding */
+            border-radius: 0.25rem; /* Bordas arredondadas */
+            border: 1px solid #4b5563;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-card:hover {
+            background-color: #4b5563;
+            color: #ffffff;
+        }
+        .btn-card svg {
+             display: inline-block;
+             width: 0.75rem; /* 12px */
+             height: 0.75rem; /* 12px */
+             margin-right: 0.25rem;
+             vertical-align: text-bottom;
+        }
+
 
         .btn-genre {
             transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-            border: 1px solid #4b5563; /* Cinza */
+            border: 1px solid #4b5563;
         }
         .btn-genre:hover {
-             background-color: #374151; /* Cinza mais escuro no hover */
+             background-color: #374151;
              transform: translateY(-1px);
         }
         .btn-genre.active {
-            background-color: #dc2626; /* Vermelho */
+            background-color: #dc2626;
             color: #ffffff;
             border-color: #dc2626;
             font-weight: 600;
         }
-         .btn-pagination {
-            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
-         }
-         .btn-pagination:hover:not(:disabled) {
-            background-color: #4b5563; /* Cinza mais escuro */
-            transform: translateY(-1px);
-         }
-         .btn-pagination:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-         }
 
-        /* Estilos da barra de rolagem (opcional, mas melhora a estética) */
+        /* Estilos da barra de rolagem */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background-color: #404040; border-radius: 4px; border: 2px solid #1a1a1a; }
         ::-webkit-scrollbar-thumb:hover { background-color: #555; }
 
-        /* Indicador de carregamento simples */
+        /* Indicador de carregamento */
         .loader {
-            border: 4px solid #374151; /* Cinza */
-            border-left-color: #e50914; /* Vermelho */
+            border: 4px solid #374151;
+            border-left-color: #e50914;
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
-            margin: 40px auto; /* Centraliza */
+            margin: 40px auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        #loading-message {
+             text-align: center;
+             margin-top: 1rem;
+             font-style: italic;
+             color: #9ca3af; /* gray-400 */
         }
     </style>
 </head>
@@ -93,12 +138,14 @@
     <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
         <nav class="container mx-auto px-0 sm:px-6 flex flex-wrap justify-between items-center">
             <a href="#" class="text-2xl sm:text-3xl font-bold text-red-600 tracking-wide hover:text-red-500 transition duration-300" onclick="window.location.reload();">Nexus Streams</a>
-            </nav>
+            <a href="index.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Home</a>
+                <a href="creditos.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Créditos</a>
+        </nav>
     </header>
 
     <section class="container mx-auto px-4 sm:px-6 py-8 md:py-12 text-center bg-gray-900/30 rounded-lg mb-10 mt-4 sm:mb-12 shadow-lg border border-gray-800/50">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Explore Filmes Populares</h1>
-        <p class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Navegue, filtre por gênero ou pesquise seus filmes favoritos.</p>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Filmes Populares</h1>
+        <p class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Explore uma lista extensa de filmes. Use a busca ou filtros de gênero.</p>
         <div class="max-w-lg mx-auto px-2 sm:px-0">
              <div class="relative">
                   <input type="search" id="search-input" placeholder="Buscar filmes pelo título..." class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
@@ -117,14 +164,15 @@
         </section>
 
         <section id="results-section" class="mb-12 sm:mb-16">
-            <h2 id="results-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Filmes Populares</h2>
-            <div id="results-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                <div id="loading-indicator" class="col-span-full loader"></div> </div>
+            <h2 id="results-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Carregando Filmes...</h2>
+            <div id="loading-indicator" class="col-span-full">
+                 <div class="loader"></div>
+                 <p id="loading-message">Buscando filmes populares... Isso pode levar um momento.</p>
+            </div>
+            <div id="results-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mt-6" style="display: none;">
+                </div>
              <p id="no-results" class="text-gray-400 text-center mt-8 hidden">Nenhum filme encontrado com os critérios selecionados.</p>
         </section>
-
-        <section id="pagination-controls" class="flex justify-center items-center gap-4 mb-10 sm:mb-12">
-            </section>
 
         </main>
 
@@ -137,7 +185,6 @@
     <script>
         // --- Constantes Globais ---
         const TMDb_API_BASE_URL = 'https://api.themoviedb.org/3';
-        // Endpoints dinâmicos serão construídos nas funções de busca
         const TMDb_API_URL_GENRES = `${TMDb_API_BASE_URL}/genre/movie/list?language=pt-BR`;
         const TMDb_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
         const TMDb_PLACEHOLDER_IMAGE = 'https://placehold.co/500x750/374151/9CA3AF?text=Poster+Indispon%C3%ADvel';
@@ -145,30 +192,31 @@
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                // IMPORTANTE: Substitua pelo seu Bearer Token da API TMDb V4 ou Chave V3 (neste caso, Bearer)
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMGU4NjljODc4YzVlYzQ0OTg0NmNjNjhmNTBkOWMwZCIsIm5iZiI6MTc0NTI1OTc2OC4xNTIsInN1YiI6IjY4MDY4Y2Y4YjY1OTgyMjgxMmVlNjhkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Owiv7fvIAoRGKoNE7erZsAypbofV2kJcDhdWmZ4-LX8'
+                // IMPORTANTE: Substitua pelo seu Bearer Token V4 ou Chave V3 (Bearer)
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMGU4NjljODc4YzVlYzQ0OTg0NmNjNjhmNTBkOWMwZCIsIm5iZiI6MTc0NTI1OTc2OC4xNTIsInN1YiI6IjY4MDY4Y2Y4YjY1OTgyMjgxMmVlNjhkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Owiv7fvIAoRGKoNE7erZsAypbofV2kJcDhdWmZ4-LX8' // Substitua pelo seu Token real
             }
         };
+        // DEFINE QUANTAS PÁGINAS BUSCAR - CUIDADO AO AUMENTAR!
+        const PAGES_TO_FETCH = 5; // Busca 5 páginas = 100 filmes. Aumente com cautela! (Máx 500 pela API)
 
         // --- Variáveis de Estado ---
-        let genres = []; // Array para armazenar {id, name} dos gêneros
-        let genreMap = {}; // Objeto para mapear id -> name (para referência rápida, se necessário)
-        let currentPage = 1;
-        let totalPages = 1;
+        let genres = [];
+        let genreMap = {};
+        let allFetchedMovies = []; // Armazena TODOS os filmes buscados
         let currentSearchTerm = '';
-        let selectedGenreId = null; // null significa "Todos"
-        let isLoading = false; // Flag para evitar buscas concorrentes
-        let searchTimeout = null; // Para debounce da busca
+        let selectedGenreId = null;
+        let isLoading = false;
+        let searchTimeout = null;
 
-        // --- Elementos do DOM (cache para performance) ---
+        // --- Elementos do DOM ---
         const resultsContainer = document.getElementById('results-container');
         const resultsTitle = document.getElementById('results-title');
         const genreButtonsContainer = document.getElementById('genre-buttons-container');
         const loadingGenresMsg = document.getElementById('loading-genres');
         const loadingIndicator = document.getElementById('loading-indicator');
+        const loadingMessage = document.getElementById('loading-message');
         const noResultsMsg = document.getElementById('no-results');
         const searchInput = document.getElementById('search-input');
-        const paginationControlsContainer = document.getElementById('pagination-controls');
         const yearSpan = document.getElementById('current-year');
 
         // --- Funções de Busca na API ---
@@ -182,10 +230,10 @@
                 if (!response.ok) throw new Error(`Erro HTTP ${response.status} ao buscar gêneros`);
                 const data = await response.json();
                 if (data.genres && data.genres.length > 0) {
-                    genres = data.genres; // Armazena a lista completa
-                    genres.forEach(genre => { genreMap[genre.id] = genre.name; }); // Atualiza o mapa
+                    genres = data.genres;
+                    genres.forEach(genre => { genreMap[genre.id] = genre.name; });
                     console.log("Gêneros carregados:", genres);
-                    displayGenreFilters(); // Chama a função para criar os botões
+                    displayGenreFilters();
                     if (loadingGenresMsg) loadingGenresMsg.style.display = 'none';
                 } else {
                     console.warn('Nenhum gênero encontrado.');
@@ -201,157 +249,206 @@
         }
 
        /**
-        * Busca filmes com base nos filtros atuais (página, gênero, busca).
-        * Decide qual endpoint usar (popular, discover, search).
+        * Busca MÚLTIPLAS PÁGINAS de filmes populares ou resultados de busca/gênero.
+        * Agrega todos os resultados em `allFetchedMovies`.
         */
-       async function fetchMovies() {
-           if (isLoading) {
-               console.log("Busca já em andamento. Aguardando...");
-               return; // Evita buscas múltiplas
-           }
-           isLoading = true;
-           showLoading(true); // Mostra indicador de carregamento principal
-           console.log(`Buscando filmes - Página: ${currentPage}, Gênero: ${selectedGenreId}, Busca: "${currentSearchTerm}"`);
+       async function fetchAllMovies() {
+            if (isLoading) return;
+            isLoading = true;
+            showLoading(true);
+            resultsContainer.style.display = 'none'; // Esconde container enquanto carrega TUDO
+            allFetchedMovies = []; // Limpa lista anterior
+            let currentFetchedPage = 1;
+            let totalFetchedPages = 0; // Será definido pela primeira chamada
+            let fetchPromises = [];
+            let endpoint = '';
+            let queryParams = { language: 'pt-BR' };
 
-           let apiUrl = '';
-           const params = new URLSearchParams({
-               language: 'pt-BR',
-               page: currentPage.toString()
-           });
+            try {
+                if (currentSearchTerm) {
+                    resultsTitle.textContent = `Buscando por: "${currentSearchTerm}"...`;
+                    loadingMessage.textContent = `Procurando por "${currentSearchTerm}"...`;
+                    endpoint = `${TMDb_API_BASE_URL}/search/movie`;
+                    queryParams.query = currentSearchTerm;
+                    queryParams.include_adult = 'false';
+                } else if (selectedGenreId) {
+                     const genreName = genreMap[selectedGenreId] || 'gênero selecionado';
+                     resultsTitle.textContent = `Buscando filmes de ${genreName}...`;
+                     loadingMessage.textContent = `Carregando filmes de ${genreName}...`;
+                    endpoint = `${TMDb_API_BASE_URL}/discover/movie`;
+                    queryParams.with_genres = selectedGenreId.toString();
+                    queryParams.sort_by = 'popularity.desc';
+                } else {
+                    resultsTitle.textContent = `Buscando Filmes Populares...`;
+                     loadingMessage.textContent = `Carregando as primeiras ${PAGES_TO_FETCH} páginas de filmes populares...`;
+                    endpoint = `${TMDb_API_BASE_URL}/movie/popular`;
+                }
 
-           try {
-               if (currentSearchTerm) {
-                   // Prioriza busca textual
-                   apiUrl = `${TMDb_API_BASE_URL}/search/movie`;
-                   params.set('query', currentSearchTerm);
-                   params.set('include_adult', 'false'); // Boa prática
-               } else if (selectedGenreId) {
-                   // Filtro por gênero
-                   apiUrl = `${TMDb_API_BASE_URL}/discover/movie`;
-                   params.set('with_genres', selectedGenreId.toString());
-                   params.set('sort_by', 'popularity.desc'); // Ordena por popularidade dentro do gênero
-               } else {
-                   // Padrão: Filmes populares gerais
-                   apiUrl = `${TMDb_API_BASE_URL}/movie/popular`;
-               }
+                console.log(`Iniciando busca - Endpoint: ${endpoint}, Páginas: ${PAGES_TO_FETCH}`);
 
-               const fullUrl = `${apiUrl}?${params.toString()}`;
-               console.log("URL da API:", fullUrl);
+                // Faz a primeira chamada para saber o total de páginas (se necessário)
+                // e já iniciar o processo.
+                const firstPageParams = new URLSearchParams({...queryParams, page: '1' });
+                const firstResponse = await fetch(`${endpoint}?${firstPageParams.toString()}`, TMDb_OPTIONS);
+                 if (!firstResponse.ok) throw new Error(`Erro HTTP ${firstResponse.status} na página 1`);
+                 const firstData = await firstResponse.json();
+                 totalFetchedPages = firstData.total_pages || 0;
+                 if (firstData.results) {
+                     allFetchedMovies.push(...firstData.results);
+                 }
+                 console.log(`Página 1 carregada. Total de páginas disponíveis: ${totalFetchedPages}`);
 
-               const response = await fetch(fullUrl, TMDb_OPTIONS);
-               if (!response.ok) {
-                   // Tenta ler a mensagem de erro da API, se houver
-                   let errorMsg = `Erro HTTP ${response.status}`;
-                   try {
-                       const errorData = await response.json();
-                       errorMsg += `: ${errorData.status_message || 'Erro desconhecido da API'}`;
-                   } catch (e) { /* Ignora se não conseguir parsear o JSON do erro */ }
-                   throw new Error(errorMsg);
-               }
+                 // Calcula quantas páginas restantes buscar (limitado por PAGES_TO_FETCH e total real)
+                 const remainingPagesToFetch = Math.min(PAGES_TO_FETCH, totalFetchedPages) - 1;
 
-               const data = await response.json();
+                // Cria Promises para buscar as páginas restantes em paralelo (com moderação)
+                 if (remainingPagesToFetch > 0) {
+                     for (let page = 2; page <= remainingPagesToFetch + 1; page++) {
+                         const pageParams = new URLSearchParams({...queryParams, page: page.toString() });
+                         fetchPromises.push(
+                             fetch(`${endpoint}?${pageParams.toString()}`, TMDb_OPTIONS)
+                                 .then(res => {
+                                     if (!res.ok) console.warn(`Erro ${res.status} ao buscar página ${page}`);
+                                     return res.ok ? res.json() : null; // Retorna null em caso de erro para Promise.allSettled
+                                 })
+                         );
+                         // Adiciona um pequeno delay para não sobrecarregar a API (opcional, mas recomendado)
+                         await new Promise(resolve => setTimeout(resolve, 50)); // 50ms de delay
+                     }
 
-               if (data.results) {
-                   console.log(`Encontrados ${data.results.length} filmes. Total de páginas: ${data.total_pages}`);
-                   totalPages = data.total_pages > 0 ? data.total_pages : 1; // Atualiza total de páginas
-                   // Mapeia os resultados para o formato esperado por createContentCard, se necessário
-                   const movies = data.results.map(movie => ({
-                       id: movie.id,
-                       displayName: movie.title,
-                       poster_path: movie.poster_path,
-                       genre_ids: movie.genre_ids || [], // Garante que sempre seja um array
-                       type: 'movie' // Define o tipo explicitamente
-                       // Adicione mais dados se precisar (ex: overview, vote_average)
-                   }));
-                   displayContent(movies); // Exibe os filmes encontrados
-                   displayPagination(); // Atualiza os controles de paginação
-               } else {
-                   console.warn('Nenhum resultado encontrado na resposta da API.');
-                   displayContent([]); // Exibe lista vazia
-                   totalPages = 1;
-                   displayPagination(); // Mostra paginação zerada/desabilitada
-               }
+                     console.log(`Buscando ${fetchPromises.length} páginas adicionais...`);
+                     const results = await Promise.allSettled(fetchPromises);
 
-           } catch (error) {
-               console.error(`Falha ao buscar/processar filmes (${apiUrl}):`, error);
-               resultsContainer.innerHTML = `<p class="text-red-500 text-center col-span-full font-semibold">Erro ao carregar filmes: ${error.message}. Tente novamente mais tarde.</p>`;
-               noResultsMsg.style.display = 'none'; // Esconde msg de "nenhum resultado"
-               paginationControlsContainer.innerHTML = ''; // Limpa paginação em caso de erro grave
-           } finally {
-               isLoading = false;
-               showLoading(false); // Esconde indicador de carregamento
-           }
+                     results.forEach((result, index) => {
+                         if (result.status === 'fulfilled' && result.value && result.value.results) {
+                             allFetchedMovies.push(...result.value.results);
+                             console.log(`Página ${index + 2} carregada.`);
+                         } else {
+                             console.warn(`Falha ao carregar página ${index + 2}: ${result.reason || 'Resposta inválida'}`);
+                         }
+                     });
+                 }
+
+                console.log(`Busca finalizada. Total de ${allFetchedMovies.length} filmes carregados.`);
+                // Mapeia para o formato desejado
+                 const moviesToDisplay = allFetchedMovies.map(movie => ({
+                    id: movie.id,
+                    displayName: movie.title || movie.name, // Compatibilidade
+                    poster_path: movie.poster_path,
+                    genre_ids: movie.genre_ids || [],
+                    type: 'movie' // Assumindo sempre filme por enquanto
+                }));
+                 displayContent(moviesToDisplay); // Exibe todos os filmes de uma vez
+
+            } catch (error) {
+                console.error(`Falha CRÍTICA ao buscar filmes (${endpoint}):`, error);
+                resultsContainer.innerHTML = `<p class="text-red-500 text-center col-span-full font-semibold">Erro ao carregar filmes: ${error.message}. Tente novamente mais tarde.</p>`;
+                 resultsContainer.style.display = 'block'; // Mostra o erro
+                noResultsMsg.style.display = 'none';
+            } finally {
+                isLoading = false;
+                showLoading(false);
+                 resultsContainer.style.display = 'grid'; // Mostra o container (mesmo se vazio ou com erro)
+                updateResultsTitle(); // Atualiza o título final
+            }
        }
+
+       /** Busca detalhes de um filme específico para pegar vídeos */
+       async function fetchMovieDetailsAndShowTrailer(movieId, movieTitle) {
+            const apiUrl = `${TMDb_API_BASE_URL}/movie/${movieId}?language=pt-BR&append_to_response=videos`;
+            console.log(`Buscando detalhes e vídeos para o filme ID: ${movieId}`);
+             // Poderia adicionar um loading visual no botão clicado aqui
+            try {
+                const response = await fetch(apiUrl, TMDb_OPTIONS);
+                if (!response.ok) throw new Error(`Erro ${response.status} ao buscar detalhes do filme`);
+                const data = await response.json();
+
+                const videos = data.videos?.results || [];
+                // Prioriza Trailer Oficial no YouTube
+                const trailer = videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer' && vid.official === true)
+                             || videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer') // Qualquer trailer no YouTube
+                             || videos.find(vid => vid.site === 'YouTube'); // Qualquer vídeo no YouTube
+
+                if (trailer && trailer.key) {
+                     const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`; // Link padrão do YouTube
+                     console.log(`Trailer encontrado: ${youtubeUrl}`);
+                     window.open(youtubeUrl, '_blank'); // Abre em nova aba
+                } else {
+                    console.warn(`Nenhum trailer do YouTube encontrado para "${movieTitle}"`);
+                    alert(`Desculpe, não foi encontrado um trailer no YouTube para "${movieTitle}".`);
+                }
+            } catch (error) {
+                console.error(`Falha ao buscar trailer para filme ${movieId}:`, error);
+                alert(`Erro ao buscar trailer para "${movieTitle}". Tente novamente mais tarde.`);
+            } finally {
+                 // Remover loading visual do botão aqui
+            }
+       }
+
 
         // --- Funções de Manipulação do DOM e Exibição ---
 
         /** Mostra ou esconde o indicador de carregamento principal */
         function showLoading(show) {
              if (loadingIndicator) {
-                  // Se for mostrar, limpa o container antes para evitar duplicatas
-                  if (show) resultsContainer.innerHTML = '';
-                  loadingIndicator.style.display = show ? 'block' : 'none';
-                   // Adiciona/remove o loader do container de resultados
-                   if (show && !resultsContainer.contains(loadingIndicator)) {
-                       resultsContainer.appendChild(loadingIndicator);
-                   } else if (!show && resultsContainer.contains(loadingIndicator)) {
-                       // resultsContainer.removeChild(loadingIndicator); // Não remove, só esconde
-                   }
+                 loadingIndicator.style.display = show ? 'block' : 'none';
              }
-             // Esconde/mostra mensagem de "sem resultados" inversamente ao loading
-             noResultsMsg.style.display = 'none';
+             noResultsMsg.style.display = 'none'; // Sempre esconde no início do carregamento
         }
 
         /** Cria os botões de filtro de gênero */
         function displayGenreFilters() {
+            // (Mesma função da versão anterior)
             if (!genreButtonsContainer) return;
-            genreButtonsContainer.innerHTML = ''; // Limpa container
-
-            // Botão "Todos"
+            genreButtonsContainer.innerHTML = '';
             const allButton = document.createElement('button');
             allButton.textContent = 'Todos';
             allButton.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
-            // Marca como ativo se nenhum gênero estiver selecionado
             if (selectedGenreId === null) allButton.classList.add('active');
-            allButton.onclick = () => handleGenreClick(null, allButton); // Passa null como ID
+            allButton.onclick = () => handleGenreClick(null, allButton);
             genreButtonsContainer.appendChild(allButton);
 
-            // Botões para cada gênero
             genres.forEach(genre => {
                 const button = document.createElement('button');
                 button.textContent = genre.name;
-                button.dataset.genreId = genre.id; // Guarda o ID no dataset
+                button.dataset.genreId = genre.id;
                 button.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
-                // Marca como ativo se for o gênero selecionado
                 if (selectedGenreId === genre.id) button.classList.add('active');
                 button.onclick = () => handleGenreClick(genre.id, button);
                 genreButtonsContainer.appendChild(button);
             });
         }
 
-        /** Cria o card HTML para um filme */
+        /** Cria o card HTML para um filme com botões */
         function createContentCard(item) {
             const element = document.createElement('div');
-            element.className = 'content-card group cursor-pointer';
+            element.className = 'content-card group'; // Removido cursor-pointer do card geral
 
             const posterUrl = item.poster_path ? `${TMDb_IMAGE_BASE_URL}${item.poster_path}` : TMDb_PLACEHOLDER_IMAGE;
             const displayName = item.displayName || 'Título Indisponível';
-            // Link direto para a página do filme no TMDb
             const tmdbUrl = `https://www.themoviedb.org/movie/${item.id}?language=pt-BR`;
 
+            // Escapa aspas simples no displayName para o onclick do trailer
+            const escapedDisplayName = displayName.replace(/'/g, "\\'");
+
             element.innerHTML = `
-                <a href="${tmdbUrl}" target="_blank" rel="noopener noreferrer" title="Ver detalhes de ${displayName} no TMDb">
-                    <div class="relative">
-                        <img src="${posterUrl}" alt="Pôster de ${displayName}" loading="lazy" onerror="this.onerror=null; this.src='${TMDb_PLACEHOLDER_IMAGE}';">
-                        <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                        <span class="absolute top-2 right-2 bg-red-600 text-white text-xs font-semibold px-1.5 py-0.5 rounded">Filme</span>
+                <div class="relative">
+                    <img src="${posterUrl}" alt="Pôster de ${displayName}" loading="lazy" onerror="this.onerror=null; this.src='${TMDb_PLACEHOLDER_IMAGE}';">
+                </div>
+                <div class="card-content">
+                    <span class="card-title" title="${displayName}">${displayName}</span>
+                    <div class="card-buttons">
+                        <button class="btn-card btn-trailer" onclick="fetchMovieDetailsAndShowTrailer(${item.id}, '${escapedDisplayName}')" title="Ver trailer no YouTube">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
+                            Trailer
+                        </button>
+                        <a href="${tmdbUrl}" target="_blank" rel="noopener noreferrer" class="btn-card btn-watch" title="Ver detalhes no TMDb">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path></svg>
+                            Detalhes
+                        </a>
                     </div>
-                    <div class="title-bg p-2 sm:p-3 text-center">
-                        <span class="title-text text-xs sm:text-sm font-semibold block truncate" title="${displayName}">${displayName}</span>
-                    </div>
-                </a>
+                </div>
             `;
-             // Não precisamos mais do onclick JS separado, o link <a> cuida disso.
             return element;
         }
 
@@ -360,73 +457,30 @@
              resultsContainer.innerHTML = ''; // Limpa resultados anteriores
 
              if (contentList && contentList.length > 0) {
-                 noResultsMsg.style.display = 'none'; // Esconde msg "sem resultados"
+                 noResultsMsg.style.display = 'none';
                  contentList.forEach(item => {
-                     // Verifica se o item é um filme (pode adicionar type 'tv' no futuro)
                      if (item.type === 'movie') {
                           const cardElement = createContentCard(item);
                           resultsContainer.appendChild(cardElement);
                      }
                  });
              } else {
-                  // Se a busca estava ativa ou um gênero selecionado, mostra "nenhum resultado"
-                 if (currentSearchTerm || selectedGenreId) {
-                      noResultsMsg.style.display = 'block';
-                 } else {
-                      // Se for a carga inicial e não vier nada (erro?), a msg de erro da fetchMovies deve aparecer
-                      noResultsMsg.style.display = 'none'; // Garante que não mostre se for erro geral
-                 }
+                 noResultsMsg.style.display = 'block'; // Mostra msg "sem resultados"
              }
-             // Atualiza o título da seção (opcional)
-             updateResultsTitle();
+             // Atualiza o título H2 final
+              updateResultsTitle();
         }
 
-         /** Atualiza o título H2 da seção de resultados */
+         /** Atualiza o título H2 da seção de resultados (considerando o estado final) */
         function updateResultsTitle() {
-            let title = "Filmes Populares"; // Padrão
-            if (currentSearchTerm) {
-                title = `Resultados para: "${currentSearchTerm}"`;
-            } else if (selectedGenreId && genreMap[selectedGenreId]) {
-                title = `Filmes de ${genreMap[selectedGenreId]}`;
-            }
-            resultsTitle.textContent = title;
-        }
-
-        /** Cria e exibe os controles de paginação */
-        function displayPagination() {
-            if (!paginationControlsContainer) return;
-            paginationControlsContainer.innerHTML = ''; // Limpa controles antigos
-
-             // Não mostra paginação se houver apenas 1 página ou se estiver carregando/erro
-            if (totalPages <= 1 || isLoading) {
-                 return;
+             let title = `Filmes Populares (${allFetchedMovies.length} carregados)`; // Padrão
+             if (currentSearchTerm) {
+                 title = `Resultados para "${currentSearchTerm}" (${allFetchedMovies.length} encontrados)`;
+             } else if (selectedGenreId && genreMap[selectedGenreId]) {
+                 title = `Filmes de ${genreMap[selectedGenreId]} (${allFetchedMovies.length} carregados)`;
              }
-
-            const prevButton = document.createElement('button');
-            prevButton.innerHTML = '&laquo; Anterior'; // <<
-            prevButton.className = 'btn-pagination bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-4 rounded-lg inline-flex items-center text-sm';
-            prevButton.disabled = currentPage === 1;
-            prevButton.onclick = () => changePage(currentPage - 1);
-
-            const pageInfo = document.createElement('span');
-            pageInfo.className = 'text-gray-400 text-sm font-medium';
-            // Mostra no máximo 500 páginas, conforme limite da API TMDb
-            const displayTotalPages = Math.min(totalPages, 500);
-            pageInfo.textContent = `Página ${currentPage} de ${displayTotalPages}`;
-
-            const nextButton = document.createElement('button');
-            nextButton.innerHTML = 'Próxima &raquo;'; // >>
-            nextButton.className = 'btn-pagination bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-4 rounded-lg inline-flex items-center text-sm';
-             // Desabilita se for a última página ou se atingir o limite da API
-            nextButton.disabled = currentPage === totalPages || currentPage >= 500;
-             if (currentPage >= 500) {
-                nextButton.title = "API do TMDb permite buscar até a página 500";
-            }
-            nextButton.onclick = () => changePage(currentPage + 1);
-
-            paginationControlsContainer.appendChild(prevButton);
-            paginationControlsContainer.appendChild(pageInfo);
-            paginationControlsContainer.appendChild(nextButton);
+             // Garante que o título seja atualizado mesmo se allFetchedMovies estiver vazio após busca/filtro
+             resultsTitle.textContent = title;
         }
 
         /** Atualiza o ano no rodapé */
@@ -438,77 +492,51 @@
 
         /** Chamado ao clicar em um botão de gênero */
         function handleGenreClick(genreId, buttonElement) {
-            // Se clicar no gênero já ativo, não faz nada (ou pode desmarcar, opcional)
-            // if (selectedGenreId === genreId) return;
+            // Não faz nada se já estiver carregando ou se for o mesmo gênero
+            if (isLoading || selectedGenreId === genreId) return;
 
             console.log(`Gênero selecionado: ${genreId ? genreMap[genreId] : 'Todos'} (ID: ${genreId})`);
             selectedGenreId = genreId;
-            currentPage = 1; // Volta para a primeira página ao mudar filtro
-            currentSearchTerm = ''; // Limpa a busca ao selecionar gênero
-            searchInput.value = ''; // Limpa o campo de busca visualmente
+            currentSearchTerm = ''; // Limpa busca
+            searchInput.value = '';
 
-            // Atualiza visualmente os botões de gênero
-            document.querySelectorAll('#genre-buttons-container .btn-genre').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('#genre-buttons-container .btn-genre').forEach(btn => btn.classList.remove('active'));
             buttonElement.classList.add('active');
 
-            fetchMovies(); // Busca filmes com o novo gênero
+            fetchAllMovies(); // REBUSCA TUDO com o novo gênero
         }
 
         /** Chamado ao digitar no campo de busca (com debounce) */
         function handleSearchInput() {
-             clearTimeout(searchTimeout); // Cancela timeout anterior
+             clearTimeout(searchTimeout);
 
              searchTimeout = setTimeout(() => {
                   const searchTerm = searchInput.value.trim();
-                  console.log(`Termo de busca: "${searchTerm}"`);
-
-                  // Só busca se o termo mudou
-                  if (currentSearchTerm !== searchTerm) {
+                  // Só busca se o termo mudou E não estiver carregando
+                  if (currentSearchTerm !== searchTerm && !isLoading) {
+                       console.log(`Termo de busca: "${searchTerm}"`);
                        currentSearchTerm = searchTerm;
-                       currentPage = 1; // Volta para a primeira página
-                       selectedGenreId = null; // Limpa filtro de gênero ao buscar
+                       selectedGenreId = null; // Limpa gênero
 
-                        // Desmarca visualmente os botões de gênero (exceto "Todos")
-                        document.querySelectorAll('#genre-buttons-container .btn-genre').forEach(btn => {
-                           btn.classList.remove('active');
-                        });
-                         // Marca o botão "Todos" como ativo visualmente
+                        document.querySelectorAll('#genre-buttons-container .btn-genre').forEach(btn => btn.classList.remove('active'));
                         const allButton = genreButtonsContainer.querySelector('button:first-child');
                         if(allButton) allButton.classList.add('active');
 
-                       fetchMovies(); // Inicia a busca
+                       fetchAllMovies(); // REBUSCA TUDO com o termo de busca
                   }
-             }, 500); // Aguarda 500ms após parar de digitar
-        }
-
-        /** Chamado ao clicar nos botões de paginação */
-        function changePage(newPage) {
-            if (newPage >= 1 && newPage <= totalPages && newPage <= 500 && !isLoading) {
-                currentPage = newPage;
-                console.log(`Mudando para página: ${currentPage}`);
-                fetchMovies(); // Busca a nova página
-                // Rola a tela suavemente para o topo da seção de resultados (opcional)
-                resultsSection = document.getElementById('results-section');
-                if(resultsSection) {
-                     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            } else {
-                 console.log(`Não foi possível mudar para a página ${newPage}. Total: ${totalPages}, Limite API: 500, Carregando: ${isLoading}`);
-            }
+             }, 500);
         }
 
         // --- Ponto de Entrada Principal ---
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM carregado. Iniciando aplicação Nexus Streams...");
+            console.log("DOM carregado. Iniciando aplicação Nexus Streams (Versão 'Carregar Tudo')...");
 
             // Configura listeners
             searchInput.addEventListener('input', handleSearchInput);
 
             // Busca inicial
-            fetchGenres(); // Busca gêneros primeiro para ter os botões
-            fetchMovies(); // Busca a primeira página de filmes populares
+            fetchGenres(); // Busca gêneros primeiro
+            fetchAllMovies(); // Busca as primeiras N páginas de filmes populares
 
             // Atualiza rodapé
             updateFooterYear();
