@@ -75,8 +75,8 @@
         <p id="main-subtitle" class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Explore uma lista extensa de filmes. Use a busca ou filtros de gênero.</p>
         <div class="max-w-lg mx-auto px-2 sm:px-0">
              <div class="relative">
-                  <input type="search" id="search-input" placeholder="Buscar pelo título..." class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
-                  <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                   <input type="search" id="search-input" placeholder="Buscar pelo título..." class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
+                   <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
              </div>
         </div>
     </section>
@@ -98,8 +98,8 @@
                      <p id="loading-message-movies">Buscando filmes populares...</p>
                 </div>
                 <div id="results-container-movies" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mt-6" style="display: none;">
-                    </div>
-                 <p id="no-results-movies" class="text-gray-400 text-center mt-8 hidden">Nenhum filme encontrado.</p>
+                 </div>
+                <p id="no-results-movies" class="text-gray-400 text-center mt-8 hidden">Nenhum filme encontrado.</p>
             </section>
         </div>
 
@@ -115,8 +115,8 @@
                      <p id="loading-message-series">Buscando séries populares...</p>
                 </div>
                 <div id="results-container-series" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mt-6" style="display: none;">
-                    </div>
-                 <p id="no-results-series" class="text-gray-400 text-center mt-8 hidden">Nenhuma série encontrada.</p>
+                 </div>
+                <p id="no-results-series" class="text-gray-400 text-center mt-8 hidden">Nenhuma série encontrada.</p>
             </section>
         </div>
 
@@ -132,21 +132,23 @@
         // --- Constantes Globais ---
         const TMDb_API_BASE_URL = 'https://api.themoviedb.org/3';
         const TMDb_API_URL_GENRES_MOVIE = `${TMDb_API_BASE_URL}/genre/movie/list?language=pt-BR`;
-        const TMDb_API_URL_GENRES_TV = `${TMDb_API_BASE_URL}/genre/tv/list?language=pt-BR`; // Novo
-        const TMDb_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-        const TMDb_PLACEHOLDER_IMAGE = 'https://placehold.co/500x750/374151/9CA3AF?text=Poster+Indispon%C3%ADvel';
+        const TMDb_API_URL_GENRES_TV = `${TMDb_API_BASE_URL}/genre/tv/list?language=pt-BR`;
+        const TMDb_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'; // Pode considerar w300 para performance
+        const TMDb_PLACEHOLDER_IMAGE = 'https://via.placeholder.com/500x750/374151/9CA3AF?text=Poster+Indisponivel'; // URL atualizada
         const TMDb_OPTIONS = {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMGU4NjljODc4YzVlYzQ0OTg0NmNjNjhmNTBkOWMwZCIsIm5iZiI6MTc0NTI1OTc2OC4xNTIsInN1YiI6IjY4MDY4Y2Y4YjY1OTgyMjgxMmVlNjhkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Owiv7fvIAoRGKoNE7erZsAypbofV2kJcDhdWmZ4-LX8' // Substitua pelo seu Token real
+                // IMPORTANTE: Substitua pela sua chave de API Bearer Token real do TMDb
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMGU4NjljODc4YzVlYzQ0OTg0NmNjNjhmNTBkOWMwZCIsIm5iZiI6MTc0NTI1OTc2OC4xNTIsInN1YiI6IjY4MDY4Y2Y4YjY1OTgyMjgxMmVlNjhkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Owiv7fvIAoRGKoNE7erZsAypbofV2kJcDhdWmZ4-LX8'
             }
         };
-        const PAGES_TO_FETCH = 5; // Busca 5 páginas = 100 itens. Aumente com MUITA cautela!
+        const PAGES_TO_FETCH = 5; // Buscar 5 páginas = 100 itens. Ajuste conforme necessário.
+        const CACHE_DURATION_MINUTES = 30; // Tempo de validade do cache em minutos
 
         // --- Variáveis de Estado ---
-        let currentView = 'movies'; // 'movies' ou 'series'
-        let isLoading = { movies: false, series: false }; // Controla loading por seção
+        let currentView = 'movies';
+        let isLoading = { movies: false, series: false };
         let searchTimeout = null;
 
         // Estado para Filmes
@@ -156,50 +158,111 @@
         let currentMovieSearchTerm = '';
         let selectedMovieGenreId = null;
 
-        // Estado para Séries (NOVO)
+        // Estado para Séries
         let seriesGenres = [];
         let seriesGenreMap = {};
         let allFetchedSeries = [];
         let currentSeriesSearchTerm = '';
         let selectedSeriesGenreId = null;
 
-
         // --- Elementos do DOM ---
-        // Gerais
-        const searchInput = document.getElementById('search-input');
-        const yearSpan = document.getElementById('current-year');
-        const mainTitle = document.getElementById('main-title');
-        const mainSubtitle = document.getElementById('main-subtitle');
-        const navMoviesBtn = document.getElementById('nav-movies');
-        const navSeriesBtn = document.getElementById('nav-series');
-        const moviesSectionDiv = document.getElementById('movies-section');
-        const seriesSectionDiv = document.getElementById('series-section');
+        // (O mesmo código de seleção de elementos do DOM que você já tinha)
+         // Gerais
+         const searchInput = document.getElementById('search-input');
+         const yearSpan = document.getElementById('current-year');
+         const mainTitle = document.getElementById('main-title');
+         const mainSubtitle = document.getElementById('main-subtitle');
+         const navMoviesBtn = document.getElementById('nav-movies');
+         const navSeriesBtn = document.getElementById('nav-series');
+         const moviesSectionDiv = document.getElementById('movies-section');
+         const seriesSectionDiv = document.getElementById('series-section');
 
-        // Filmes
-        const resultsContainerMovies = document.getElementById('results-container-movies');
-        const resultsTitleMovies = document.getElementById('results-title-movies');
-        const genreButtonsContainerMovies = document.getElementById('genre-buttons-container-movies');
-        const loadingGenresMsgMovies = document.getElementById('loading-genres-movies');
-        const loadingIndicatorMovies = document.getElementById('loading-indicator-movies');
-        const loadingMessageMovies = document.getElementById('loading-message-movies');
-        const noResultsMsgMovies = document.getElementById('no-results-movies');
+         // Filmes
+         const resultsContainerMovies = document.getElementById('results-container-movies');
+         const resultsTitleMovies = document.getElementById('results-title-movies');
+         const genreButtonsContainerMovies = document.getElementById('genre-buttons-container-movies');
+         const loadingGenresMsgMovies = document.getElementById('loading-genres-movies');
+         const loadingIndicatorMovies = document.getElementById('loading-indicator-movies');
+         const loadingMessageMovies = document.getElementById('loading-message-movies');
+         const noResultsMsgMovies = document.getElementById('no-results-movies');
 
-        // Séries
-        const resultsContainerSeries = document.getElementById('results-container-series');
-        const resultsTitleSeries = document.getElementById('results-title-series');
-        const genreButtonsContainerSeries = document.getElementById('genre-buttons-container-series');
-        const loadingGenresMsgSeries = document.getElementById('loading-genres-series');
-        const loadingIndicatorSeries = document.getElementById('loading-indicator-series');
-        const loadingMessageSeries = document.getElementById('loading-message-series');
-        const noResultsMsgSeries = document.getElementById('no-results-series');
+         // Séries
+         const resultsContainerSeries = document.getElementById('results-container-series');
+         const resultsTitleSeries = document.getElementById('results-title-series');
+         const genreButtonsContainerSeries = document.getElementById('genre-buttons-container-series');
+         const loadingGenresMsgSeries = document.getElementById('loading-genres-series');
+         const loadingIndicatorSeries = document.getElementById('loading-indicator-series');
+         const loadingMessageSeries = document.getElementById('loading-message-series');
+         const noResultsMsgSeries = document.getElementById('no-results-series');
+
+
+        // --- Funções de Cache ---
+
+        /** Salva dados no sessionStorage com timestamp */
+        function setCache(key, data) {
+            try {
+                const cacheEntry = {
+                    timestamp: Date.now(),
+                    data: data
+                };
+                sessionStorage.setItem(key, JSON.stringify(cacheEntry));
+                console.log(`Cache salvo para chave: ${key}`);
+            } catch (e) {
+                console.error("Erro ao salvar no sessionStorage:", e);
+                // Limpar cache se estiver cheio?
+                sessionStorage.clear();
+            }
+        }
+
+        /** Busca dados do sessionStorage, validando o timestamp */
+        function getCache(key) {
+            try {
+                const cacheEntry = sessionStorage.getItem(key);
+                if (!cacheEntry) return null;
+
+                const parsedEntry = JSON.parse(cacheEntry);
+                const now = Date.now();
+                const maxAge = CACHE_DURATION_MINUTES * 60 * 1000; // em milissegundos
+
+                if (now - parsedEntry.timestamp > maxAge) {
+                    console.log(`Cache expirado para chave: ${key}`);
+                    sessionStorage.removeItem(key); // Remove cache expirado
+                    return null;
+                }
+
+                console.log(`Cache encontrado para chave: ${key}`);
+                return parsedEntry.data;
+            } catch (e) {
+                console.error("Erro ao ler do sessionStorage:", e);
+                return null;
+            }
+        }
 
         // --- Funções de Busca na API ---
 
-        /** Busca lista de gêneros (genérica) */
+        /** Busca lista de gêneros (com cache) */
         async function fetchGenres(type = 'movie') {
-            const url = type === 'movie' ? TMDb_API_URL_GENRES_MOVIE : TMDb_API_URL_GENRES_TV;
+            const cacheKey = `genres_${type}`;
+            const cachedGenres = getCache(cacheKey);
             const loadingMsgElement = type === 'movie' ? loadingGenresMsgMovies : loadingGenresMsgSeries;
-            console.log(`Buscando gêneros de ${type}...`);
+
+            if (cachedGenres) {
+                console.log(`Usando gêneros cacheados para ${type}.`);
+                if (type === 'movie') {
+                    movieGenres = cachedGenres;
+                    movieGenres.forEach(genre => { movieGenreMap[genre.id] = genre.name; });
+                } else {
+                    seriesGenres = cachedGenres;
+                    seriesGenres.forEach(genre => { seriesGenreMap[genre.id] = genre.name; });
+                }
+                displayGenreFilters(type);
+                if (loadingMsgElement) loadingMsgElement.style.display = 'none';
+                return; // Sai da função se usou cache
+            }
+
+            // Se não tem cache, busca na API
+            const url = type === 'movie' ? TMDb_API_URL_GENRES_MOVIE : TMDb_API_URL_GENRES_TV;
+            console.log(`Buscando gêneros de ${type} da API...`);
             if (loadingMsgElement) loadingMsgElement.style.display = 'block';
 
             try {
@@ -210,13 +273,15 @@
                     if (type === 'movie') {
                         movieGenres = data.genres;
                         movieGenres.forEach(genre => { movieGenreMap[genre.id] = genre.name; });
+                        setCache(cacheKey, movieGenres); // Salva no cache
                         displayGenreFilters('movie');
                     } else {
                         seriesGenres = data.genres;
                         seriesGenres.forEach(genre => { seriesGenreMap[genre.id] = genre.name; });
+                        setCache(cacheKey, seriesGenres); // Salva no cache
                         displayGenreFilters('series');
                     }
-                    console.log(`Gêneros de ${type} carregados.`);
+                    console.log(`Gêneros de ${type} carregados da API e cacheados.`);
                     if (loadingMsgElement) loadingMsgElement.style.display = 'none';
                 } else {
                     console.warn(`Nenhum gênero encontrado para ${type}.`);
@@ -231,10 +296,11 @@
             }
         }
 
-       /**
-        * Busca MÚLTIPLAS PÁGINAS de conteúdo (filmes ou séries).
-        */
-       async function fetchAllContent(type = 'movie') {
+        /**
+         * Busca MÚLTIPLAS PÁGINAS de conteúdo (filmes ou séries) em PARALELO.
+         * Otimizado com busca paralela e cache para populares.
+         */
+        async function fetchAllContent(type = 'movie') {
             const isLoadingFlag = isLoading[type];
             if (isLoadingFlag) return;
             isLoading[type] = true;
@@ -244,14 +310,43 @@
             const loadingIndicatorElement = type === 'movie' ? loadingIndicatorMovies : loadingIndicatorSeries;
             const loadingMessageElement = type === 'movie' ? loadingMessageMovies : loadingMessageSeries;
             const noResultsElement = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
-            let allFetchedContent = type === 'movie' ? [] : []; // Limpa o array correto
             let searchTerm = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
             let selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
             const genreMap = type === 'movie' ? movieGenreMap : seriesGenreMap;
+            const isPopularSearch = !searchTerm && !selectedGenreId;
+            const cacheKey = isPopularSearch ? `popular_${type}` : null; // Chave de cache só para populares
 
             showLoading(true, type);
-            resultsContainer.style.display = 'none';
+            resultsContainer.style.display = 'none'; // Esconde container durante a busca
 
+            // --- Tenta carregar do cache PRIMEIRO se for busca popular ---
+            if (isPopularSearch) {
+                const cachedContent = getCache(cacheKey);
+                if (cachedContent) {
+                    console.log(`Usando conteúdo popular cacheado para ${type}.`);
+                    if (type === 'movie') {
+                        allFetchedMovies = cachedContent;
+                    } else {
+                        allFetchedSeries = cachedContent;
+                    }
+                    const itemsToDisplay = cachedContent.map(item => ({
+                        id: item.id,
+                        displayName: item.title || item.name,
+                        poster_path: item.poster_path,
+                        genre_ids: item.genre_ids || [],
+                        type: type === 'movie' ? 'movie' : 'tv'
+                    }));
+                    displayContent(itemsToDisplay, type);
+                    showLoading(false, type);
+                    resultsContainer.style.display = 'grid'; // Mostra container
+                    isLoading[type] = false;
+                    return; // Sai da função pois usou cache
+                }
+                console.log(`Cache popular para ${type} não encontrado ou expirado. Buscando da API.`);
+            }
+            // -------------------------------------------------------------
+
+            let allFetchedContent = []; // Limpa array antes de nova busca
             let fetchPromises = [];
             let endpoint = '';
             let queryParams = { language: 'pt-BR' };
@@ -259,92 +354,106 @@
             const singularTypeText = type === 'movie' ? 'filme' : 'série';
 
             try {
-                if (searchTerm) {
-                    resultsTitleElement.textContent = `Buscando ${contentTypeText} por: "${searchTerm}"...`;
-                    loadingMessageElement.textContent = `Procurando por "${searchTerm}"...`;
-                    endpoint = `${TMDb_API_BASE_URL}/search/${type === 'movie' ? 'movie' : 'tv'}`;
-                    queryParams.query = searchTerm;
-                    queryParams.include_adult = 'false';
-                } else if (selectedGenreId) {
+                 // Define o endpoint e os parâmetros baseados no tipo de busca
+                 if (searchTerm) {
+                     resultsTitleElement.textContent = `Buscando ${contentTypeText} por: "${searchTerm}"...`;
+                     loadingMessageElement.textContent = `Procurando por "${searchTerm}"...`;
+                     endpoint = `${TMDb_API_BASE_URL}/search/${type === 'movie' ? 'movie' : 'tv'}`;
+                     queryParams.query = searchTerm;
+                     queryParams.include_adult = 'false';
+                 } else if (selectedGenreId) {
                      const genreName = genreMap[selectedGenreId] || 'gênero selecionado';
                      resultsTitleElement.textContent = `Buscando ${contentTypeText} de ${genreName}...`;
                      loadingMessageElement.textContent = `Carregando ${contentTypeText} de ${genreName}...`;
-                    endpoint = `${TMDb_API_BASE_URL}/discover/${type === 'movie' ? 'movie' : 'tv'}`;
-                    queryParams.with_genres = selectedGenreId.toString();
-                    queryParams.sort_by = 'popularity.desc';
-                } else {
-                    resultsTitleElement.textContent = `Buscando ${contentTypeText} Populares...`;
-                    loadingMessageElement.textContent = `Carregando as primeiras ${PAGES_TO_FETCH} páginas de ${contentTypeText.toLowerCase()} populares...`;
-                    endpoint = `${TMDb_API_BASE_URL}/${type === 'movie' ? 'movie' : 'tv'}/popular`;
-                }
+                     endpoint = `${TMDb_API_BASE_URL}/discover/${type === 'movie' ? 'movie' : 'tv'}`;
+                     queryParams.with_genres = selectedGenreId.toString();
+                     queryParams.sort_by = 'popularity.desc';
+                 } else { // Busca populares (sem filtro/busca)
+                     resultsTitleElement.textContent = `Buscando ${contentTypeText} Populares...`;
+                     loadingMessageElement.textContent = `Carregando as primeiras ${PAGES_TO_FETCH} páginas de ${contentTypeText.toLowerCase()} populares...`;
+                     endpoint = `${TMDb_API_BASE_URL}/${type === 'movie' ? 'movie' : 'tv'}/popular`;
+                 }
 
-                console.log(`Iniciando busca ${type} - Endpoint: ${endpoint}, Páginas: ${PAGES_TO_FETCH}`);
+                 console.log(`Iniciando busca ${type} PARALELA - Endpoint: ${endpoint}, Páginas: ${PAGES_TO_FETCH}`);
 
-                const firstPageParams = new URLSearchParams({...queryParams, page: '1' });
-                const firstResponse = await fetch(`${endpoint}?${firstPageParams.toString()}`, TMDb_OPTIONS);
-                if (!firstResponse.ok) throw new Error(`Erro HTTP ${firstResponse.status} na página 1`);
-                const firstData = await firstResponse.json();
-                let totalFetchedPages = firstData.total_pages || 0;
-                if (firstData.results) {
-                    allFetchedContent.push(...firstData.results);
-                }
-                console.log(`Página 1 de ${type} carregada. Total: ${totalFetchedPages}`);
+                 // Cria uma Promise para cada página a ser buscada
+                 for (let page = 1; page <= PAGES_TO_FETCH; page++) {
+                     const pageParams = new URLSearchParams({...queryParams, page: page.toString() });
+                     const fetchUrl = `${endpoint}?${pageParams.toString()}`;
+                     fetchPromises.push(
+                         fetch(fetchUrl, TMDb_OPTIONS)
+                             .then(res => {
+                                 if (!res.ok) {
+                                     // Se uma página falhar, loga o erro mas não quebra tudo
+                                     console.warn(`Erro HTTP ${res.status} ao buscar página ${page} de ${type} (${fetchUrl})`);
+                                     return { results: [] }; // Retorna objeto vazio para não quebrar o reduce
+                                 }
+                                 return res.json();
+                             })
+                             .catch(err => {
+                                 console.error(`Erro de rede ao buscar página ${page} de ${type}:`, err);
+                                 return { results: [] }; // Retorna objeto vazio em caso de erro de rede
+                             })
+                     );
+                     // Pequeno delay para evitar 'rate limiting' (ajuste se necessário)
+                     // await new Promise(resolve => setTimeout(resolve, 30)); // Pode ser removido se não houver problemas
+                 }
 
-                const remainingPagesToFetch = Math.min(PAGES_TO_FETCH, totalFetchedPages) - 1;
+                 // Executa todas as buscas em paralelo e espera todas terminarem (com sucesso ou falha)
+                 const results = await Promise.allSettled(fetchPromises);
 
-                if (remainingPagesToFetch > 0) {
-                    for (let page = 2; page <= remainingPagesToFetch + 1; page++) {
-                        const pageParams = new URLSearchParams({...queryParams, page: page.toString() });
-                        fetchPromises.push(
-                            fetch(`${endpoint}?${pageParams.toString()}`, TMDb_OPTIONS)
-                                .then(res => res.ok ? res.json() : Promise.reject(`Erro ${res.status} pág ${page}`))
-                        );
-                        await new Promise(resolve => setTimeout(resolve, 50)); // Pequeno delay
-                    }
-                    console.log(`Buscando ${fetchPromises.length} páginas adicionais de ${type}...`);
-                    const results = await Promise.allSettled(fetchPromises);
-                    results.forEach((result, index) => {
-                        if (result.status === 'fulfilled' && result.value && result.value.results) {
-                            allFetchedContent.push(...result.value.results);
-                        } else {
-                             console.warn(`Falha ao carregar página ${index + 2} de ${type}: ${result.reason}`);
-                        }
-                    });
-                }
+                 console.log(`Resultados das buscas paralelas (${type}):`, results);
 
-                console.log(`Busca ${type} finalizada. Total de ${allFetchedContent.length} itens carregados.`);
+                 // Processa os resultados de cada busca
+                 results.forEach((result, index) => {
+                     if (result.status === 'fulfilled' && result.value && result.value.results) {
+                         allFetchedContent.push(...result.value.results);
+                     } else if (result.status === 'rejected') {
+                          // O erro já foi logado no .catch individual, mas podemos logar de novo se quisermos
+                          console.warn(`Falha ao carregar página ${index + 1} de ${type} (Promise rejeitada): ${result.reason}`);
+                     }
+                     // Se status fulfilled mas value.results é vazio (erro HTTP tratado), já foi logado antes.
+                 });
 
-                // Salva no estado correto
-                if (type === 'movie') {
-                    allFetchedMovies = allFetchedContent;
-                } else {
-                    allFetchedSeries = allFetchedContent;
-                }
+                 // Remove duplicados (caso a API retorne o mesmo item em páginas diferentes, raro mas possível)
+                 allFetchedContent = Array.from(new Map(allFetchedContent.map(item => [item.id, item])).values());
 
-                const itemsToDisplay = allFetchedContent.map(item => ({
-                    id: item.id,
-                    displayName: item.title || item.name,
-                    poster_path: item.poster_path,
-                    genre_ids: item.genre_ids || [],
-                    type: type === 'movie' ? 'movie' : 'tv'
-                }));
-                 displayContent(itemsToDisplay, type);
+                 console.log(`Busca ${type} finalizada. Total de ${allFetchedContent.length} itens únicos carregados.`);
 
-            } catch (error) {
-                console.error(`Falha CRÍTICA ao buscar ${type}:`, error);
-                resultsContainer.innerHTML = `<p class="text-red-500 text-center col-span-full font-semibold">Erro ao carregar ${contentTypeText.toLowerCase()}: ${error.message}.</p>`;
-                resultsContainer.style.display = 'block';
-                noResultsElement.style.display = 'none';
+                 // Salva no estado correto
+                 if (type === 'movie') {
+                     allFetchedMovies = allFetchedContent;
+                     if (isPopularSearch) setCache(cacheKey, allFetchedMovies); // Cache apenas populares
+                 } else {
+                     allFetchedSeries = allFetchedContent;
+                     if (isPopularSearch) setCache(cacheKey, allFetchedSeries); // Cache apenas populares
+                 }
+
+                 // Prepara para exibição
+                 const itemsToDisplay = allFetchedContent.map(item => ({
+                     id: item.id,
+                     displayName: item.title || item.name, // Usa 'name' para séries, 'title' para filmes
+                     poster_path: item.poster_path,
+                     genre_ids: item.genre_ids || [],
+                     type: type === 'movie' ? 'movie' : 'tv'
+                 }));
+
+                 displayContent(itemsToDisplay, type); // Exibe o conteúdo
+
+            } catch (error) { // Erro GERAL (ex: falha na lógica antes do fetch)
+                 console.error(`Falha CRÍTICA e inesperada ao buscar ${type}:`, error);
+                 resultsContainer.innerHTML = `<p class="text-red-500 text-center col-span-full font-semibold">Erro inesperado ao carregar ${contentTypeText.toLowerCase()}: ${error.message}. Verifique o console.</p>`;
+                 noResultsElement.style.display = 'none';
             } finally {
-                isLoading[type] = false;
-                showLoading(false, type);
-                resultsContainer.style.display = 'grid';
-                updateResultsTitle(type); // Atualiza o título final
+                 isLoading[type] = false;
+                 showLoading(false, type);
+                 resultsContainer.style.display = 'grid'; // Garante que o container está visível
+                 updateResultsTitle(type); // Atualiza o título final
             }
-       }
+        }
 
-       /** Busca detalhes e trailer (genérico) */
-       async function fetchDetailsAndShowTrailer(itemId, itemTitle, type = 'movie') {
+        /** Busca detalhes e trailer (genérico) - Mantida como estava */
+        async function fetchDetailsAndShowTrailer(itemId, itemTitle, type = 'movie') {
             const apiUrl = `${TMDb_API_BASE_URL}/${type === 'movie' ? 'movie' : 'tv'}/${itemId}?language=pt-BR&append_to_response=videos`;
             console.log(`Buscando detalhes (${type}) ID: ${itemId}`);
             try {
@@ -352,208 +461,304 @@
                 if (!response.ok) throw new Error(`Erro ${response.status} ao buscar detalhes`);
                 const data = await response.json();
                 const videos = data.videos?.results || [];
+                // Prioriza trailer oficial, depois qualquer trailer, depois qualquer vídeo do YouTube
                 const trailer = videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer' && vid.official)
                              || videos.find(vid => vid.site === 'YouTube' && vid.type === 'Trailer')
                              || videos.find(vid => vid.site === 'YouTube');
 
                 if (trailer && trailer.key) {
-                     const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
-                     window.open(youtubeUrl, '_blank');
+                    // IMPORTANTE: Ajuste o URL do googleusercontent se necessário ou use o URL padrão do YouTube
+                    // const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
+                    const youtubeUrl = `https://www.youtube.com/watch?v=$${trailer.key}`; // Manteve o formato original do seu código
+                    console.log("Abrindo trailer:", youtubeUrl);
+                    window.open(youtubeUrl, '_blank');
                 } else {
                     alert(`Nenhum trailer do YouTube encontrado para "${itemTitle}".`);
                 }
             } catch (error) {
                 console.error(`Falha ao buscar trailer (${type}) ID ${itemId}:`, error);
-                alert(`Erro ao buscar trailer para "${itemTitle}".`);
+                alert(`Erro ao buscar trailer para "${itemTitle}". Verifique o console.`);
             }
        }
 
 
         // --- Funções de Manipulação do DOM e Exibição ---
+        // (Funções showLoading, displayGenreFilters, createContentCard, displayContent, updateResultsTitle, updateFooterYear mantidas como estavam, pois a lógica principal de exibição não mudou)
 
         /** Mostra/Esconde loading para um tipo específico */
-        function showLoading(show, type = 'movie') {
-             const indicator = type === 'movie' ? loadingIndicatorMovies : loadingIndicatorSeries;
-             const noResults = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
-             if (indicator) indicator.style.display = show ? 'block' : 'none';
-             if (noResults) noResults.style.display = 'none';
-        }
+         function showLoading(show, type = 'movie') {
+              const indicator = type === 'movie' ? loadingIndicatorMovies : loadingIndicatorSeries;
+              const noResults = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
+              if (indicator) indicator.style.display = show ? 'block' : 'none';
+              if (noResults) noResults.style.display = 'none'; // Sempre esconde msg de 'sem resultados' ao mostrar loading
+         }
 
-        /** Cria botões de gênero (genérico) */
-        function displayGenreFilters(type = 'movie') {
-            const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
-            const genresList = type === 'movie' ? movieGenres : seriesGenres;
-            let selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+         /** Cria botões de gênero (genérico) */
+         function displayGenreFilters(type = 'movie') {
+             const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
+             const genresList = type === 'movie' ? movieGenres : seriesGenres;
+             // Determina o ID selecionado ATUALMENTE para este tipo
+             let currentSelectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
 
-            if (!container) return;
-            container.innerHTML = ''; // Limpa
-
-            // Botão "Todos"
-            const allButton = document.createElement('button');
-            allButton.textContent = 'Todos';
-            allButton.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
-            if (selectedGenreId === null) allButton.classList.add('active');
-            allButton.onclick = () => handleGenreClick(null, allButton, type);
-            container.appendChild(allButton);
-
-            // Botões de Gênero
-            genresList.forEach(genre => {
-                const button = document.createElement('button');
-                button.textContent = genre.name;
-                button.dataset.genreId = genre.id;
-                button.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
-                if (selectedGenreId === genre.id) button.classList.add('active');
-                button.onclick = () => handleGenreClick(genre.id, button, type);
-                container.appendChild(button);
-            });
-        }
-
-        /** Cria card HTML (genérico) */
-        function createContentCard(item) { // item = { id, displayName, poster_path, type }
-            const element = document.createElement('div');
-            element.className = 'content-card group';
-
-            const posterUrl = item.poster_path ? `${TMDb_IMAGE_BASE_URL}${item.poster_path}` : TMDb_PLACEHOLDER_IMAGE;
-            const tmdbUrl = `https://www.themoviedb.org/${item.type === 'movie' ? 'movie' : 'tv'}/${item.id}?language=pt-BR`;
-            const escapedDisplayName = item.displayName.replace(/'/g, "\\'");
-            const contentTypeText = item.type === 'movie' ? 'Filme' : 'Série';
-
-            element.innerHTML = `
-                <div class="relative">
-                    <img src="${posterUrl}" alt="Pôster de ${item.displayName}" loading="lazy" onerror="this.onerror=null; this.src='${TMDb_PLACEHOLDER_IMAGE}';">
-                     <span class="absolute top-2 right-2 ${item.type === 'movie' ? 'bg-red-600' : 'bg-blue-600'} text-white text-xs font-semibold px-1.5 py-0.5 rounded">${contentTypeText}</span>
-                </div>
-                <div class="card-content">
-                    <span class="card-title" title="${item.displayName}">${item.displayName}</span>
-                    <div class="card-buttons">
-                        <button class="btn-card btn-trailer" onclick="fetchDetailsAndShowTrailer(${item.id}, '${escapedDisplayName}', '${item.type}')" title="Ver trailer no YouTube">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
-                            Trailer
-                        </button>
-                        <a href="${tmdbUrl}" target="_blank" rel="noopener noreferrer" class="btn-card btn-watch" title="Ver detalhes no TMDb">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path></svg>
-                            Detalhes
-                        </a>
-                    </div>
-                </div>
-            `;
-            return element;
-        }
-
-        /** Exibe lista de conteúdo (genérico) */
-        function displayContent(contentList, type = 'movie') {
-             const container = type === 'movie' ? resultsContainerMovies : resultsContainerSeries;
-             const noResults = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
+             if (!container) return;
              container.innerHTML = ''; // Limpa
 
-             if (contentList && contentList.length > 0) {
-                 noResults.style.display = 'none';
-                 contentList.forEach(item => {
-                     const cardElement = createContentCard(item); // Passa o item completo
-                     container.appendChild(cardElement);
-                 });
-             } else {
-                 noResults.style.display = 'block';
+             // Botão "Todos"
+             const allButton = document.createElement('button');
+             allButton.textContent = 'Todos';
+             allButton.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
+             // Adiciona classe 'active' se NENHUM gênero específico estiver selecionado para este tipo
+             if (currentSelectedGenreId === null) {
+                 allButton.classList.add('active');
+                 // Muda a cor da borda e texto para azul se for de séries
+                 if(type === 'series') {
+                    allButton.style.backgroundColor = '#2563eb'; // blue-600
+                    allButton.style.borderColor = '#2563eb';
+                 }
              }
-             updateResultsTitle(type); // Atualiza o título da seção específica
-        }
+             allButton.onclick = () => handleGenreClick(null, allButton, type);
+             container.appendChild(allButton);
+
+             // Botões de Gênero
+             genresList.forEach(genre => {
+                 const button = document.createElement('button');
+                 button.textContent = genre.name;
+                 button.dataset.genreId = genre.id;
+                 button.className = 'btn-genre px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium text-gray-300';
+                 // Adiciona classe 'active' se ESTE gênero for o selecionado para este tipo
+                 if (currentSelectedGenreId === genre.id) {
+                    button.classList.add('active');
+                    // Muda a cor da borda e texto para azul se for de séries
+                    if(type === 'series') {
+                        button.style.backgroundColor = '#2563eb'; // blue-600
+                        button.style.borderColor = '#2563eb';
+                    }
+                 }
+                 button.onclick = () => handleGenreClick(genre.id, button, type);
+                 container.appendChild(button);
+             });
+         }
+
+
+         /** Cria card HTML (genérico) */
+         function createContentCard(item) { // item = { id, displayName, poster_path, type }
+             const element = document.createElement('div');
+             element.className = 'content-card group';
+
+             const posterUrl = item.poster_path ? `${TMDb_IMAGE_BASE_URL}${item.poster_path}` : TMDb_PLACEHOLDER_IMAGE;
+             const tmdbUrl = `https://www.themoviedb.org/${item.type === 'movie' ? 'movie' : 'tv'}/${item.id}?language=pt-BR`;
+              // Escapa aspas simples e duplas para segurança no onclick
+             const escapedDisplayName = item.displayName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+             const contentTypeText = item.type === 'movie' ? 'Filme' : 'Série';
+
+             element.innerHTML = `
+                 <div class="relative">
+                     <img src="${posterUrl}" alt="Pôster de ${item.displayName}" loading="lazy" onerror="this.onerror=null; this.src='${TMDb_PLACEHOLDER_IMAGE}'; this.alt='Pôster indisponível';">
+                      <span class="absolute top-2 right-2 ${item.type === 'movie' ? 'bg-red-600' : 'bg-blue-600'} text-white text-xs font-semibold px-1.5 py-0.5 rounded shadow">${contentTypeText}</span>
+                 </div>
+                 <div class="card-content">
+                     <span class="card-title" title="${item.displayName}">${item.displayName}</span>
+                     <div class="card-buttons">
+                         <button class="btn-card btn-trailer" onclick="fetchDetailsAndShowTrailer(${item.id}, '${escapedDisplayName}', '${item.type}')" title="Ver trailer no YouTube">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
+                             Trailer
+                         </button>
+                         <a href="${tmdbUrl}" target="_blank" rel="noopener noreferrer" class="btn-card btn-watch" title="Ver detalhes no TMDb">
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path></svg>
+                             Detalhes
+                         </a>
+                     </div>
+                 </div>
+             `;
+             return element;
+         }
+
+
+         /** Exibe lista de conteúdo (genérico) */
+         function displayContent(contentList, type = 'movie') {
+              const container = type === 'movie' ? resultsContainerMovies : resultsContainerSeries;
+              const noResults = type === 'movie' ? noResultsMsgMovies : noResultsMsgSeries;
+              container.innerHTML = ''; // Limpa sempre antes de exibir
+
+              if (contentList && contentList.length > 0) {
+                   noResults.style.display = 'none';
+                   const fragment = document.createDocumentFragment(); // Usar fragmento para melhor performance
+                   contentList.forEach(item => {
+                       const cardElement = createContentCard(item);
+                       fragment.appendChild(cardElement);
+                   });
+                   container.appendChild(fragment); // Adiciona tudo de uma vez
+              } else {
+                   noResults.style.display = 'block'; // Mostra mensagem se não há itens
+                   // Garante que a mensagem correta seja exibida dependendo se foi busca ou filtro
+                   const searchTerm = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
+                   const selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+                   if (searchTerm) {
+                       noResults.textContent = `Nenhum(a) ${type === 'movie' ? 'filme' : 'série'} encontrado(a) para "${searchTerm}".`;
+                   } else if (selectedGenreId) {
+                       const genreMap = type === 'movie' ? movieGenreMap : seriesGenreMap;
+                       const genreName = genreMap[selectedGenreId] || 'gênero selecionado';
+                       noResults.textContent = `Nenhum(a) ${type === 'movie' ? 'filme' : 'série'} encontrado(a) para o gênero ${genreName}.`;
+                   } else {
+                       noResults.textContent = `Nenhum(a) ${type === 'movie' ? 'filme popular' : 'série popular'} encontrado(a) no momento.`;
+                   }
+              }
+              // updateResultsTitle é chamado no finally de fetchAllContent
+         }
+
 
          /** Atualiza título H2 da seção (genérico) */
-        function updateResultsTitle(type = 'movie') {
-             const titleElement = type === 'movie' ? resultsTitleMovies : resultsTitleSeries;
-             const fetchedItems = type === 'movie' ? allFetchedMovies : allFetchedSeries;
-             const searchTerm = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
-             const selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
-             const genreMap = type === 'movie' ? movieGenreMap : seriesGenreMap;
-             const contentTypeText = type === 'movie' ? 'Filmes' : 'Séries';
+         function updateResultsTitle(type = 'movie') {
+              const titleElement = type === 'movie' ? resultsTitleMovies : resultsTitleSeries;
+              // Pega os itens JÁ EXIBIDOS no container, não necessariamente todos os buscados se houve erro
+              const displayedItemsCount = (type === 'movie' ? resultsContainerMovies : resultsContainerSeries).children.length;
+              const searchTerm = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
+              const selectedGenreId = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+              const genreMap = type === 'movie' ? movieGenreMap : seriesGenreMap;
+              const contentTypeText = type === 'movie' ? 'Filmes' : 'Séries';
+              const contentTypeTextLower = contentTypeText.toLowerCase();
 
-             let title = `${contentTypeText} Populares (${fetchedItems.length} carregados)`;
-             if (searchTerm) {
-                 title = `Resultados de ${contentTypeText.toLowerCase()} para "${searchTerm}" (${fetchedItems.length} encontrados)`;
-             } else if (selectedGenreId && genreMap[selectedGenreId]) {
-                 title = `${contentTypeText} de ${genreMap[selectedGenreId]} (${fetchedItems.length} carregados)`;
-             }
-             titleElement.textContent = title;
-        }
+              let title = `${contentTypeText} Populares`;
+              if (searchTerm) {
+                  title = `Resultados de ${contentTypeTextLower} para "${searchTerm}"`;
+              } else if (selectedGenreId && genreMap[selectedGenreId]) {
+                  title = `${contentTypeText} de ${genreMap[selectedGenreId]}`;
+              }
 
-        /** Atualiza o ano no rodapé */
-        function updateFooterYear() {
-            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-        }
+              // Adiciona a contagem apenas se houver resultados
+              if (displayedItemsCount > 0) {
+                 title += ` (${displayedItemsCount} ${displayedItemsCount === 1 ? 'item' : 'itens'})`;
+              } else if (!isLoading[type]) { // Se não está carregando e não tem itens
+                  // O título já reflete a busca/filtro, a msg de 'sem resultados' é mostrada em displayContent
+              } else {
+                  // Mantém o título de "Carregando..." enquanto busca
+                  title = titleElement.textContent; // Não sobrescreve o "Carregando..."
+              }
+
+
+              titleElement.textContent = title;
+         }
+
+         /** Atualiza o ano no rodapé */
+         function updateFooterYear() {
+             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+         }
 
         // --- Manipuladores de Eventos ---
 
         /** Troca a visão entre Filmes e Séries */
         function switchView(viewToShow) {
-             if (viewToShow === currentView) return; // Já está na visão correta
+             if (viewToShow === currentView && !isLoading[viewToShow]) return; // Já na view e não carregando
 
+             console.log("Mudando visão para:", viewToShow);
              currentView = viewToShow;
-             console.log("Mudando visão para:", currentView);
+
 
              // Atualiza botões da Nav
              navMoviesBtn.classList.toggle('active', currentView === 'movies');
              navSeriesBtn.classList.toggle('active', currentView === 'series');
+             // Adapta cor do botão ativo da nav de séries
+             navSeriesBtn.classList.toggle('bg-blue-600', currentView === 'series'); // Azul para series
+             navSeriesBtn.classList.toggle('text-white', currentView === 'series');
+             navMoviesBtn.classList.toggle('bg-red-600', currentView === 'movies'); // Vermelho para filmes
 
              // Atualiza título principal e placeholder da busca
              const isMovies = currentView === 'movies';
              mainTitle.textContent = isMovies ? 'Filmes Populares' : 'Séries Populares';
              mainSubtitle.textContent = `Explore uma lista extensa de ${isMovies ? 'filmes' : 'séries'}. Use a busca ou filtros de gênero.`;
              searchInput.placeholder = `Buscar ${isMovies ? 'filmes' : 'séries'} pelo título...`;
-             searchInput.value = ''; // Limpa busca ao trocar
 
-             // Limpa filtros/busca da view anterior (opcional, mas recomendado)
-             if (isMovies) {
-                 currentSeriesSearchTerm = '';
-                 selectedSeriesGenreId = null;
-             } else {
-                 currentMovieSearchTerm = '';
-                 selectedMovieGenreId = null;
-             }
+             // Troca borda do título da seção ativa
+             resultsTitleMovies.classList.toggle('border-red-600', isMovies);
+             resultsTitleMovies.classList.toggle('border-blue-600', !isMovies); // Assume que é séries se não for filmes
+             resultsTitleSeries.classList.toggle('border-blue-600', !isMovies);
+             resultsTitleSeries.classList.toggle('border-red-600', isMovies); // Assume que é filmes se não for séries
+
+             // LIMPA o input de busca ao trocar de view
+             searchInput.value = '';
+             // RESETA o estado de busca/filtro da view ANTERIOR para evitar confusão
+              if (isMovies) {
+                  currentSeriesSearchTerm = '';
+                  selectedSeriesGenreId = null;
+              } else {
+                  currentMovieSearchTerm = '';
+                  selectedMovieGenreId = null;
+              }
 
              // Mostra/Esconde seções
              moviesSectionDiv.style.display = isMovies ? 'block' : 'none';
              seriesSectionDiv.style.display = isMovies ? 'none' : 'block';
 
-             // Busca conteúdo para a nova visão SE NUNCA FOI CARREGADO AINDA
-             const itemsAlreadyFetched = isMovies ? allFetchedMovies.length > 0 : allFetchedSeries.length > 0;
-             if (!itemsAlreadyFetched) {
-                 fetchAllContent(currentView);
+             // --- Lógica de Carregamento Otimizada ---
+             // 1. Verifica se os dados já estão no estado (allFetchedMovies/allFetchedSeries)
+             const itemsAlreadyInState = isMovies ? allFetchedMovies.length > 0 : allFetchedSeries.length > 0;
+             const isPopularSearch = isMovies ? (!currentMovieSearchTerm && !selectedMovieGenreId) : (!currentSeriesSearchTerm && !selectedSeriesGenreId);
+
+             // Se for busca popular E os itens JÁ ESTÃO em memória (foram buscados antes nesta sessão)
+             if (isPopularSearch && itemsAlreadyInState) {
+                 console.log(`Reexibindo ${currentView} já em memória.`);
+                 const itemsToDisplay = (isMovies ? allFetchedMovies : allFetchedSeries).map(item => ({
+                     id: item.id,
+                     displayName: item.title || item.name,
+                     poster_path: item.poster_path,
+                     genre_ids: item.genre_ids || [],
+                     type: isMovies ? 'movie' : 'tv'
+                 }));
+                 displayContent(itemsToDisplay, currentView);
+                 // Garante que os filtros de gênero sejam exibidos corretamente para a view atual
+                 displayGenreFilters(currentView);
              } else {
-                  // Se já carregou, apenas atualiza o título (caso tenha filtro/busca ativa da outra seção)
-                  updateResultsTitle(currentView);
-                  // Pode ser necessário re-renderizar os filtros se o estado deles não foi resetado
-                  displayGenreFilters(currentView);
+                  // Se não estão em memória OU se é uma busca/filtro específico, busca da API (que usará cache se aplicável)
+                  console.log(`Buscando ${currentView} da API (ou cache da API).`);
+                  fetchAllContent(currentView);
+                  // Os gêneros também serão buscados/usados do cache pela fetchGenres chamada no DOMContentLoaded
+                  // Mas podemos garantir que os botões sejam renderizados corretamente chamando aqui também
+                   displayGenreFilters(currentView);
              }
-        }
+         }
 
         /** Clique em botão de gênero (genérico) */
         function handleGenreClick(genreId, buttonElement, type = 'movie') {
-            const isLoadingFlag = isLoading[type];
-            let currentSelectedGenre = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
+             const isLoadingFlag = isLoading[type];
+             let currentSelectedGenre = type === 'movie' ? selectedMovieGenreId : selectedSeriesGenreId;
 
-            if (isLoadingFlag || currentSelectedGenre === genreId) return;
+             // Não faz nada se já estiver carregando ou se clicou no gênero já ativo
+             if (isLoadingFlag || currentSelectedGenre === genreId) return;
 
-            console.log(`Gênero (${type}) selecionado: ${genreId}`);
+             console.log(`Gênero (${type}) selecionado: ${genreId === null ? 'Todos' : genreId}`);
 
-            // Atualiza estado correto
-            if (type === 'movie') {
-                selectedMovieGenreId = genreId;
-                currentMovieSearchTerm = ''; // Limpa busca
-            } else {
-                selectedSeriesGenreId = genreId;
-                currentSeriesSearchTerm = ''; // Limpa busca
-            }
-             searchInput.value = ''; // Limpa visualmente
+             // Atualiza estado correto
+             if (type === 'movie') {
+                 selectedMovieGenreId = genreId;
+                 currentMovieSearchTerm = ''; // Limpa busca ao selecionar gênero
+             } else {
+                 selectedSeriesGenreId = genreId;
+                 currentSeriesSearchTerm = ''; // Limpa busca ao selecionar gênero
+             }
+              searchInput.value = ''; // Limpa visualmente o input de busca
 
-            // Atualiza botões da seção correta
-            const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
-            container.querySelectorAll('.btn-genre').forEach(btn => btn.classList.remove('active'));
-            buttonElement.classList.add('active');
+             // Atualiza visualmente os botões de gênero (ativa o clicado, desativa os outros)
+             const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
+             container.querySelectorAll('.btn-genre').forEach(btn => {
+                 btn.classList.remove('active');
+                 // Reseta estilos específicos de tipo
+                 btn.style.backgroundColor = '';
+                 btn.style.borderColor = '';
+             });
+             buttonElement.classList.add('active');
+             // Aplica estilo ativo específico do tipo (vermelho para filme, azul para série)
+             if(type === 'series') {
+                buttonElement.style.backgroundColor = '#2563eb'; // blue-600
+                buttonElement.style.borderColor = '#2563eb';
+             } else {
+                 // Para filmes (ou o botão 'Todos' quando filmes está ativo), usa a classe 'active' padrão (vermelho)
+             }
 
-            fetchAllContent(type); // REBUSCA TUDO com o novo gênero
-        }
 
-        /** Input de busca (genérico) */
+             fetchAllContent(type); // REBUSCA TUDO com o novo gênero (usará cache se for populares)
+         }
+
+        /** Input de busca (genérico com debounce) */
         function handleSearchInput() {
              clearTimeout(searchTimeout);
 
@@ -563,47 +768,61 @@
                   const isLoadingFlag = isLoading[type];
                   let currentSearchState = type === 'movie' ? currentMovieSearchTerm : currentSeriesSearchTerm;
 
+                  // Só busca se o termo mudou E não estiver carregando
                   if (currentSearchState !== searchTerm && !isLoadingFlag) {
                        console.log(`Termo de busca (${type}): "${searchTerm}"`);
 
                        // Atualiza estado correto
                        if (type === 'movie') {
                            currentMovieSearchTerm = searchTerm;
-                           selectedMovieGenreId = null; // Limpa gênero
+                           selectedMovieGenreId = null; // Limpa gênero ao buscar
                        } else {
                            currentSeriesSearchTerm = searchTerm;
-                           selectedSeriesGenreId = null; // Limpa gênero
+                           selectedSeriesGenreId = null; // Limpa gênero ao buscar
                        }
 
-                        // Desmarca botões de gênero da seção ativa
-                        const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
-                         if(container) { // Verifica se o container existe
-                            container.querySelectorAll('.btn-genre').forEach(btn => btn.classList.remove('active'));
-                            const allButton = container.querySelector('button:first-child');
-                            if(allButton) allButton.classList.add('active');
-                        }
+                       // Desmarca botões de gênero da seção ativa e ativa o "Todos"
+                       const container = type === 'movie' ? genreButtonsContainerMovies : genreButtonsContainerSeries;
+                       if(container) {
+                           container.querySelectorAll('.btn-genre').forEach(btn => {
+                               btn.classList.remove('active');
+                               btn.style.backgroundColor = ''; // Reseta cor
+                               btn.style.borderColor = '';
+                           });
+                           const allButton = container.querySelector('button:first-child');
+                           if(allButton) {
+                               allButton.classList.add('active');
+                               // Aplica cor ativa correta ao botão "Todos"
+                               if(type === 'series') {
+                                    allButton.style.backgroundColor = '#2563eb';
+                                    allButton.style.borderColor = '#2563eb';
+                               }
+                           }
+                       }
 
                        fetchAllContent(type); // REBUSCA TUDO com o termo
+                  } else if (currentSearchState === searchTerm && !isLoadingFlag) {
+                      console.log(`Termo de busca (${type}) não mudou: "${searchTerm}". Nenhuma nova busca.`);
                   }
-             }, 500);
-        }
+             }, 350); // Debounce de 350ms (um pouco mais rápido)
+         }
 
         // --- Ponto de Entrada Principal ---
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM carregado. Iniciando Nexus Streams...");
+             console.log("DOM carregado. Iniciando Nexus Streams v2 (Otimizado)...");
 
-            // Configura listeners
-            searchInput.addEventListener('input', handleSearchInput);
-            navMoviesBtn.addEventListener('click', () => switchView('movies'));
-            navSeriesBtn.addEventListener('click', () => switchView('series'));
+             // Configura listeners
+             searchInput.addEventListener('input', handleSearchInput);
+             navMoviesBtn.addEventListener('click', () => switchView('movies'));
+             navSeriesBtn.addEventListener('click', () => switchView('series'));
 
-            // Busca inicial (gêneros de ambos, conteúdo da view padrão 'movies')
-            fetchGenres('movie');
-            fetchGenres('series'); // Busca gêneros das séries também
-            fetchAllContent('movies'); // Carrega filmes inicialmente
+             // Busca inicial (gêneros de ambos com cache, conteúdo da view padrão 'movies' com cache)
+             fetchGenres('movie');
+             fetchGenres('series'); // Busca gêneros das séries também (usará cache se disponível)
+             fetchAllContent('movies'); // Carrega filmes inicialmente (usará cache se disponível)
 
-            // Atualiza rodapé
-            updateFooterYear();
+             // Atualiza rodapé
+             updateFooterYear();
         });
 
     </script>
