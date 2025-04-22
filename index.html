@@ -24,7 +24,10 @@
         .play-icon::before { content: '▶'; font-size: 1.5rem; color: rgba(255, 255, 255, 0.9); }
 
         /* Animação Badge Live */
-        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(255, 0, 0, 0.6); } 50% { opacity: 0.8; box-shadow: 0 0 10px rgba(255, 0, 0, 0.9); } }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(14, 165, 233, 0.6); } /* sky-500 */
+          50% { opacity: 0.8; box-shadow: 0 0 10px rgba(14, 165, 233, 0.9); } /* sky-500 */
+        }
         .badge-live { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 
         /* Utilitários (esconder barra de rolagem em elementos específicos) */
@@ -98,8 +101,19 @@
             opacity: 0; visibility: hidden; pointer-events: none; /* Fica invisível e não interativo */
         }
         /* Título na Splash Screen atualizado */
-        #splash-screen h1 { font-size: 2.5rem; font-weight: 700; color: #dc2626; margin-bottom: 2rem; text-shadow: 0 0 8px rgba(220, 38, 38, 0.5); }
-        .spinner { border: 4px solid rgba(255, 255, 255, 0.2); border-left-color: #dc2626; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 1.5rem; /* Adiciona espaço abaixo do spinner */ }
+        #splash-screen h1 {
+            font-size: 2.5rem; font-weight: 700;
+            color: #0ea5e9; /* Azul claro (sky-500) */
+            margin-bottom: 2rem;
+            text-shadow: 0 0 8px rgba(14, 165, 233, 0.5); /* Sombra azul claro */
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #0ea5e9; /* Azul claro (sky-500) */
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem; /* Adiciona espaço abaixo do spinner */
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         /* --- FIM DOS ESTILOS DA SPLASH SCREEN --- */
     </style>
@@ -111,10 +125,11 @@
         <div class="spinner"></div>
         <p class="text-yellow-400 text-base font-medium mb-1">Versão de Teste</p>
         <p class="text-gray-400 text-sm">Em Desenvolvimento</p>
-        </div>
+    </div>
+
     <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
         <nav class="container mx-auto px-0 sm:px-6 flex flex-wrap justify-between items-center">
-            <a href="#" class="text-2xl sm:text-3xl font-bold text-red-600 tracking-wide hover:text-red-500 transition duration-300">Nexus Streaming</a>
+             <a href="#" class="text-2xl sm:text-3xl font-bold text-sky-500 tracking-wide hover:text-sky-600 transition duration-300">Nexus Streaming</a>
             <div class="space-x-3 sm:space-x-5 mt-2 sm:mt-0">
                  <a href="#ao-vivo" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Ao Vivo</a>
                  <a href="#radios" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Rádios</a>
@@ -133,7 +148,7 @@
         <div class="max-w-lg mx-auto px-2 sm:px-0">
              <div class="relative">
                  <input type="search" placeholder="Buscar canais, rádios, notícias..."
-                        class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
+                        class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
                  <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                  </svg>
@@ -144,10 +159,10 @@
     <main class="container mx-auto px-4 sm:px-6">
 
         <section id="ao-vivo" class="mb-12 sm:mb-16">
-            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Canais Ao Vivo</h2>
+            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Canais Ao Vivo</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                <a href="https://globoplay.globo.com/tv-globo/ao-vivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                    <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                 <a href="https://globoplay.globo.com/tv-globo/ao-vivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                    <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
                     <div class="relative">
                         <img src="https://assets.goal.com/images/v3/blt615b3ae591a82e71/1aad91a5b8fab93c575faf3d3ec4eb03c62409cc.png?auto=webp&format=pjpg&width=3840&quality=60" alt="Logo Globo" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -155,127 +170,127 @@
                     </div>
                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Globo</span></div>
                 </a>
-                <a href="https://www.sbt.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                <a href="https://www.sbt.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
                      <div class="relative">
-                         <img src="https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2025/04/07/1431165982-sbt.jpg" alt="Logo SBT" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                          <img src="https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2025/04/07/1431165982-sbt.jpg" alt="Logo SBT" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                      </div>
                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">SBT</span></div>
                 </a>
-                <a href="https://www.playplus.com/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                <a href="https://www.playplus.com/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
                      <div class="relative">
-                         <img src="https://www.moneytimes.com.br/uploads/2023/05/microsoftteams-image-4.png" alt="Logo RecordTV" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                          <img src="https://www.moneytimes.com.br/uploads/2023/05/microsoftteams-image-4.png" alt="Logo RecordTV" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                      </div>
                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">RecordTV</span></div>
                 </a>
-                <a href="https://www.band.uol.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                <a href="https://www.band.uol.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
                      <div class="relative">
-                         <img src="https://braziljournal.com/wp-content/uploads/2022/06/164bcbd7-9e1a-b098-6489-da08bb218aac.jpg" alt="Logo Band" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                          <img src="https://braziljournal.com/wp-content/uploads/2022/06/164bcbd7-9e1a-b098-6489-da08bb218aac.jpg" alt="Logo Band" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                      </div>
                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Band</span></div>
                 </a>
-                <a href="https://www.redetv.uol.com.br/aovivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                <a href="https://www.redetv.uol.com.br/aovivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
                      <div class="relative">
-                         <img src="https://upload.wikimedia.org/wikipedia/pt/8/89/Logotipo_da_RedeTV%21.png" alt="Logo RedeTV!" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                          <img src="https://upload.wikimedia.org/wikipedia/pt/8/89/Logotipo_da_RedeTV%21.png" alt="Logo RedeTV!" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                      </div>
                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">RedeTV!</span></div>
                 </a>
-                <a href="https://cultura.uol.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                <a href="https://cultura.uol.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
                      <div class="relative">
-                         <img src="https://piauihoje.com/uploads/imagens/whatsapp-image-2024-09-05-at-09-18-49-1725538809.jpeg" alt="Logo TV Cultura" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                          <img src="https://piauihoje.com/uploads/imagens/whatsapp-image-2024-09-05-at-09-18-49-1725538809.jpeg" alt="Logo TV Cultura" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                      </div>
                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Cultura</span></div>
                 </a>
-                <a href="https://www.tvgazeta.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                     <div class="relative">
-                         <img src="https://neamp.pucsp.br/images/logos/tv-gazeta.png" alt="Logo TV Gazeta" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                     </div>
-                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Gazeta</span></div>
-                </a>
-                <a href="https://www.a12.com/tv/tv-ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                     <div class="relative">
-                         <img src="https://images.a12.com/source/files/c/256354/tv-aparecida-ao-vivo1618383616_600-315-0-0.jpg" alt="Logo TV Aparecida" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                     </div>
-                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Aparecida</span></div>
-                </a>
-                <a href="https://tvbrasil.ebc.com.br/webtv" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-red-600/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-red-600 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                     <div class="relative">
-                         <img src="https://imagem.natelinha.uol.com.br/televisao/emissora/tv-brasil_8669.jpeg" alt="Logo TV Brasil" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                     </div>
-                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Brasil</span></div>
-                </a>
-                </div>
+                 <a href="https://www.tvgazeta.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                      <div class="relative">
+                           <img src="https://neamp.pucsp.br/images/logos/tv-gazeta.png" alt="Logo TV Gazeta" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Gazeta</span></div>
+                 </a>
+                 <a href="https://www.a12.com/tv/tv-ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                      <div class="relative">
+                           <img src="https://images.a12.com/source/files/c/256354/tv-aparecida-ao-vivo1618383616_600-315-0-0.jpg" alt="Logo TV Aparecida" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Aparecida</span></div>
+                 </a>
+                 <a href="https://tvbrasil.ebc.com.br/webtv" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                      <div class="relative">
+                           <img src="https://imagem.natelinha.uol.com.br/televisao/emissora/tv-brasil_8669.jpeg" alt="Logo TV Brasil" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Brasil</span></div>
+                 </a>
+                 </div>
         </section>
 
         <hr class="border-t border-gray-800 my-12 sm:my-16">
 
         <section id="radios" class="mb-12 sm:mb-16">
-            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-500 pl-3 sm:pl-4">Rádios Online</h2>
+            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Rádios Online</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                <a href="https://jovempan.com.br/aovivo/fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
-                      <div class="relative">
-                           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Jovem_Pan_logo_and_wordmark.svg/1200px-Jovem_Pan_logo_and_wordmark.svg.png" alt="Logo Jovem Pan FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                <a href="https://jovempan.com.br/aovivo/fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="relative">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Jovem_Pan_logo_and_wordmark.svg/1200px-Jovem_Pan_logo_and_wordmark.svg.png" alt="Logo Jovem Pan FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Jovem Pan FM</span></div>
+                </a>
+                <a href="https://www.band.uol.com.br/band-fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="relative">
+                         <img src="https://upload.wikimedia.org/wikipedia/pt/e/e9/Logotipo_da_Band_FM.png" alt="Logo Band FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Band FM</span></div>
+                 </a>
+                 <a href="https://cbn.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="relative">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/CBN_logo.svg/2560px-CBN_logo.svg.png" alt="Logo CBN" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">CBN</span></div>
+                 </a>
+                  <a href="https://www.antena1.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                       <div class="relative">
+                           <img src="https://media.rtp.pt/empresa/wp-content/uploads/sites/31/2015/07/Antena1_positivo_horiz_RGB.png" alt="Logo Antena 1" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Jovem Pan FM</span></div>
-                 </a>
-                <a href="https://www.band.uol.com.br/band-fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
-                    <div class="relative">
-                        <img src="https://upload.wikimedia.org/wikipedia/pt/e/e9/Logotipo_da_Band_FM.png" alt="Logo Band FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                        <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                        <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                    </div>
-                    <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Band FM</span></div>
-                </a>
-                <a href="https://cbn.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
-                    <div class="relative">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/CBN_logo.svg/2560px-CBN_logo.svg.png" alt="Logo CBN" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                        <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                        <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                    </div>
-                    <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">CBN</span></div>
-                </a>
-                 <a href="https://www.antena1.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
-                      <div class="relative">
-                          <img src="https://media.rtp.pt/empresa/wp-content/uploads/sites/31/2015/07/Antena1_positivo_horiz_RGB.png" alt="Logo Antena 1" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Antena 1</span></div>
-                 </a>
-                 <a href="https://www.kissfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
-                      <div class="relative">
-                          <img src="https://upload.wikimedia.org/wikipedia/pt/4/46/Logotipo_da_Kiss_FM.png" alt="Logo Kiss FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Kiss FM</span></div>
-                 </a>
-                  <a href="https://alphafm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
+                       </div>
+                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Antena 1</span></div>
+                  </a>
+                   <a href="https://www.kissfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                       <div class="relative">
+                           <img src="https://upload.wikimedia.org/wikipedia/pt/4/46/Logotipo_da_Kiss_FM.png" alt="Logo Kiss FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                       </div>
+                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Kiss FM</span></div>
+                  </a>
+                   <a href="https://alphafm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
                        <div class="relative">
                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Alpha_FM_Bras%C3%ADlia_logo.png" alt="Logo Alpha FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -283,7 +298,7 @@
                        </div>
                        <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Alpha FM</span></div>
                   </a>
-                  <a href="https://mixfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
+                   <a href="https://mixfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
                        <div class="relative">
                            <img src="https://upload.wikimedia.org/wikipedia/pt/7/7c/Logotipo_da_Mix_FM.png" alt="Logo Mix FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -291,7 +306,7 @@
                        </div>
                        <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Mix FM</span></div>
                   </a>
-                  <a href="https://transamerica.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
+                   <a href="https://transamerica.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
                        <div class="relative">
                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Transam%C3%A9rica_100.1_FM_logo.png" alt="Logo Transamérica" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -299,51 +314,51 @@
                        </div>
                        <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Transamérica</span></div>
                   </a>
-                   <a href="https://radioglobo.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
+                    <a href="https://radioglobo.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
                         <div class="relative">
-                            <img src="https://neamp.pucsp.br/images/logos/radio-globo.png" alt="Logo Rádio Globo" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                             <img src="https://neamp.pucsp.br/images/logos/radio-globo.png" alt="Logo Rádio Globo" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                             <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                             <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                         </div>
                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Rádio Globo</span></div>
                    </a>
-                   <a href="https://www.radiorock.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
+                    <a href="https://www.radiorock.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
                         <div class="relative">
-                            <img src="https://upload.wikimedia.org/wikipedia/pt/7/79/Logotipo_da_89_FM.png" alt="Logo 89 FM A Rádio Rock" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                             <img src="https://upload.wikimedia.org/wikipedia/pt/7/79/Logotipo_da_89_FM.png" alt="Logo 89 FM A Rádio Rock" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                             <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                             <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                         </div>
                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">89 FM Rádio Rock</span></div>
                    </a>
-                   <a href="https://radiodisney.disney.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
+                    <a href="https://radiodisney.disney.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
                         <div class="relative">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Logo_Radio_Disney_Brasil.png" alt="Logo Rádio Disney" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                             <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Logo_Radio_Disney_Brasil.png" alt="Logo Rádio Disney" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                             <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                             <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                         </div>
                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Rádio Disney</span></div>
                    </a>
-                   <a href="https://cultura.uol.com.br/radio/fm/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50">
+                    <a href="https://cultura.uol.com.br/radio/fm/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
                         <div class="relative">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/R%C3%A1dio_Cultura_Brasil_logo_2021.png" alt="Logo Cultura FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                             <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/R%C3%A1dio_Cultura_Brasil_logo_2021.png" alt="Logo Cultura FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                             <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                             <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
                         </div>
                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Cultura FM</span></div>
                    </a>
-                </div>
+                 </div>
         </section>
 
         <hr class="border-t border-gray-800 my-12 sm:my-16">
 
         <section id="destaques" class="mb-12 sm:mb-16">
-            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Destaques Esportivos (ge)</h2>
+             <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Destaques Esportivos (ge)</h2>
             <div class="relative">
                 <div id="highlights-container" class="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 hide-scrollbar -mx-4 sm:mx-0 px-4 sm:px-1">
                     <p id="highlights-loading" class="text-gray-400 px-4 sm:px-0" style="display: none;">Carregando destaques...</p>
-                </div>
+                    </div>
                 <div class="text-center mt-8 sm:mt-10">
-                    <button class="btn-more bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://ge.globo.com/', '_blank')">
+                     <button class="btn-more bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://ge.globo.com/', '_blank')">
                         Ver mais no ge
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1.5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -356,12 +371,12 @@
         <hr class="border-t border-gray-800 my-12 sm:my-16">
 
         <section id="noticias" class="mb-12 sm:mb-16">
-            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-600 pl-3 sm:pl-4">Últimas Notícias (G1)</h2>
+             <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Últimas Notícias (G1)</h2>
             <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                  <p id="news-loading" class="text-gray-400 md:col-span-2" style="display: none;">Carregando notícias...</p>
-            </div>
+                 </div>
             <div class="text-center mt-8 sm:mt-10">
-                <button class="btn-more bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://g1.globo.com/', '_blank')">
+                 <button class="btn-more bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://g1.globo.com/', '_blank')">
                     Ver todas as notícias (G1)
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1.5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -466,7 +481,7 @@
                     // Remove a mensagem de carregamento (caso ainda esteja lá)
                     if (loadingMessage.parentNode === container) container.removeChild(loadingMessage);
                     // Exibe uma mensagem de erro para o usuário
-                    container.innerHTML = `<p class="text-red-500 ${containerId === 'news-grid' ? 'md:col-span-2' : ''}">Não foi possível carregar o conteúdo. Tente novamente mais tarde.</p>`;
+                    container.innerHTML = `<p class="text-red-500 ${containerId === 'news-grid' ? 'md:col-span-2' : ''}">Não foi possível carregar o conteúdo. Tente novamente mais tarde.</p>`; // Mantém erro em vermelho para destaque
                     throw error; // Propaga o erro
                 });
         }
@@ -498,7 +513,7 @@
                 mediaElementHTML = `
                     <iframe class="card-media-video" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
                 `;
-                console.log(`Vídeo encontrado para DESTAQUE "${title}": ${iframeSrc}`);
+                // console.log(`Vídeo encontrado para DESTAQUE "${title}": ${iframeSrc}`); // Descomente para debug
             } else {
                 // Se não encontrou iframe, usa a imagem thumbnail (ou placeholder)
                 const imageUrl = item.thumbnail || placeholderImg;
@@ -531,6 +546,7 @@
         function createNewsCard(item, feed, placeholderImg, findIframeFn) {
             const element = document.createElement('div');
             // Classes Tailwind para estilo e layout do card de notícia (flex row em telas maiores)
+            // Hover do título alterado para sky-400
             element.className = 'bg-gray-800/80 rounded-lg shadow-md hover:bg-gray-700/80 transition duration-300 group flex flex-col sm:flex-row overflow-hidden cursor-pointer border border-gray-700/50 hover:border-gray-600';
             element.onclick = () => window.open(item.link, '_blank'); // Abre o link original ao clicar
 
@@ -545,7 +561,7 @@
                 mediaElementHTML = `
                     <iframe class="card-media-video" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
                 `;
-                 console.log(`Vídeo encontrado para NOTÍCIA "${title}": ${iframeSrc}`);
+                 //console.log(`Vídeo encontrado para NOTÍCIA "${title}": ${iframeSrc}`); // Descomente para debug
             } else {
                 // Senão, usa imagem thumbnail
                 const imageUrl = item.thumbnail || placeholderImg;
@@ -562,7 +578,7 @@
                 </div>
                 <div class="p-3 sm:p-4 flex flex-col justify-between flex-grow">
                     <div>
-                        <h3 class="font-semibold text-base sm:text-md text-white mb-1 group-hover:text-red-400 transition duration-200 truncate-3-lines" title="${title}">${title}</h3>
+                         <h3 class="font-semibold text-base sm:text-md text-white mb-1 group-hover:text-sky-400 transition duration-200 truncate-3-lines" title="${title}">${title}</h3>
                         <p class="text-[11px] sm:text-xs text-gray-400">
                             Fonte: ${feed.title || 'G1'} - <time datetime="${item.pubDate}">${formatTimeAgo(item.pubDate)}</time>
                         </p>
