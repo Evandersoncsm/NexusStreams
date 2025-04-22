@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Streams - Músicas do Brasil e do Mundo (Previews Deezer)</title>
+    <title>Nexus Streams - Músicas do Brasil e do Mundo</title>
     <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20230309/ourmid/pngtree-letter-n-logo-vector-png-image_6639640.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,12 +65,12 @@
         #player-info .title { font-weight: 600; }
         #player-info .artist { font-size: 0.85em; color: #a0a0a0; }
          #audio-player {
-            width: 100%;
-            max-width: 400px;
-            height: 40px; /* Ajusta altura */
+             width: 100%;
+             max-width: 400px;
+             height: 40px; /* Ajusta altura */
          }
          #player-container.hidden {
-            display: none;
+             display: none;
          }
 
          /* Estilos Botões de Gênero */
@@ -96,20 +96,24 @@
 
     </style>
 </head>
-<body class="antialiased pb-24"> <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
+<body class="antialiased pb-24">
+
+    <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
         <nav class="container mx-auto px-0 sm:px-6 flex flex-wrap justify-between items-center">
-            <a href="#" class="text-2xl sm:text-3xl font-bold text-red-600 tracking-wide hover:text-red-500 transition duration-300">Nexus Streams</a>
+            <a href="index.html" class="text-2xl sm:text-3xl font-bold text-red-600 tracking-wide hover:text-red-500 transition duration-300">Nexus Streams</a>
             <div class="space-x-3 sm:space-x-5 mt-2 sm:mt-0">
-                <a href="#" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Início</a>
-                <a href="#music-results" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Músicas</a>
-                <a href="creditos.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Créditos</a>
+                <a href="index.html#ao-vivo" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Ao Vivo</a>
+                <a href="index.html#radios" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Rádios</a>
+                <a href="streams.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Filmes & Séries</a>
+                <a href="index.html#destaques" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Destaques</a>
+                <a href="index.html#noticias" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Notícias</a>
+                <a href="creditos.html" class="text-white font-semibold transition duration-200 text-sm sm:text-base">Créditos</a>
             </div>
         </nav>
     </header>
-
     <section class="container mx-auto px-4 sm:px-6 py-8 md:py-12 text-center bg-gray-900/30 rounded-lg mb-10 mt-4 sm:mb-12 shadow-lg border border-gray-800/50">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Explore Músicas do Brasil e do Mundo</h1>
-        <p class="text-base sm:text-lg text-gray-300 mb-6 max-w-2xl mx-auto">Busque ou explore por gênero e ouça prévias (via Deezer).</p>
+        <p class="text-base sm:text-lg text-gray-300 mb-6 max-w-2xl mx-auto">Busque ou explore por gênero e ouça prévias de músicas.</p>
         <div class="max-w-lg mx-auto px-2 sm:px-0">
              <div class="relative">
                  <input type="search" id="search-input" placeholder="Buscar músicas, artistas..."
@@ -137,16 +141,26 @@
         </div>
     </section>
 
-    <main class="container mx-auto px-4 sm:px-6">
-        <section id="music-results" aria-live="polite" class="mb-12 sm:mb-16"> <h2 id="results-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-500 pl-3 sm:pl-4">Resultados</h2>
-            <p id="loading-message" class="text-center text-gray-400">Carregando músicas populares do Brasil...</p>
-            <div id="music-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+    <div class="container mx-auto px-4 sm:px-6"> <section id="top-brasil-results" aria-live="polite" class="mb-12 sm:mb-16">
+            <h2 id="top-brasil-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-500 pl-3 sm:pl-4">Top Brasil</h2>
+            <p id="top-brasil-loading" class="text-center text-gray-400">Carregando Top Brasil...</p>
+            <div id="top-brasil-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
                 </div>
         </section>
-     </main>
 
-    <div id="player-container" class="hidden">
-        <div id="player-info" class="text-white truncate-1-line">
+        <section id="most-played-results" aria-live="polite" class="mb-12 sm:mb-16">
+            <h2 id="most-played-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-500 pl-3 sm:pl-4">Mais Tocadas</h2>
+            <p id="most-played-loading" class="text-center text-gray-400">Carregando Mais Tocadas...</p>
+            <div id="most-played-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                </div>
+        </section>
+
+        <section id="music-results" aria-live="polite" class="mb-12 sm:mb-16" style="display: none;"> <h2 id="results-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-green-500 pl-3 sm:pl-4">Resultados da Busca</h2>
+            <p id="loading-message" class="text-center text-gray-400" style="display: none;"></p> <div id="music-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                </div>
+        </section>
+
+    </div> <div id="player-container" class="hidden"> <div id="player-info" class="text-white truncate-1-line">
              <span id="player-title" class="title block truncate-1-line">Nenhuma prévia tocando</span>
              <span id="player-artist" class="artist block truncate-1-line"></span>
          </div>
@@ -157,113 +171,140 @@
 
     <footer class="bg-black mt-12 sm:mt-16 py-6 sm:py-8 border-t border-gray-800">
         <div class="container mx-auto px-4 sm:px-6 text-center text-gray-500 text-xs sm:text-sm">
-            &copy; <span id="current-year"></span> Nexus Streams. Todos os direitos reservados. Prévia de músicas via Deezer API.
+            &copy; <span id="current-year"></span> Nexus Streams. Todos os direitos reservados.
         </div>
     </footer>
 
     <script>
         // --- Constantes e Variáveis Globais ---
         const DEEZER_API_BASE_URL = 'https://api.deezer.com/search';
-        const tracksLimit = 18;
+        const tracksLimit = 12; // Número de faixas por seção
 
-        // Elementos do DOM (melhor buscar uma vez e guardar)
+        // Elementos do DOM gerais
         const searchInput = document.getElementById('search-input');
         const searchButton = document.getElementById('search-button');
-        const musicGrid = document.getElementById('music-grid');
-        const loadingMessage = document.getElementById('loading-message');
         const audioPlayer = document.getElementById('audio-player');
         const playerContainer = document.getElementById('player-container');
         const playerTitle = document.getElementById('player-title');
         const playerArtist = document.getElementById('player-artist');
         const footerYearSpan = document.getElementById('current-year');
-        const genreButtons = document.querySelectorAll('.genre-button');
-        const resultsTitle = document.getElementById('results-title');
+        const genreButtonContainer = document.getElementById('genre-buttons');
 
-        let currentJsonpScript = null; // Referência para o script JSONP atual
+        // Elementos das seções específicas
+        const topBrasilGrid = document.getElementById('top-brasil-grid');
+        const topBrasilTitle = document.getElementById('top-brasil-title');
+        const topBrasilLoading = document.getElementById('top-brasil-loading');
+
+        const mostPlayedGrid = document.getElementById('most-played-grid');
+        const mostPlayedTitle = document.getElementById('most-played-title');
+        const mostPlayedLoading = document.getElementById('most-played-loading');
+
+        const searchResultsSection = document.getElementById('music-results'); // Seção de busca
+        const searchResultsGrid = document.getElementById('music-grid');      // Grid da busca
+        const searchResultsTitle = document.getElementById('results-title');   // Título da busca
+        const searchLoadingMessage = document.getElementById('loading-message'); // Loading da busca
+
+        let currentJsonpScripts = {}; // Objeto para gerenciar múltiplos scripts/callbacks
 
         // --- Funções ---
 
         /**
-         * Limpa o script JSONP anterior e a função callback global associada.
+         * Limpa o script JSONP e a função callback global associada.
          * @param {string} callbackName - O nome da função callback a ser removida.
          */
         function cleanupJsonp(callbackName) {
-            if (currentJsonpScript && currentJsonpScript.parentNode) {
-                currentJsonpScript.parentNode.removeChild(currentJsonpScript);
-                currentJsonpScript = null; // Limpa a referência
+            const script = currentJsonpScripts[callbackName];
+            if (script && script.parentNode) {
+                script.parentNode.removeChild(script);
             }
+            delete currentJsonpScripts[callbackName];
+
             if (callbackName && typeof window[callbackName] === 'function') {
                 try {
                     delete window[callbackName];
-                    // console.log(`Callback ${callbackName} removido.`); // Log para depuração
                 } catch (e) {
-                    window[callbackName] = undefined; // Fallback para navegadores antigos
+                    window[callbackName] = undefined;
                 }
             }
         }
 
         /**
-         * Busca músicas na API do Deezer usando JSONP.
+         * Busca músicas na API usando JSONP e atualiza a seção correta.
          * @param {string} searchTerm - O termo a ser buscado.
+         * @param {HTMLElement} gridElement - O elemento da grade onde exibir os resultados.
+         * @param {HTMLElement} titleElement - O elemento do título da seção.
+         * @param {HTMLElement} loadingElement - O elemento da mensagem de carregamento.
+         * @param {string} sectionTitle - O título descritivo para a seção.
          */
-        function fetchMusicJsonp(searchTerm) {
+        function fetchMusicJsonp(searchTerm, gridElement, titleElement, loadingElement, sectionTitle) {
             const trimmedSearchTerm = searchTerm.trim();
-            if (!trimmedSearchTerm) {
-                loadingMessage.textContent = 'Por favor, digite um termo ou clique em um gênero para buscar.';
-                loadingMessage.style.display = 'block';
-                musicGrid.innerHTML = '';
-                resultsTitle.textContent = "Resultados";
-                cleanupJsonp(); // Limpa qualquer callback pendente
-                return;
-            }
 
-            const searchDisplayTerm = trimmedSearchTerm.length > 30 ? trimmedSearchTerm.substring(0, 27) + '...' : trimmedSearchTerm;
-            resultsTitle.textContent = `Resultados para "${searchDisplayTerm}"`;
-            loadingMessage.textContent = `Buscando por "${searchDisplayTerm}"...`;
-            loadingMessage.style.display = 'block';
-            musicGrid.innerHTML = '';
+             if (!gridElement || !titleElement || !loadingElement) {
+                 console.error(`Elementos DOM faltando para a busca de "${searchTerm}". Abortando.`);
+                 if(loadingElement) {
+                    loadingElement.textContent = "Erro interno ao carregar.";
+                    loadingElement.style.display = 'block';
+                 }
+                 return;
+             }
 
-            // Limpa callback/script anterior antes de criar um novo
-            cleanupJsonp();
+            if (gridElement === searchResultsGrid && !trimmedSearchTerm) {
+                 titleElement.textContent = "Resultados da Busca";
+                 loadingElement.textContent = 'Por favor, digite um termo ou clique em um gênero para buscar.';
+                 loadingElement.style.display = 'block';
+                 gridElement.innerHTML = '';
+                 if (searchResultsSection) searchResultsSection.style.display = 'block';
+                 return;
+             }
 
-            const callbackName = `deezerCallback_${Date.now()}`;
+             const displaySearchTerm = trimmedSearchTerm.length > 30 ? trimmedSearchTerm.substring(0, 27) + '...' : trimmedSearchTerm;
+             titleElement.textContent = sectionTitle;
+             loadingElement.textContent = `Buscando por "${displaySearchTerm}"...`;
+             loadingElement.style.display = 'block';
+             gridElement.innerHTML = '';
+
+            const callbackName = `nexusCallback_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
             window[callbackName] = function(data) {
-                console.log(`Dados recebidos do Deezer para "${trimmedSearchTerm}":`, data); // Log útil
-
                 if (data && data.data && data.data.length > 0) {
-                    displayTracks(data.data);
-                    loadingMessage.style.display = 'none';
+                    displayTracks(data.data, gridElement);
+                    loadingElement.style.display = 'none';
                 } else {
-                    loadingMessage.textContent = `Nenhuma prévia encontrada para "${trimmedSearchTerm}".`;
-                    loadingMessage.style.display = 'block';
+                    loadingElement.textContent = `Nenhuma prévia encontrada para "${displaySearchTerm}".`;
+                    loadingElement.style.display = 'block';
                 }
-                cleanupJsonp(callbackName); // Limpa após sucesso
+                cleanupJsonp(callbackName);
             };
 
             const apiUrl = `${DEEZER_API_BASE_URL}?q=${encodeURIComponent(trimmedSearchTerm)}&limit=${tracksLimit}&output=jsonp&callback=${callbackName}`;
 
-            currentJsonpScript = document.createElement('script');
-            currentJsonpScript.src = apiUrl;
-            currentJsonpScript.onerror = function() {
-                console.error('Erro ao carregar o script JSONP do Deezer para:', apiUrl);
-                resultsTitle.textContent = "Erro na Busca";
-                loadingMessage.textContent = 'Erro de rede ao buscar. Verifique sua conexão e tente novamente.';
-                loadingMessage.style.display = 'block';
-                cleanupJsonp(callbackName); // Limpa após erro
+            const script = document.createElement('script');
+            script.src = apiUrl;
+            script.onerror = function() {
+                console.error(`Erro ao carregar o script JSONP para: ${apiUrl} (Callback: ${callbackName})`);
+                titleElement.textContent = `Erro - ${sectionTitle}`;
+                loadingElement.textContent = 'Erro de rede ao buscar. Verifique sua conexão e tente novamente.';
+                loadingElement.style.display = 'block';
+                cleanupJsonp(callbackName);
             };
-            document.body.appendChild(currentJsonpScript);
+
+            currentJsonpScripts[callbackName] = script;
+            document.body.appendChild(script);
         }
 
         /**
-         * Exibe os cards de música na grade.
-         * @param {Array} tracks - Array de objetos de música da API do Deezer.
+         * Exibe os cards de música na grade especificada.
+         * @param {Array} tracks - Array de objetos de música da API.
+         * @param {HTMLElement} gridElement - O elemento da grade onde os cards serão adicionados.
          */
-        function displayTracks(tracks) {
-            musicGrid.innerHTML = ''; // Limpa novamente por segurança
+        function displayTracks(tracks, gridElement) {
+            if (!gridElement) {
+                 console.error("Tentativa de exibir tracks sem um gridElement válido.");
+                 return;
+            }
+            gridElement.innerHTML = '';
 
             tracks.forEach(track => {
-                // Validação mais robusta dos dados necessários
                 if (!track.preview || !track.title || !track.artist?.name || !track.album?.cover_medium) {
                     console.warn(`Faixa pulada por falta de dados essenciais: ID ${track.id}, Título: ${track.title}`);
                     return;
@@ -271,7 +312,7 @@
 
                 const card = document.createElement('div');
                 card.className = 'music-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50 cursor-pointer';
-                const artworkUrl = track.album.cover_medium; // Deezer garante cover_medium
+                const artworkUrl = track.album.cover_medium;
 
                 card.innerHTML = `
                     <div class="relative">
@@ -284,36 +325,27 @@
                         <span class="track-artist block text-gray-400 text-xs font-medium truncate-1-line" title="${track.artist.name}">${track.artist.name}</span>
                     </div>
                 `;
-                // Adiciona evento de clique para tocar a PRÉVIA da música
                 card.addEventListener('click', () => {
-                    // Passa também a capa para potencialmente mostrar no player no futuro
                     playTrack(track.preview, track.title, track.artist.name, artworkUrl);
                 });
-                musicGrid.appendChild(card);
+                gridElement.appendChild(card);
             });
         }
 
         /**
          * Carrega e toca uma PRÉVIA de música no player.
-         * @param {string} audioSrc - URL da prévia do áudio.
-         * @param {string} trackName - Nome da música.
-         * @param {string} artistName - Nome do artista.
-         * @param {string} artworkUrl - URL da capa (opcional).
          */
         function playTrack(audioSrc, trackName, artistName, artworkUrl) {
-            audioPlayer.src = audioSrc;
-            playerTitle.textContent = `${trackName} (Prévia)`;
-            playerTitle.title = trackName; // Tooltip com nome completo
-            playerArtist.textContent = artistName;
-            playerArtist.title = artistName; // Tooltip com nome completo
-            // Poderia adicionar a imagem ao player aqui se houvesse um elemento img no player
-            playerContainer.classList.remove('hidden'); // Mostra o player
-            audioPlayer.load(); // Recarrega o áudio com o novo src
-            audioPlayer.play().catch(e => {
-                // Erro comum: usuário não interagiu com a página antes do play automático
-                console.error("Erro ao tocar prévia:", e);
-                // Poderia mostrar uma mensagem pedindo para o usuário clicar novamente
-            });
+             audioPlayer.src = audioSrc;
+             playerTitle.textContent = `${trackName} (Prévia)`;
+             playerTitle.title = trackName;
+             playerArtist.textContent = artistName;
+             playerArtist.title = artistName;
+             playerContainer.classList.remove('hidden');
+             audioPlayer.load();
+             audioPlayer.play().catch(e => {
+                 console.error("Erro ao tocar prévia:", e);
+             });
         }
 
         /**
@@ -321,23 +353,41 @@
          */
         function updateFooterYear() {
             if (footerYearSpan) {
-                footerYearSpan.textContent = new Date().getFullYear();
+                const currentYear = new Date().getFullYear();
+                footerYearSpan.textContent = currentYear;
             }
         }
 
         // --- Event Handlers ---
 
+        /**
+         * Lida com a busca do usuário, exibindo resultados na seção de busca.
+         */
         function handleSearch() {
-             fetchMusicJsonp(searchInput.value);
+            if (!searchResultsSection || !searchResultsGrid || !searchResultsTitle || !searchLoadingMessage) {
+                console.error("Elementos da seção de busca não encontrados. A busca não pode ser realizada.");
+                return;
+            }
+            const searchTerm = searchInput.value;
+            const displaySearchTerm = searchTerm.trim().length > 30 ? searchTerm.trim().substring(0, 27) + '...' : searchTerm.trim();
+            searchResultsSection.style.display = 'block';
+            fetchMusicJsonp(searchTerm, searchResultsGrid, searchResultsTitle, searchLoadingMessage, `Resultados para "${displaySearchTerm || '...'}"`);
         }
 
+        /**
+         * Lida com o clique em um botão de gênero, exibindo resultados na seção de busca.
+         */
         function handleGenreClick(event) {
              const button = event.target.closest('.genre-button');
              if (button) {
                  const genre = button.dataset.genre;
                  if (genre) {
-                    // searchInput.value = genre; // Opcional: atualizar barra de busca
-                    fetchMusicJsonp(genre);
+                    if (!searchResultsSection || !searchResultsGrid || !searchResultsTitle || !searchLoadingMessage) {
+                        console.error("Elementos da seção de busca não encontrados. A busca por gênero não pode ser realizada.");
+                        return;
+                    }
+                    searchResultsSection.style.display = 'block';
+                    fetchMusicJsonp(genre, searchResultsGrid, searchResultsTitle, searchLoadingMessage, `Resultados para Gênero: "${genre}"`);
                  }
              }
         }
@@ -346,31 +396,44 @@
         function initialize() {
             updateFooterYear();
 
-            // Adiciona listeners
-            searchButton.addEventListener('click', handleSearch);
-            searchInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    handleSearch();
-                }
-            });
-            // Adiciona listener para os botões de gênero (delegação de evento)
-            const genreButtonContainer = document.getElementById('genre-buttons');
-             if(genreButtonContainer){
+            if (searchButton && searchInput) {
+                 searchButton.addEventListener('click', handleSearch);
+                 searchInput.addEventListener('keydown', (event) => {
+                     if (event.key === 'Enter') {
+                         event.preventDefault();
+                         handleSearch();
+                     }
+                 });
+            } else {
+                 console.error("Botão ou input de busca não encontrado.");
+            }
+
+             if (genreButtonContainer) {
                  genreButtonContainer.addEventListener('click', handleGenreClick);
              } else {
                  console.error("Container de botões de gênero não encontrado.");
              }
 
+            if (topBrasilGrid && topBrasilTitle && topBrasilLoading) {
+                 fetchMusicJsonp('top brasil', topBrasilGrid, topBrasilTitle, topBrasilLoading, "Top Brasil");
+             } else {
+                 console.error("Elementos para 'Top Brasil' não encontrados.");
+                 if (topBrasilLoading) { topBrasilLoading.textContent = "Erro ao carregar seção."; topBrasilLoading.style.display = 'block';}
+             }
 
-            // Faz a busca inicial
-            fetchMusicJsonp('popular brasil');
+             if (mostPlayedGrid && mostPlayedTitle && mostPlayedLoading) {
+                 fetchMusicJsonp('top hits global', mostPlayedGrid, mostPlayedTitle, mostPlayedLoading, "Mais Tocadas (Global)");
+             } else {
+                 console.error("Elementos para 'Mais Tocadas' não encontrados.");
+                 if (mostPlayedLoading) { mostPlayedLoading.textContent = "Erro ao carregar seção."; mostPlayedLoading.style.display = 'block';}
+             }
         }
 
         // Garante que o DOM está pronto antes de rodar o script
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initialize);
         } else {
-            initialize(); // DOM já carregado
+            initialize();
         }
 
     </script>
