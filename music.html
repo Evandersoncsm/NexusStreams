@@ -115,14 +115,14 @@
 
     <div class="container mx-auto px-4 sm:px-6">
         <section id="top-brasil-results" aria-live="polite" class="mb-12 sm:mb-16">
-            <h2 id="top-brasil-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-500 pl-3 sm:pl-4">Top Brasil Atual</h2>
-            <p id="top-brasil-loading" class="text-center text-gray-400">Carregando Top Brasil...</p>
+             <h2 id="top-brasil-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-500 pl-3 sm:pl-4">Mais Tocadas Brasil</h2>
+            <p id="top-brasil-loading" class="text-center text-gray-400">Carregando Mais Tocadas Brasil...</p>
             <div id="top-brasil-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"></div>
         </section>
 
         <section id="most-played-results" aria-live="polite" class="mb-12 sm:mb-16">
             <h2 id="most-played-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-500 pl-3 sm:pl-4">Mais Tocadas (Global)</h2>
-            <p id="most-played-loading" class="text-center text-gray-400">Carregando Mais Tocadas...</p>
+            <p id="most-played-loading" class="text-center text-gray-400">Carregando Mais Tocadas (Global)...</p>
             <div id="most-played-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"></div>
         </section>
 
@@ -242,8 +242,8 @@
             }
 
             const displaySearchTerm = trimmedSearchTerm.length > 30 ? trimmedSearchTerm.substring(0, 27) + '...' : trimmedSearchTerm;
-            titleElement.textContent = sectionTitle;
-            loadingElement.textContent = `Buscando por "${displaySearchTerm || sectionTitle}"...`;
+            titleElement.textContent = sectionTitle; // Usa o título passado diretamente
+            loadingElement.textContent = `Buscando ${sectionTitle}...`; // Mensagem usa o título
             loadingElement.style.display = 'block';
             gridElement.innerHTML = '';
 
@@ -252,10 +252,11 @@
             window[callbackName] = function(data) {
                 loadingElement.style.display = 'none';
                 if (data && data.data && data.data.length > 0) {
-                    // Passa o ID Spotify de DEMO para cada card
                     displayTracks(data.data, gridElement, DEMO_SPOTIFY_ID);
                 } else {
-                    loadingElement.textContent = `Nenhuma prévia encontrada para "${displaySearchTerm}".`;
+                    // Mensagem mais informativa se o termo de busca foi usado
+                    const termMsg = (gridElement === searchResultsGrid || gridElement === topBrasilGrid || gridElement === mostPlayedGrid) ? `para "${displaySearchTerm || sectionTitle}"` : '';
+                    loadingElement.textContent = `Nenhuma prévia encontrada ${termMsg}.`;
                     loadingElement.style.display = 'block';
                 }
                 cleanupJsonp(callbackName);
@@ -315,9 +316,8 @@
                 card.querySelector('.lyrics-button')?.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const idToFetch = e.target.dataset.spotifyId;
-                    // Abre o modal com info da faixa clicada e inicia busca da letra
                     openNowPlayingModal(track.title, track.artist.name, artworkUrl);
-                    fetchAndDisplayLyrics(idToFetch); // Busca a letra para o ID (de demo)
+                    fetchAndDisplayLyrics(idToFetch);
                 });
 
                 // Evento para Abrir Modal ao clicar no Card (sem buscar letra)
@@ -325,7 +325,6 @@
                     if (!event.target.closest('.lyrics-button') && !event.target.closest('.play-icon')) {
                          playTrack(track.preview, track.title, track.artist.name, artworkUrl);
                          openNowPlayingModal(track.title, track.artist.name, artworkUrl);
-                         // Limpa área de letras, pois não foi solicitada diretamente
                          setLyricsMessage("Clique em 'Ver Letra' para buscar.", false);
                     }
                 });
@@ -357,8 +356,8 @@
             if (!modalLyricsMessage || !modalLyricsContent) return;
             modalLyricsContent.textContent = ''; // Limpa conteúdo da letra
             modalLyricsMessage.textContent = message;
-            modalLyricsMessage.classList.toggle('error', isError); // Adiciona classe de erro se necessário
-            modalLyricsMessage.style.display = 'block'; // Mostra a mensagem
+            modalLyricsMessage.classList.toggle('error', isError);
+            modalLyricsMessage.style.display = 'block';
         }
 
         /** Limpa a área de letras completamente */
@@ -381,7 +380,7 @@
             modalArtistName.textContent = info.artist;
             modalArtistName.title = info.artist;
 
-            clearLyricsArea(); // Sempre limpa ao abrir o modal
+            clearLyricsArea();
             nowPlayingModal.classList.add('visible');
             document.body.style.overflow = 'hidden';
         }
@@ -398,8 +397,6 @@
                 setLyricsMessage("ID da faixa inválido.", true);
                 return;
             }
-
-            // 1. Define estado de carregamento
             setLyricsMessage("Carregando letra...");
 
             // 🚨 INSEGURO: Chave API e chamada direta do cliente! 🚨
@@ -413,52 +410,32 @@
             };
 
             try {
-                // 2. Faz a chamada com Fetch
                 const response = await fetch(apiUrl, options);
-
-                // 3. Verifica se a resposta HTTP foi bem-sucedida (status 2xx)
                 if (!response.ok) {
-                    // Tenta ler a mensagem de erro da API, se houver
                     let errorMsg = `Erro ${response.status}: ${response.statusText}`;
-                    try {
-                        const errorData = await response.json();
-                        errorMsg = errorData.message || errorMsg; // Usa mensagem da API se disponível
-                    } catch (e) { /* Ignora erro ao parsear erro */ }
-                    throw new Error(errorMsg); // Lança um erro para o bloco catch
+                    try { const errorData = await response.json(); errorMsg = errorData.message || errorMsg; } catch (e) { /* Ignora */ }
+                    throw new Error(errorMsg);
                 }
-
-                // 4. Processa a resposta JSON
                 const data = await response.json();
-                console.log("Resposta da API de Letras:", data); // Para depuração
+                console.log("Resposta da API de Letras:", data);
 
-                // 5. Extrai e exibe a letra (AJUSTE CONFORME A RESPOSTA REAL DA API)
-                // Exemplo comum: { lyrics: { lines: [ { words: "linha 1", time: 1000 }, ... ] } }
+                // --- Processamento da Letra (AJUSTE CONFORME RESPOSTA REAL) ---
+                let lyricsText = null;
                 if (data?.lyrics?.lines && Array.isArray(data.lyrics.lines)) {
-                    if (data.lyrics.lines.length > 0) {
-                        const lyricsText = data.lyrics.lines.map(line => line.words || '').join('\n');
-                        modalLyricsContent.textContent = lyricsText;
-                        modalLyricsMessage.style.display = 'none'; // Esconde mensagem de loading/erro
-                    } else {
-                        setLyricsMessage("Letra não encontrada para esta música.", false);
-                    }
+                    lyricsText = data.lyrics.lines.map(line => line.words || '').join('\n').trim();
+                } else if (data?.lines && Array.isArray(data.lines)) { // Formato alternativo
+                    lyricsText = data.lines.map(line => line.words || '').join('\n').trim();
                 }
-                 // Outro formato possível: { lines: [...] } (sem o objeto 'lyrics' externo)
-                 else if (data?.lines && Array.isArray(data.lines)) {
-                     if (data.lines.length > 0) {
-                         const lyricsText = data.lines.map(line => line.words || '').join('\n');
-                         modalLyricsContent.textContent = lyricsText;
-                         modalLyricsMessage.style.display = 'none';
-                     } else {
-                         setLyricsMessage("Letra não encontrada (formato 2).", false);
-                     }
-                 }
-                else {
-                    // Se a estrutura for diferente ou não houver letra
-                    setLyricsMessage("Letra não disponível ou formato inesperado.", false);
+
+                if (lyricsText) {
+                    modalLyricsContent.textContent = lyricsText;
+                    modalLyricsMessage.style.display = 'none'; // Esconde mensagem
+                } else {
+                    setLyricsMessage("Letra não encontrada ou indisponível.", false);
                 }
+                // --- Fim do Processamento ---
 
             } catch (error) {
-                // 6. Captura erros (de rede ou lançados acima)
                 console.error("Erro ao buscar ou processar letra:", error);
                 setLyricsMessage(`Erro ao buscar letra: ${error.message}`, true);
             }
@@ -496,14 +473,22 @@
             genreButtonContainer?.addEventListener('click', handleGenreClick);
 
              // Carrega Seções Iniciais Deezer
-             if (topBrasilGrid) fetchMusicJsonp('genre:"sertanejo" OR genre:"funk carioca" OR genre:"pop brasil" OR genre:"pagode" OR genre:"piseiro"', topBrasilGrid, topBrasilTitle, topBrasilLoading, "Top Brasil Atual");
-             if (mostPlayedGrid) fetchMusicJsonp('chart top tracks', mostPlayedGrid, mostPlayedTitle, mostPlayedLoading, "Mais Tocadas (Global)");
+             if (topBrasilGrid && topBrasilTitle && topBrasilLoading) {
+                 // ----- LINHA MODIFICADA -----
+                 // Tentando buscar as mais tocadas no Brasil via termo de busca
+                 fetchMusicJsonp('mais tocadas brasil', topBrasilGrid, topBrasilTitle, topBrasilLoading, "Mais Tocadas Brasil");
+                 // --------------------------
+             }
+             if (mostPlayedGrid && mostPlayedTitle && mostPlayedLoading) {
+                 // Mantém busca por chart global para a outra seção
+                 fetchMusicJsonp('chart top tracks', mostPlayedGrid, mostPlayedTitle, mostPlayedLoading, "Mais Tocadas (Global)");
+             }
 
             // Listeners Modal
             playerContainer?.addEventListener('click', (event) => {
                 if (event.target.closest('audio') === null && currentTrackInfo) {
-                    openNowPlayingModal(); // Abre com info atual
-                    setLyricsMessage("Clique em 'Ver Letra' para buscar.", false); // Mensagem inicial
+                    openNowPlayingModal();
+                    setLyricsMessage("Clique em 'Ver Letra' para buscar.", false);
                 }
             });
             closeModalButton?.addEventListener('click', closeNowPlayingModal);
