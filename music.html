@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Streaming - Músicas do Brasil e do Mundo</title>
+    <title>Nexus Streaming - Músicas (DEMO INSEGURA)</title>
     <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20230309/ourmid/pngtree-letter-n-logo-vector-png-image_6639640.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
     <style>
         /* Estilos gerais */
         body { background-color: #0f0f0f; color: #e1e1e1; font-family: 'Inter', sans-serif; }
-        .music-card:hover .card-image-overlay, .music-card:hover .play-icon { opacity: 1; }
+        .music-card:hover .card-image-overlay, .music-card:hover .play-icon-container { opacity: 1; }
         .music-card:hover .play-icon { transform: scale(1.1); }
         .music-card:hover .track-title { color: #ffffff; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -29,113 +29,56 @@
         .music-card:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); }
 
         /* Estilos Music Card */
-        .music-card .card-image {
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            background-color: #2a2a2a;
-        }
-         .music-card .play-icon::before {
-             font-size: 1.2rem;
-         }
-        .music-card:hover .card-image {
-            filter: brightness(0.85);
-        }
+        .music-card .card-image { aspect-ratio: 1 / 1; object-fit: cover; background-color: #2a2a2a; }
+        .music-card .play-icon::before { font-size: 1.2rem; }
+        .music-card:hover .card-image { filter: brightness(0.85); }
+        .play-icon-container { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease-in-out; z-index: 10; gap: 8px; }
+        .lyrics-button { background-color: rgba(0, 0, 0, 0.6); color: #ccc; border: 1px solid #555; border-radius: 4px; padding: 4px 8px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s ease; pointer-events: auto; }
+        .lyrics-button:hover { background-color: rgba(0, 0, 0, 0.8); color: #fff; border-color: #888; }
+        .play-icon { cursor: pointer; /* Garante cursor no play */ }
 
         /* Estilos Player Fixo */
-        #player-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: rgba(26, 26, 26, 0.95); /* #1a1a1a com transparência */
-            backdrop-filter: blur(5px);
-            padding: 10px 20px;
-            border-top: 1px solid #303030;
-            z-index: 100; /* Menor que o modal */
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-            cursor: pointer; /* Adicionado cursor pointer */
-            transition: background-color 0.2s ease;
-        }
-        #player-container:hover {
-             background-color: rgba(40, 40, 40, 0.98); /* Levemente mais claro no hover */
-        }
-        #player-info {
-            flex-grow: 1;
-            text-align: left;
-            min-width: 0; /* Para o truncate funcionar no flex item */
-            pointer-events: none; /* Para o clique ir para o container pai */
-        }
+        #player-container { position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(26, 26, 26, 0.95); backdrop-filter: blur(5px); padding: 10px 20px; border-top: 1px solid #303030; z-index: 100; display: flex; align-items: center; gap: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.5); cursor: pointer; transition: background-color 0.2s ease; }
+        #player-container:hover { background-color: rgba(40, 40, 40, 0.98); }
+        #player-info { flex-grow: 1; text-align: left; min-width: 0; pointer-events: none; }
         #player-info .title { font-weight: 600; }
         #player-info .artist { font-size: 0.85em; color: #a0a0a0; }
-         #audio-player {
-             width: 100%;
-             max-width: 400px;
-             height: 40px; /* Ajusta altura */
-             pointer-events: auto; /* Permite interação com os controles do audio */
-         }
-         #player-container.hidden {
-             display: none;
-         }
+        #audio-player { width: 100%; max-width: 400px; height: 40px; pointer-events: auto; }
+        #player-container.hidden { display: none; }
 
-         /* Estilos Botões de Gênero */
-         .genre-button {
-             background-color: #374151; /* gray-700 */
-             color: #e5e7eb; /* gray-200 */
-             padding: 0.3rem 0.8rem;
-             border-radius: 9999px; /* full */
-             font-size: 0.8rem;
-             font-weight: 500;
-             transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-             border: 1px solid #4b5563; /* gray-600 */
-             cursor: pointer; /* Adiciona cursor pointer */
-         }
-         .genre-button:hover {
-             background-color: #1d4ed8; /* blue-700 */
-             border-color: #2563eb; /* blue-600 */
-             transform: translateY(-1px);
-         }
-          .genre-button:active {
-             transform: translateY(0);
-          }
+        /* Estilos Botões de Gênero */
+        .genre-button { background-color: #374151; color: #e5e7eb; padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; transition: background-color 0.2s ease-in-out, transform 0.1s ease; border: 1px solid #4b5563; cursor: pointer; }
+        .genre-button:hover { background-color: #1d4ed8; border-color: #2563eb; transform: translateY(-1px); }
+        .genre-button:active { transform: translateY(0); }
 
-         /* --- NOVOS ESTILOS PARA O MODAL --- */
-         #now-playing-modal {
-             z-index: 150; /* Acima do player */
-             opacity: 0;
-             visibility: hidden;
-             transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-         }
-         #now-playing-modal.visible {
-             opacity: 1;
-             visibility: visible;
-         }
-         #now-playing-modal.visible #modal-content {
-             transform: scale(1);
-             opacity: 1;
-         }
-         #modal-content {
-             position: relative; /* Para o botão de fechar absoluto funcionar */
-             opacity: 0;
-             transform: scale(0.95);
-             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-         }
-         /* --- FIM DOS NOVOS ESTILOS --- */
+        /* --- ESTILOS PARA O MODAL COM LETRA --- */
+        #now-playing-modal { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 150; opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; }
+        #now-playing-modal.visible { opacity: 1; visibility: visible; }
+        #now-playing-modal.visible #modal-content { transform: scale(1); opacity: 1; }
+        #modal-content { background-color: #1f2937; /* gray-800 */ border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); width: 100%; max-width: 500px; position: relative; opacity: 0; transform: scale(0.95); transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; max-height: 90vh; display: flex; flex-direction: column; }
+        #modal-lyrics-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(0,0,0,0.2); border-radius: 0.25rem; flex-grow: 1; overflow-y: auto; min-height: 100px; max-height: 45vh; /* Aumentei um pouco */ border: 1px solid #374151; /* gray-700 */ }
+        #modal-lyrics-content { white-space: pre-wrap; font-size: 0.9rem; color: #d1d5db; /* gray-300 */ text-align: left; line-height: 1.6; }
+        #modal-lyrics-message { color: #9ca3af; /* gray-400 */ font-style: italic; text-align: center; padding: 1.5rem 0; display: none; /* Escondido por padrão */ }
+        #modal-lyrics-message.error { color: #f87171; /* red-400 */ font-weight: 500; }
+        #close-modal-button { position: absolute; top: 0.75rem; right: 0.75rem; color: #9ca3af; /* gray-400 */ background: none; border: none; cursor: pointer; }
+        #close-modal-button:hover { color: #fff; }
+        /* --- FIM DOS ESTILOS --- */
 
     </style>
 </head>
-<body class="antialiased pb-24"> <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
+<body class="antialiased pb-24">
+
+    <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
         <nav class="container mx-auto px-0 sm:px-6 flex flex-wrap justify-between items-center">
             <a href="index.html" class="text-2xl sm:text-3xl font-bold text-red-600 tracking-wide hover:text-red-500 transition duration-300">Nexus Streaming</a>
-            <div class="space-x-3 sm:space-x-5 mt-2 sm:mt-0">
-                <a href="index.html#ao-vivo" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Ao Vivo</a>
-                <a href="index.html#radios" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Rádios</a>
-                <a href="streams.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Filmes & Séries</a>
-                <a href="index.html#destaques" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Destaques</a>
-                <a href="index.html#noticias" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Notícias</a>
-                <a href="creditos.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Créditos</a> </div>
+             <div class="space-x-3 sm:space-x-5 mt-2 sm:mt-0">
+                 <a href="index.html#ao-vivo" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Ao Vivo</a>
+                 <a href="index.html#radios" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Rádios</a>
+                 <a href="streams.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Filmes & Séries</a>
+                 <a href="index.html#destaques" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Destaques</a>
+                 <a href="index.html#noticias" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Notícias</a>
+                 <a href="creditos.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Créditos</a>
+             </div>
         </nav>
     </header>
 
@@ -159,58 +102,61 @@
              <button class="genre-button" data-genre="samba">Samba</button>
              <button class="genre-button" data-genre="pagode">Pagode</button>
              <button class="genre-button" data-genre="funk carioca">Funk Carioca</button>
-              <button class="genre-button" data-genre="forró">Forró</button>
+             <button class="genre-button" data-genre="forró">Forró</button>
+             <button class="genre-button" data-genre="piseiro">Piseiro</button>
              <button class="genre-button" data-genre="pop brasil">Pop Brasil</button>
              <button class="genre-button" data-genre="rock brasil">Rock Brasil</button>
              <button class="genre-button" data-genre="pop">Pop</button>
              <button class="genre-button" data-genre="rock">Rock</button>
              <button class="genre-button" data-genre="electronic">Eletrônica</button>
              <button class="genre-button" data-genre="hip hop">Hip Hop</button>
-         </div>
+        </div>
     </section>
 
     <div class="container mx-auto px-4 sm:px-6">
         <section id="top-brasil-results" aria-live="polite" class="mb-12 sm:mb-16">
-            <h2 id="top-brasil-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-500 pl-3 sm:pl-4">Top Brasil</h2>
+            <h2 id="top-brasil-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-blue-500 pl-3 sm:pl-4">Top Brasil Atual</h2>
             <p id="top-brasil-loading" class="text-center text-gray-400">Carregando Top Brasil...</p>
-            <div id="top-brasil-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                </div>
+            <div id="top-brasil-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"></div>
         </section>
 
         <section id="most-played-results" aria-live="polite" class="mb-12 sm:mb-16">
-            <h2 id="most-played-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-500 pl-3 sm:pl-4">Mais Tocadas (Global)</h2> <p id="most-played-loading" class="text-center text-gray-400">Carregando Mais Tocadas...</p>
-            <div id="most-played-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                </div>
+            <h2 id="most-played-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-red-500 pl-3 sm:pl-4">Mais Tocadas (Global)</h2>
+            <p id="most-played-loading" class="text-center text-gray-400">Carregando Mais Tocadas...</p>
+            <div id="most-played-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"></div>
         </section>
 
-        <section id="music-results" aria-live="polite" class="mb-12 sm:mb-16" style="display: none;"> <h2 id="results-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-green-500 pl-3 sm:pl-4">Resultados da Busca</h2>
+        <section id="music-results" aria-live="polite" class="mb-12 sm:mb-16" style="display: none;">
+            <h2 id="results-title" class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-green-500 pl-3 sm:pl-4">Resultados da Busca</h2>
             <p id="loading-message" class="text-center text-gray-400" style="display: none;"></p>
-            <div id="music-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                </div>
+            <div id="music-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"></div>
         </section>
     </div>
 
-    <div id="player-container" class="hidden"> <div id="player-info">
+    <div id="player-container" class="hidden">
+        <div id="player-info">
              <span id="player-title" class="title block truncate-1-line">Nenhuma prévia tocando</span>
              <span id="player-artist" class="artist block truncate-1-line"></span>
         </div>
-        <audio id="audio-player" controls>
-            Seu navegador não suporta o elemento de áudio.
-        </audio>
+        <audio id="audio-player" controls>Seu navegador não suporta o elemento de áudio.</audio>
     </div>
 
-    <div id="now-playing-modal" class="fixed inset-0 bg-black bg-opacity-90 backdrop-blur-md flex items-center justify-center p-4" aria-labelledby="modal-track-title" role="dialog" aria-modal="true">
-        <div id="modal-content" class="bg-gray-800 rounded-lg shadow-xl w-full max-w-md md:max-w-lg relative">
-            <button id="close-modal-button" class="absolute top-3 right-3 text-gray-400 hover:text-white z-10" aria-label="Fechar tela de reprodução">
+    <div id="now-playing-modal">
+        <div id="modal-content">
+            <button id="close-modal-button" aria-label="Fechar tela de reprodução">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-            <div class="p-5 md:p-8 text-center">
-                <img id="modal-album-art" src="" alt="Capa do Álbum" class="w-48 h-48 md:w-64 md:h-64 mx-auto rounded-md mb-5 md:mb-6 shadow-lg object-cover bg-gray-700">
-                <h2 id="modal-track-title" class="text-xl md:text-2xl font-semibold text-white mb-1 truncate">Nome da Música</h2>
-                <p id="modal-artist-name" class="text-base md:text-lg text-gray-300 mb-6 truncate">Nome do Artista</p>
-                <p class="text-xs text-gray-500">(Prévia)</p>
-                 </div>
-        </div>
+            <div class="p-5 md:p-8 text-center flex-shrink-0">
+                <img id="modal-album-art" src="" alt="Capa do Álbum" class="w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-md mb-4 shadow-lg object-cover bg-gray-700">
+                <h2 id="modal-track-title" class="text-lg sm:text-xl font-semibold text-white mb-1 truncate">Nome da Música</h2>
+                <p id="modal-artist-name" class="text-sm sm:text-base text-gray-300 mb-2 truncate">Nome do Artista</p>
+                <p class="text-xs text-gray-500 mb-3">(Prévia)</p>
+            </div>
+            <div id="modal-lyrics-container">
+                <div id="modal-lyrics-message">Carregando letra...</div>
+                <pre id="modal-lyrics-content"></pre>
+            </div>
+            </div>
     </div>
 
     <footer class="bg-black mt-12 sm:mt-16 py-6 sm:py-8 border-t border-gray-800">
@@ -221,8 +167,16 @@
 
     <script>
         // --- Constantes e Variáveis Globais ---
-        const DEEZER_API_BASE_URL = 'https://api.deezer.com/search'; // API via Proxy CORS
-        const tracksLimit = 12; // Número de faixas por seção
+        const DEEZER_API_BASE_URL = 'https://api.deezer.com/search';
+        const tracksLimit = 12;
+
+        // --- Configuração da API de Letras (RapidAPI) ---
+        // 🚨 INSEGURO: Chave API exposta no cliente! Use um backend proxy em produção! 🚨
+        const RAPIDAPI_KEY = 'ef613e925emsh53287a5f68b20d3p1fdab6jsn413aaa4d5f9d';
+        const RAPIDAPI_HOST = 'spotify23.p.rapidapi.com'; // Confirme o host correto
+
+        // ❗ NOTA: ID do Spotify Fixo para Demonstração. Precisa ser dinâmico. ❗
+        const DEMO_SPOTIFY_ID = '4snRyiaLyvTMui0hzp8MF7';
 
         // Elementos do DOM gerais
         const searchInput = document.getElementById('search-input');
@@ -238,15 +192,13 @@
         const topBrasilGrid = document.getElementById('top-brasil-grid');
         const topBrasilTitle = document.getElementById('top-brasil-title');
         const topBrasilLoading = document.getElementById('top-brasil-loading');
-
         const mostPlayedGrid = document.getElementById('most-played-grid');
         const mostPlayedTitle = document.getElementById('most-played-title');
         const mostPlayedLoading = document.getElementById('most-played-loading');
-
-        const searchResultsSection = document.getElementById('music-results'); // Seção de busca
-        const searchResultsGrid = document.getElementById('music-grid');      // Grid da busca
-        const searchResultsTitle = document.getElementById('results-title');   // Título da busca
-        const searchLoadingMessage = document.getElementById('loading-message'); // Loading da busca
+        const searchResultsSection = document.getElementById('music-results');
+        const searchResultsGrid = document.getElementById('music-grid');
+        const searchResultsTitle = document.getElementById('results-title');
+        const searchLoadingMessage = document.getElementById('loading-message');
 
         // --- Elementos do Modal ---
         const nowPlayingModal = document.getElementById('now-playing-modal');
@@ -255,131 +207,97 @@
         const modalAlbumArt = document.getElementById('modal-album-art');
         const modalTrackTitle = document.getElementById('modal-track-title');
         const modalArtistName = document.getElementById('modal-artist-name');
+        const modalLyricsContainer = document.getElementById('modal-lyrics-container');
+        const modalLyricsMessage = document.getElementById('modal-lyrics-message'); // Para loading/erro
+        const modalLyricsContent = document.getElementById('modal-lyrics-content'); // Para a letra <pre>
 
-        let currentJsonpScripts = {}; // Objeto para gerenciar múltiplos scripts/callbacks
-        let currentTrackInfo = null; // Guarda info da música atual para o modal
+        let currentJsonpScripts = {};
+        let currentTrackInfo = null; // Guarda info da música atual (Deezer)
 
-        // --- Funções ---
-
-        /**
-         * Limpa o script JSONP e a função callback global associada.
-         * @param {string} callbackName - O nome da função callback a ser removida.
-         */
+        // --- Funções Deezer (JSONP) ---
         function cleanupJsonp(callbackName) {
             const script = currentJsonpScripts[callbackName];
             if (script && script.parentNode) {
                 script.parentNode.removeChild(script);
             }
             delete currentJsonpScripts[callbackName];
-
-            if (callbackName && typeof window[callbackName] === 'function') {
-                try {
-                    delete window[callbackName];
-                } catch (e) {
-                    window[callbackName] = undefined;
-                }
-            }
+            try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
         }
 
-        /**
-         * Busca músicas na API usando JSONP e atualiza a seção correta.
-         * @param {string} searchTerm - O termo a ser buscado.
-         * @param {HTMLElement} gridElement - O elemento da grade onde exibir os resultados.
-         * @param {HTMLElement} titleElement - O elemento do título da seção.
-         * @param {HTMLElement} loadingElement - O elemento da mensagem de carregamento.
-         * @param {string} sectionTitle - O título descritivo para a seção.
-         */
         function fetchMusicJsonp(searchTerm, gridElement, titleElement, loadingElement, sectionTitle) {
             const trimmedSearchTerm = searchTerm.trim();
-
             if (!gridElement || !titleElement || !loadingElement) {
-                console.error(`Elementos DOM faltando para a busca de "${searchTerm}". Abortando.`);
-                if(loadingElement) {
-                    loadingElement.textContent = "Erro interno ao carregar.";
-                    loadingElement.style.display = 'block';
-                }
+                console.error(`Elementos DOM faltando para busca: "${searchTerm}"`);
+                if(loadingElement) { loadingElement.textContent = "Erro interno."; loadingElement.style.display = 'block'; }
                 return;
             }
 
-            // Se for a seção de busca e não houver termo, exibe mensagem
             if (gridElement === searchResultsGrid && !trimmedSearchTerm) {
                 titleElement.textContent = "Resultados da Busca";
-                loadingElement.textContent = 'Por favor, digite um termo ou clique em um gênero para buscar.';
+                loadingElement.textContent = 'Digite algo ou clique num gênero.';
                 loadingElement.style.display = 'block';
                 gridElement.innerHTML = '';
                 if (searchResultsSection) searchResultsSection.style.display = 'block';
                 return;
             }
 
-            // Atualiza UI para indicar carregamento
             const displaySearchTerm = trimmedSearchTerm.length > 30 ? trimmedSearchTerm.substring(0, 27) + '...' : trimmedSearchTerm;
             titleElement.textContent = sectionTitle;
-            loadingElement.textContent = `Buscando por "${displaySearchTerm}"...`;
+            loadingElement.textContent = `Buscando por "${displaySearchTerm || sectionTitle}"...`;
             loadingElement.style.display = 'block';
             gridElement.innerHTML = '';
 
-            // Cria um nome de callback único para evitar conflitos
             const callbackName = `nexusCallback_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
-            // Define a função callback global que será chamada pela resposta JSONP
             window[callbackName] = function(data) {
+                loadingElement.style.display = 'none';
                 if (data && data.data && data.data.length > 0) {
-                    displayTracks(data.data, gridElement); // Mostra as faixas
-                    loadingElement.style.display = 'none'; // Esconde o loading
+                    // Passa o ID Spotify de DEMO para cada card
+                    displayTracks(data.data, gridElement, DEMO_SPOTIFY_ID);
                 } else {
                     loadingElement.textContent = `Nenhuma prévia encontrada para "${displaySearchTerm}".`;
                     loadingElement.style.display = 'block';
                 }
-                cleanupJsonp(callbackName); // Limpa o script e a função callback
+                cleanupJsonp(callbackName);
             };
 
-            // Monta a URL da API com o termo, limite e nome do callback
             const apiUrl = `${DEEZER_API_BASE_URL}?q=${encodeURIComponent(trimmedSearchTerm)}&limit=${tracksLimit}&output=jsonp&callback=${callbackName}`;
-
-            // Cria e adiciona o script JSONP ao DOM para fazer a requisição
             const script = document.createElement('script');
             script.src = apiUrl;
             script.onerror = function() {
-                console.error(`Erro ao carregar o script JSONP para: ${apiUrl} (Callback: ${callbackName})`);
+                console.error(`Erro ao carregar JSONP: ${apiUrl}`);
                 titleElement.textContent = `Erro - ${sectionTitle}`;
-                loadingElement.textContent = 'Erro de rede ao buscar. Verifique sua conexão e tente novamente.';
+                loadingElement.textContent = 'Erro de rede ao buscar. Tente novamente.';
                 loadingElement.style.display = 'block';
-                cleanupJsonp(callbackName); // Limpa mesmo em caso de erro
+                cleanupJsonp(callbackName);
             };
-
-            currentJsonpScripts[callbackName] = script; // Armazena referência ao script
+            currentJsonpScripts[callbackName] = script;
             document.body.appendChild(script);
         }
 
-        /**
-         * Exibe os cards de música na grade especificada.
-         * @param {Array} tracks - Array de objetos de música da API.
-         * @param {HTMLElement} gridElement - O elemento da grade onde os cards serão adicionados.
-         */
-        function displayTracks(tracks, gridElement) {
-            if (!gridElement) {
-                console.error("Tentativa de exibir tracks sem um gridElement válido.");
-                return;
-            }
-            gridElement.innerHTML = ''; // Limpa a grade antes de adicionar novos cards
+        // --- Funções de Exibição e Player ---
+        function displayTracks(tracks, gridElement, spotifyTrackId) {
+            if (!gridElement) return;
+            gridElement.innerHTML = '';
 
             tracks.forEach(track => {
-                // Verifica se a faixa tem as informações mínimas necessárias (preview, título, artista, capa)
                 if (!track.preview || !track.title || !track.artist?.name || !track.album?.cover_medium) {
-                    console.warn(`Faixa pulada por falta de dados essenciais: ID ${track.id}, Título: ${track.title}`);
-                    return; // Pula esta faixa
+                    console.warn(`Faixa pulada (dados incompletos): ${track.id} - ${track.title}`);
+                    return;
                 }
 
                 const card = document.createElement('div');
-                card.className = 'music-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50 cursor-pointer';
-                const artworkUrl = track.album.cover_medium; // URL da capa
+                card.className = 'music-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-blue-500/50';
+                const artworkUrl = track.album.cover_medium;
 
-                // Cria o HTML interno do card
                 card.innerHTML = `
                     <div class="relative">
                         <img src="${artworkUrl}" alt="Capa de ${track.title}" class="card-image w-full transition-transform duration-300" loading="lazy">
                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                        <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10" aria-hidden="true"></div>
+                        <div class="play-icon-container">
+                            <div class="play-icon" aria-hidden="true"></div>
+                            <button class="lyrics-button" data-spotify-id="${spotifyTrackId}">Ver Letra</button>
+                        </div>
                     </div>
                     <div class="p-2 sm:p-3 text-center bg-gray-800">
                         <span class="track-title block text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300 truncate-1-line" title="${track.title}">${track.title_short || track.title}</span>
@@ -387,191 +305,215 @@
                     </div>
                 `;
 
-                // Adiciona o evento de clique para tocar a música
-                card.addEventListener('click', () => {
+                // Evento para Tocar
+                card.querySelector('.play-icon')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     playTrack(track.preview, track.title, track.artist.name, artworkUrl);
                 });
+
+                // Evento para Ver Letra
+                card.querySelector('.lyrics-button')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const idToFetch = e.target.dataset.spotifyId;
+                    // Abre o modal com info da faixa clicada e inicia busca da letra
+                    openNowPlayingModal(track.title, track.artist.name, artworkUrl);
+                    fetchAndDisplayLyrics(idToFetch); // Busca a letra para o ID (de demo)
+                });
+
+                // Evento para Abrir Modal ao clicar no Card (sem buscar letra)
+                 card.addEventListener('click', (event) => {
+                    if (!event.target.closest('.lyrics-button') && !event.target.closest('.play-icon')) {
+                         playTrack(track.preview, track.title, track.artist.name, artworkUrl);
+                         openNowPlayingModal(track.title, track.artist.name, artworkUrl);
+                         // Limpa área de letras, pois não foi solicitada diretamente
+                         setLyricsMessage("Clique em 'Ver Letra' para buscar.", false);
+                    }
+                });
+
                 gridElement.appendChild(card);
             });
         }
 
-        /**
-         * Carrega e toca uma PRÉVIA de música no player E ATUALIZA A INFO GLOBAL.
-         * @param {string} audioSrc - URL da prévia do áudio.
-         * @param {string} trackName - Nome da música.
-         * @param {string} artistName - Nome do artista.
-         * @param {string} artworkUrl - URL da capa do álbum.
-         */
         function playTrack(audioSrc, trackName, artistName, artworkUrl) {
-            // Armazena informações da faixa atual para usar no modal
-             currentTrackInfo = {
-                 title: trackName,
-                 artist: artistName,
-                 artwork: artworkUrl,
-                 audioSrc: audioSrc // Pode ser útil se quiser re-tocar do modal
-             };
-
-             // Atualiza o player fixo na parte inferior
+             currentTrackInfo = { title: trackName, artist: artistName, artwork: artworkUrl, audioSrc: audioSrc };
              audioPlayer.src = audioSrc;
              playerTitle.textContent = trackName;
-             playerTitle.title = trackName; // Adiciona tooltip para nomes longos
+             playerTitle.title = trackName;
              playerArtist.textContent = artistName;
-             playerArtist.title = artistName; // Adiciona tooltip para nomes longos
-             playerContainer.classList.remove('hidden'); // Mostra o player fixo
-
-             audioPlayer.load(); // Boa prática ao mudar a src
-             audioPlayer.play().catch(e => {
-                 console.error("Erro ao tocar prévia:", e);
-                 // Considerar exibir mensagem de erro para o usuário
-             });
+             playerArtist.title = artistName;
+             playerContainer.classList.remove('hidden');
+             audioPlayer.load();
+             audioPlayer.play().catch(e => console.error("Erro ao tocar prévia:", e));
         }
 
-        /**
-         * Atualiza o ano no rodapé.
-         */
         function updateFooterYear() {
-            if (footerYearSpan) {
-                const currentYear = new Date().getFullYear();
-                footerYearSpan.textContent = currentYear;
-            }
+            if (footerYearSpan) footerYearSpan.textContent = new Date().getFullYear();
         }
 
-        // --- Funções para o Modal ---
+        // --- Funções do Modal e Letras (Refatoradas com Fetch) ---
 
-        /**
-         * Abre o modal "Now Playing" com as informações da música atual.
-         */
-        function openNowPlayingModal() {
-            if (!currentTrackInfo) return; // Não abre se nada estiver tocando
-
-            // Preenche os dados do modal com as informações armazenadas
-            modalAlbumArt.src = currentTrackInfo.artwork;
-            modalAlbumArt.alt = `Capa de ${currentTrackInfo.title}`;
-            modalTrackTitle.textContent = currentTrackInfo.title;
-            modalTrackTitle.title = currentTrackInfo.title; // Tooltip
-            modalArtistName.textContent = currentTrackInfo.artist;
-            modalArtistName.title = currentTrackInfo.artist; // Tooltip
-
-            nowPlayingModal.classList.add('visible'); // Torna o modal visível com transição CSS
-            document.body.style.overflow = 'hidden'; // Impede scroll da página ao fundo
+        /** Define o estado da área de letras (loading, erro, mensagem) */
+        function setLyricsMessage(message, isError = false) {
+            if (!modalLyricsMessage || !modalLyricsContent) return;
+            modalLyricsContent.textContent = ''; // Limpa conteúdo da letra
+            modalLyricsMessage.textContent = message;
+            modalLyricsMessage.classList.toggle('error', isError); // Adiciona classe de erro se necessário
+            modalLyricsMessage.style.display = 'block'; // Mostra a mensagem
         }
 
-        /**
-         * Fecha o modal "Now Playing".
-         */
+        /** Limpa a área de letras completamente */
+        function clearLyricsArea() {
+            if (!modalLyricsMessage || !modalLyricsContent) return;
+            modalLyricsContent.textContent = '';
+            modalLyricsMessage.textContent = '';
+            modalLyricsMessage.style.display = 'none';
+        }
+
+        /** Abre o modal, preenchendo com informações da faixa */
+        function openNowPlayingModal(trackName, artistName, artworkUrl) {
+            const info = trackName ? { title: trackName, artist: artistName, artwork: artworkUrl } : currentTrackInfo;
+            if (!info) return;
+
+            modalAlbumArt.src = info.artwork;
+            modalAlbumArt.alt = `Capa de ${info.title}`;
+            modalTrackTitle.textContent = info.title;
+            modalTrackTitle.title = info.title;
+            modalArtistName.textContent = info.artist;
+            modalArtistName.title = info.artist;
+
+            clearLyricsArea(); // Sempre limpa ao abrir o modal
+            nowPlayingModal.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+
+        /** Fecha o modal */
         function closeNowPlayingModal() {
-            nowPlayingModal.classList.remove('visible'); // Esconde o modal com transição
-            document.body.style.overflow = ''; // Restaura scroll da página
+            nowPlayingModal.classList.remove('visible');
+            document.body.style.overflow = '';
         }
 
-        // --- Event Handlers ---
-
-        /**
-         * Lida com a busca do usuário, exibindo resultados na seção de busca.
-         */
-        function handleSearch() {
-            // Verifica se os elementos necessários existem
-            if (!searchResultsSection || !searchResultsGrid || !searchResultsTitle || !searchLoadingMessage) {
-                console.error("Elementos da seção de busca não encontrados. A busca não pode ser realizada.");
+        /** Busca e exibe a letra usando Fetch e Async/Await (CHAMADA DIRETA - INSEGURA) */
+        async function fetchAndDisplayLyrics(spotifyTrackId) {
+            if (!spotifyTrackId) {
+                setLyricsMessage("ID da faixa inválido.", true);
                 return;
             }
-            const searchTerm = searchInput.value;
-            // Trunca o termo de busca se for muito longo para exibição no título
-            const displaySearchTerm = searchTerm.trim().length > 30 ? searchTerm.trim().substring(0, 27) + '...' : searchTerm.trim();
 
-            searchResultsSection.style.display = 'block'; // Garante que a seção de busca esteja visível
-            // Chama a função de busca para preencher a grade de resultados
-            fetchMusicJsonp(searchTerm, searchResultsGrid, searchResultsTitle, searchLoadingMessage, `Resultados para "${displaySearchTerm || '...'}"`);
+            // 1. Define estado de carregamento
+            setLyricsMessage("Carregando letra...");
+
+            // 🚨 INSEGURO: Chave API e chamada direta do cliente! 🚨
+            const apiUrl = `https://${RAPIDAPI_HOST}/track_lyrics/?id=${spotifyTrackId}`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': RAPIDAPI_KEY,
+                    'x-rapidapi-host': RAPIDAPI_HOST
+                }
+            };
+
+            try {
+                // 2. Faz a chamada com Fetch
+                const response = await fetch(apiUrl, options);
+
+                // 3. Verifica se a resposta HTTP foi bem-sucedida (status 2xx)
+                if (!response.ok) {
+                    // Tenta ler a mensagem de erro da API, se houver
+                    let errorMsg = `Erro ${response.status}: ${response.statusText}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.message || errorMsg; // Usa mensagem da API se disponível
+                    } catch (e) { /* Ignora erro ao parsear erro */ }
+                    throw new Error(errorMsg); // Lança um erro para o bloco catch
+                }
+
+                // 4. Processa a resposta JSON
+                const data = await response.json();
+                console.log("Resposta da API de Letras:", data); // Para depuração
+
+                // 5. Extrai e exibe a letra (AJUSTE CONFORME A RESPOSTA REAL DA API)
+                // Exemplo comum: { lyrics: { lines: [ { words: "linha 1", time: 1000 }, ... ] } }
+                if (data?.lyrics?.lines && Array.isArray(data.lyrics.lines)) {
+                    if (data.lyrics.lines.length > 0) {
+                        const lyricsText = data.lyrics.lines.map(line => line.words || '').join('\n');
+                        modalLyricsContent.textContent = lyricsText;
+                        modalLyricsMessage.style.display = 'none'; // Esconde mensagem de loading/erro
+                    } else {
+                        setLyricsMessage("Letra não encontrada para esta música.", false);
+                    }
+                }
+                 // Outro formato possível: { lines: [...] } (sem o objeto 'lyrics' externo)
+                 else if (data?.lines && Array.isArray(data.lines)) {
+                     if (data.lines.length > 0) {
+                         const lyricsText = data.lines.map(line => line.words || '').join('\n');
+                         modalLyricsContent.textContent = lyricsText;
+                         modalLyricsMessage.style.display = 'none';
+                     } else {
+                         setLyricsMessage("Letra não encontrada (formato 2).", false);
+                     }
+                 }
+                else {
+                    // Se a estrutura for diferente ou não houver letra
+                    setLyricsMessage("Letra não disponível ou formato inesperado.", false);
+                }
+
+            } catch (error) {
+                // 6. Captura erros (de rede ou lançados acima)
+                console.error("Erro ao buscar ou processar letra:", error);
+                setLyricsMessage(`Erro ao buscar letra: ${error.message}`, true);
+            }
         }
 
-        /**
-         * Lida com o clique em um botão de gênero, exibindo resultados na seção de busca.
-         */
+
+        // --- Event Handlers ---
+        function handleSearch() {
+             if (!searchResultsSection || !searchResultsGrid || !searchResultsTitle || !searchLoadingMessage) return;
+             const searchTerm = searchInput.value;
+             const displaySearchTerm = searchTerm.trim().length > 30 ? searchTerm.trim().substring(0, 27) + '...' : searchTerm.trim();
+             searchResultsSection.style.display = 'block';
+             fetchMusicJsonp(searchTerm, searchResultsGrid, searchResultsTitle, searchLoadingMessage, `Resultados para "${displaySearchTerm || '...'}"`);
+        }
+
         function handleGenreClick(event) {
-            const button = event.target.closest('.genre-button'); // Encontra o botão clicado
+            const button = event.target.closest('.genre-button');
             if (button) {
-                const genre = button.dataset.genre; // Pega o gênero do atributo data-genre
-                if (genre) {
-                    // Verifica se os elementos da seção de busca existem
-                    if (!searchResultsSection || !searchResultsGrid || !searchResultsTitle || !searchLoadingMessage) {
-                        console.error("Elementos da seção de busca não encontrados. A busca por gênero não pode ser realizada.");
-                        return;
-                    }
-                    searchInput.value = genre; // Opcional: Preenche o input com o gênero clicado
-                    searchResultsSection.style.display = 'block'; // Mostra a seção de busca
-                    // Chama a função de busca com o gênero
-                    fetchMusicJsonp(genre, searchResultsGrid, searchResultsTitle, searchLoadingMessage, `Resultados para Gênero: "${button.textContent || genre}"`); // Usa o texto do botão para título
+                const genre = button.dataset.genre;
+                if (genre && searchResultsSection) {
+                    searchInput.value = genre;
+                    searchResultsSection.style.display = 'block';
+                    fetchMusicJsonp(genre, searchResultsGrid, searchResultsTitle, searchLoadingMessage, `Gênero: "${button.textContent || genre}"`);
                 }
             }
         }
 
         // --- Inicialização ---
         function initialize() {
-            updateFooterYear(); // Atualiza o ano no rodapé
+            updateFooterYear();
 
-            // Adiciona event listeners para a busca (botão e tecla Enter)
-            if (searchButton && searchInput) {
-                searchButton.addEventListener('click', handleSearch);
-                searchInput.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter') {
-                        event.preventDefault(); // Impede envio de formulário
-                        handleSearch();
-                    }
-                });
-            } else {
-                console.error("Botão ou input de busca não encontrado.");
-            }
+            // Listeners Busca Deezer
+            searchButton?.addEventListener('click', handleSearch);
+            searchInput?.addEventListener('keydown', (event) => { if (event.key === 'Enter') { event.preventDefault(); handleSearch(); }});
+            genreButtonContainer?.addEventListener('click', handleGenreClick);
 
-            // Adiciona event listener para os botões de gênero (usando delegação de eventos)
-            if (genreButtonContainer) {
-                 genreButtonContainer.addEventListener('click', handleGenreClick);
-            } else {
-                 console.error("Container de botões de gênero não encontrado.");
-            }
+             // Carrega Seções Iniciais Deezer
+             if (topBrasilGrid) fetchMusicJsonp('genre:"sertanejo" OR genre:"funk carioca" OR genre:"pop brasil" OR genre:"pagode" OR genre:"piseiro"', topBrasilGrid, topBrasilTitle, topBrasilLoading, "Top Brasil Atual");
+             if (mostPlayedGrid) fetchMusicJsonp('chart top tracks', mostPlayedGrid, mostPlayedTitle, mostPlayedLoading, "Mais Tocadas (Global)");
 
-            // Carrega as seções iniciais ("Top Brasil" e "Mais Tocadas")
-            if (topBrasilGrid && topBrasilTitle && topBrasilLoading) {
-                 fetchMusicJsonp('playlist "Top Brasil"', topBrasilGrid, topBrasilTitle, topBrasilLoading, "Top Brasil"); // Usando playlist como fonte
-            } else {
-                 console.error("Elementos para 'Top Brasil' não encontrados.");
-                 if (topBrasilLoading) { topBrasilLoading.textContent = "Erro ao carregar seção."; topBrasilLoading.style.display = 'block';}
-            }
-
-            if (mostPlayedGrid && mostPlayedTitle && mostPlayedLoading) {
-                 fetchMusicJsonp('chart top tracks', mostPlayedGrid, mostPlayedTitle, mostPlayedLoading, "Mais Tocadas (Global)"); // Usando chart
-            } else {
-                 console.error("Elementos para 'Mais Tocadas' não encontrados.");
-                 if (mostPlayedLoading) { mostPlayedLoading.textContent = "Erro ao carregar seção."; mostPlayedLoading.style.display = 'block';}
-            }
-
-            // --- Event Listeners do Modal ---
-            // Abre o modal ao clicar no player fixo (exceto nos controles de áudio)
-            if (playerContainer) {
-                playerContainer.addEventListener('click', (event) => {
-                    if (event.target.closest('audio') === null) { // Verifica se o clique NÃO foi no elemento <audio>
-                        openNowPlayingModal();
-                    }
-                });
-            }
-            // Fecha o modal ao clicar no botão de fechar
-            if (closeModalButton) {
-                closeModalButton.addEventListener('click', closeNowPlayingModal);
-            }
-            // Fecha o modal ao clicar no fundo escuro (fora do conteúdo do modal)
-            if (nowPlayingModal) {
-                nowPlayingModal.addEventListener('click', (event) => {
-                    if (event.target === nowPlayingModal) {
-                        closeNowPlayingModal();
-                    }
-                });
-            }
+            // Listeners Modal
+            playerContainer?.addEventListener('click', (event) => {
+                if (event.target.closest('audio') === null && currentTrackInfo) {
+                    openNowPlayingModal(); // Abre com info atual
+                    setLyricsMessage("Clique em 'Ver Letra' para buscar.", false); // Mensagem inicial
+                }
+            });
+            closeModalButton?.addEventListener('click', closeNowPlayingModal);
+            nowPlayingModal?.addEventListener('click', (event) => { if (event.target === nowPlayingModal) closeNowPlayingModal(); });
         }
 
-        // Garante que o DOM está pronto antes de rodar o script de inicialização
+        // Garante que o DOM está pronto
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initialize);
         } else {
-            // DOM já carregado
             initialize();
         }
 
