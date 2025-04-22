@@ -10,112 +10,89 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilos gerais */
         body { background-color: #0f0f0f; color: #e1e1e1; font-family: 'Inter', sans-serif; }
         .channel-card:hover .card-image-overlay, .channel-card:hover .play-icon { opacity: 1; }
         .channel-card:hover .play-icon { transform: scale(1.1); }
         .channel-card:hover .channel-name { color: #ffffff; }
-        /* Estilos da Barra de Rolagem */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background-color: #404040; border-radius: 4px; border: 2px solid #1a1a1a; }
         ::-webkit-scrollbar-thumb:hover { background-color: #555; }
-        /* Ícone de Play (simulado com caractere) */
         .play-icon::before { content: '▶'; font-size: 1.5rem; color: rgba(255, 255, 255, 0.9); }
-
-        /* Animação Badge Live */
         @keyframes pulse {
-          0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(14, 165, 233, 0.6); } /* sky-500 */
-          50% { opacity: 0.8; box-shadow: 0 0 10px rgba(14, 165, 233, 0.9); } /* sky-500 */
+          0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(14, 165, 233, 0.6); }
+          50% { opacity: 0.8; box-shadow: 0 0 10px rgba(14, 165, 233, 0.9); }
         }
         .badge-live { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-
-        /* Utilitários (esconder barra de rolagem em elementos específicos) */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* --- ESTILOS PARA MÍDIA NOS CARDS (IMAGEM OU VÍDEO) --- */
-        /* Vídeo (Comum para Notícias e Destaques) */
         .card-media-video {
             width: 100%;
-            aspect-ratio: 16 / 9; /* Proporção comum de vídeo */
+            aspect-ratio: 16 / 9;
             border: none;
-            display: block; /* Garante que o iframe ocupe o espaço */
+            display: block;
         }
-        /* Imagem Destaques */
         .highlight-card-img {
              width: 100%;
-             height: 10rem; /* Altura fixa para imagem de destaque (h-40) */
-             object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+             height: 10rem;
+             object-fit: cover;
              transition: filter 0.3s;
              display: block;
         }
         .group:hover .highlight-card-img {
-             filter: brightness(0.9); /* Escurece levemente a imagem no hover */
+             filter: brightness(0.9);
         }
-        /* Layout e Imagem Notícias (Layout diferente) */
         .news-card-media-container {
-             width: 100%; /* Ocupa toda a largura em telas pequenas */
-             flex-shrink: 0; /* Impede que encolha quando em flex layout */
+             width: 100%;
+             flex-shrink: 0;
         }
-        @media (min-width: 640px) { /* sm breakpoint - A partir de telas pequenas */
-             .news-card-media-container { width: 33.333333%; } /* Ocupa 1/3 da largura */
+        @media (min-width: 640px) {
+             .news-card-media-container { width: 33.333333%; }
         }
         .news-card-img {
             width: 100%;
-            height: 10rem; /* Altura fixa (h-40) */
+            height: 10rem;
             object-fit: cover;
             transition: opacity 0.3s;
             display: block;
         }
-        .group:hover .news-card-img { opacity: 0.9; } /* Leve transparência no hover */
-        /* --- FIM DOS ESTILOS DE MÍDIA --- */
-
-        /* Truncamento de texto (limita a N linhas e adiciona "...") */
+        .group:hover .news-card-img { opacity: 0.9; }
         .truncate-2-lines { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
         .truncate-3-lines { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-        /* Sombra e efeito hover para cards */
         .channel-card { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); }
         .channel-card:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); }
-        /* Estilo e efeito hover para botões "Ver Mais" e outros botões */
         .btn, .btn-more { transition: background-color 0.3s ease, transform 0.2s ease; }
-        .btn:hover, .btn-more:hover { transform: translateY(-1px); /* Leve elevação no hover */ }
-
-        /* Estilos Rádios (imagem quadrada, com preenchimento e fundo) */
+        .btn:hover, .btn-more:hover { transform: translateY(-1px); }
         .radio-card .card-image { aspect-ratio: 1 / 1; object-fit: contain; padding: 8px; background-color: #2a2a2a; }
-        .radio-card .play-icon::before { font-size: 1.2rem; } /* Ícone de play menor */
+        .radio-card .play-icon::before { font-size: 1.2rem; }
         .radio-card:hover .card-image { filter: brightness(0.85); }
-
-        /* --- ESTILOS DA SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #0f0f0f; /* Mesmo fundo do body */
+            background-color: #0f0f0f;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; /* Fica acima de todo o conteúdo */
+            z-index: 9999;
             color: #e1e1e1;
-            opacity: 1; visibility: visible; /* Começa visível */
-            transition: opacity 0.8s ease-out, visibility 0.8s ease-out; /* Transição suave para esconder */
-            text-align: center; /* Centraliza o texto adicionado */
+            opacity: 1; visibility: visible;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+            text-align: center;
         }
         #splash-screen.hidden {
-            opacity: 0; visibility: hidden; pointer-events: none; /* Fica invisível e não interativo */
+            opacity: 0; visibility: hidden; pointer-events: none;
         }
-        /* Título na Splash Screen atualizado */
         #splash-screen h1 {
             font-size: 2.5rem; font-weight: 700;
-            color: #0ea5e9; /* Azul claro (sky-500) */
+            color: #0ea5e9;
             margin-bottom: 2rem;
-            text-shadow: 0 0 8px rgba(14, 165, 233, 0.5); /* Sombra azul claro */
+            text-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
         }
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.2);
-            border-left-color: #0ea5e9; /* Azul claro (sky-500) */
+            border-left-color: #0ea5e9;
             border-radius: 50%; width: 50px; height: 50px;
             animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem; /* Adiciona espaço abaixo do spinner */
+            margin-bottom: 1.5rem;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* --- FIM DOS ESTILOS DA SPLASH SCREEN --- */
     </style>
 </head>
 <body class="antialiased">
@@ -146,7 +123,7 @@
     <section class="container mx-auto px-4 sm:px-6 py-8 md:py-12 text-center bg-gray-900/30 rounded-lg mb-10 mt-4 sm:mb-12 shadow-lg border border-gray-800/50">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Bem-vindo à Nexus Streaming</h1>
         <p class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Sua central de canais ao vivo, filmes e séries, músicas, rádios, destaques e notícias.</p>
-        <div class="max-w-lg mx-auto px-2 sm:px-0 mb-8"> {/* Adicionado mb-8 para espaço */}
+        <div class="max-w-lg mx-auto px-2 sm:px-0 mb-8">
              <div class="relative">
                  <input type="search" placeholder="Buscar canais, rádios, notícias..."
                         class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
@@ -362,7 +339,7 @@
             <div class="relative">
                 <div id="highlights-container" class="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 hide-scrollbar -mx-4 sm:mx-0 px-4 sm:px-1">
                     <p id="highlights-loading" class="text-gray-400 px-4 sm:px-0" style="display: none;">Carregando destaques...</p>
-                    </div>
+                </div>
                 <div class="text-center mt-8 sm:mt-10">
                      <button class="btn-more bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://ge.globo.com/', '_blank')">
                         Ver mais no ge
@@ -380,7 +357,7 @@
              <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Últimas Notícias (G1)</h2>
             <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                  <p id="news-loading" class="text-gray-400 md:col-span-2" style="display: none;">Carregando notícias...</p>
-                 </div>
+            </div>
             <div class="text-center mt-8 sm:mt-10">
                  <button class="btn-more bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://g1.globo.com/', '_blank')">
                     Ver todas as notícias (G1)
@@ -400,128 +377,82 @@
     </footer>
 
     <script>
-        // URLs dos Feeds RSS (usados para buscar notícias e destaques)
-        const G1_RSS_URL = 'https://g1.globo.com/rss/g1/'; // Feed G1
-        const GE_RSS_URL = 'https://ge.globo.com/rss/ge/'; // Feed Globo Esporte
-        // Imagem placeholder caso a notícia não tenha imagem
+        const G1_RSS_URL = 'https://g1.globo.com/rss/g1/';
+        const GE_RSS_URL = 'https://ge.globo.com/rss/ge/';
         const placeholderImg = 'https://placehold.co/300x170/607D8B/FFFFFF?text=Notícia';
 
-        /**
-         * Tenta encontrar um URL de iframe dentro de uma string HTML.
-         * Útil para extrair vídeos embedados na descrição do RSS.
-         * @param {string} htmlString - O conteúdo HTML (geralmente item.description do RSS).
-         * @returns {string|null} - A URL do src do iframe ou null se não encontrado.
-         */
         function findIframeSrc(htmlString) {
             if (!htmlString) return null;
             try {
-                const parser = new DOMParser(); // Cria um analisador de HTML
-                const doc = parser.parseFromString(htmlString, 'text/html'); // Analisa a string
-                const iframeElement = doc.querySelector('iframe'); // Busca o primeiro iframe
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlString, 'text/html');
+                const iframeElement = doc.querySelector('iframe');
                 if (iframeElement && iframeElement.src) {
-                    return iframeElement.src; // Retorna o atributo 'src' se existir
+                    return iframeElement.src;
                 }
             } catch (e) {
-                console.warn("Erro ao analisar HTML para iframe:", e); // Avisa sobre erros na análise
+                console.warn("Erro ao analisar HTML para iframe:", e);
             }
-            return null; // Retorna null se não encontrar ou der erro
+            return null;
         }
 
-        /**
-         * Busca e processa um feed RSS usando a API rss2json.com.
-         * @param {string} feedUrl - A URL do feed RSS.
-         * @param {string} containerId - O ID do elemento HTML onde os cards serão inseridos.
-         * @param {string} loadingId - O ID do elemento HTML da mensagem de carregamento.
-         * @param {function} cardBuilderFn - A função que cria o HTML de cada card.
-         * @param {number} [limit=4] - O número máximo de itens a serem exibidos.
-         * @returns {Promise<boolean>} - Promessa resolvida com true se sucesso, rejeitada em caso de erro.
-         */
         async function fetchRSS(feedUrl, containerId, loadingId, cardBuilderFn, limit = 4) {
             const container = document.getElementById(containerId);
             const loadingMessage = document.getElementById(loadingId);
-            // API que converte RSS para JSON (facilita o uso em JS)
             const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
 
-            // Verifica se os elementos HTML existem
             if (!container || !loadingMessage) {
                 const errorMsg = `Elementos HTML não encontrados: ${containerId} ou ${loadingId}`;
                 console.error(errorMsg);
-                return Promise.reject(errorMsg); // Rejeita a promessa se elementos não existem
+                return Promise.reject(errorMsg);
             }
 
-            // Mostra a mensagem de carregamento e limpa o container
             loadingMessage.style.display = 'block';
-            container.innerHTML = ''; // Limpa conteúdo anterior
-            container.appendChild(loadingMessage); // Adiciona a mensagem de carregamento
+            container.innerHTML = '';
+            container.appendChild(loadingMessage);
 
-            // Faz a requisição para a API
             return fetch(apiUrl)
                 .then(response => {
-                    // Verifica se a resposta da rede foi bem-sucedida
                     if (!response.ok) throw new Error(`Erro HTTP: ${response.status} ao buscar ${feedUrl}`);
-                    return response.json(); // Converte a resposta para JSON
+                    return response.json();
                 })
                 .then(data => {
-                    // Remove a mensagem de carregamento
                     if (loadingMessage.parentNode === container) container.removeChild(loadingMessage);
 
-                    // Verifica se a API retornou 'ok' e se há itens no feed
                     if (data.status === 'ok' && data.items && data.items.length > 0) {
-                        const itemsToDisplay = data.items.slice(0, limit); // Limita o número de itens
+                        const itemsToDisplay = data.items.slice(0, limit);
                         itemsToDisplay.forEach(item => {
-                            // Chama a função construtora de card para cada item, passando o item,
-                            // informações do feed, placeholder e a função para buscar iframe.
                             const cardElement = cardBuilderFn(item, data.feed, placeholderImg, findIframeSrc);
-                            if (cardElement) container.appendChild(cardElement); // Adiciona o card ao container
+                            if (cardElement) container.appendChild(cardElement);
                         });
                     } else {
-                        // Exibe mensagem se não houver itens ou ocorrer erro no feed
                         console.warn(`Nenhum item encontrado ou erro no feed: ${feedUrl}`, data);
                         container.innerHTML = `<p class="text-gray-400 ${containerId === 'news-grid' ? 'md:col-span-2' : ''}">Nenhuma notícia/destaque encontrado neste feed.</p>`;
                     }
-                    return true; // Indica sucesso
+                    return true;
                 })
                 .catch(error => {
-                    // Trata erros na requisição ou processamento
                     console.error(`Falha ao buscar/processar RSS (${feedUrl}):`, error);
-                    // Remove a mensagem de carregamento (caso ainda esteja lá)
                     if (loadingMessage.parentNode === container) container.removeChild(loadingMessage);
-                    // Exibe uma mensagem de erro para o usuário
-                    container.innerHTML = `<p class="text-red-500 ${containerId === 'news-grid' ? 'md:col-span-2' : ''}">Não foi possível carregar o conteúdo. Tente novamente mais tarde.</p>`; // Mantém erro em vermelho para destaque
-                    throw error; // Propaga o erro
+                    container.innerHTML = `<p class="text-red-500 ${containerId === 'news-grid' ? 'md:col-span-2' : ''}">Não foi possível carregar o conteúdo. Tente novamente mais tarde.</p>`;
+                    throw error;
                 });
         }
 
-        /**
-         * Cria o elemento HTML para um card de destaque esportivo.
-         * Tenta usar um vídeo (iframe) se encontrado na descrição, senão usa a imagem thumbnail.
-         * @param {object} item - O item do feed RSS.
-         * @param {object} feed - Informações sobre o feed.
-         * @param {string} placeholderImg - URL da imagem placeholder.
-         * @param {function} findIframeFn - Função para buscar iframe na descrição.
-         * @returns {HTMLElement} - O elemento div do card criado.
-         */
         function createHighlightCard(item, feed, placeholderImg, findIframeFn) {
             const element = document.createElement('div');
-            // Classes Tailwind para estilo e layout do card de destaque
             element.className = 'flex-shrink-0 w-64 sm:w-72 bg-gray-800 rounded-lg shadow-lg overflow-hidden group cursor-pointer transform transition duration-300 hover:scale-103 hover:shadow-xl border border-gray-700/50';
-            element.onclick = () => window.open(item.link, '_blank'); // Abre o link original ao clicar
+            element.onclick = () => window.open(item.link, '_blank');
 
-            // Limpa o título (remove sufixos como "- ge.globo")
             const title = item.title.replace(/ - [^-]+?\.(com|globo)\/?$/, '').trim();
-            let mediaElementHTML = ''; // HTML para a mídia (imagem ou vídeo)
-
-            // Tenta encontrar um iframe na descrição do item RSS
+            let mediaElementHTML = '';
             const iframeSrc = findIframeFn(item.description);
 
             if (iframeSrc) {
-                // Se encontrou um iframe, cria o HTML do iframe
                 mediaElementHTML = `
                     <iframe class="card-media-video" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
                 `;
-                // console.log(`Vídeo encontrado para DESTAQUE "${title}": ${iframeSrc}`); // Descomente para debug
             } else {
-                // Se não encontrou iframe, usa a imagem thumbnail (ou placeholder)
                 const imageUrl = item.thumbnail || placeholderImg;
                 mediaElementHTML = `
                     <img src="${imageUrl}" alt="${title}" class="highlight-card-img"
@@ -529,7 +460,6 @@
                 `;
             }
 
-            // Monta o HTML interno do card
             element.innerHTML = `
                 ${mediaElementHTML}
                 <div class="p-3 sm:p-4">
@@ -540,36 +470,20 @@
             return element;
         }
 
-        /**
-         * Cria o elemento HTML para um card de notícia.
-         * Tenta usar um vídeo (iframe) se encontrado na descrição, senão usa a imagem thumbnail.
-         * @param {object} item - O item do feed RSS.
-         * @param {object} feed - Informações sobre o feed.
-         * @param {string} placeholderImg - URL da imagem placeholder.
-         * @param {function} findIframeFn - Função para buscar iframe na descrição.
-         * @returns {HTMLElement} - O elemento div do card criado.
-         */
         function createNewsCard(item, feed, placeholderImg, findIframeFn) {
             const element = document.createElement('div');
-            // Classes Tailwind para estilo e layout do card de notícia (flex row em telas maiores)
-            // Hover do título alterado para sky-400
             element.className = 'bg-gray-800/80 rounded-lg shadow-md hover:bg-gray-700/80 transition duration-300 group flex flex-col sm:flex-row overflow-hidden cursor-pointer border border-gray-700/50 hover:border-gray-600';
-            element.onclick = () => window.open(item.link, '_blank'); // Abre o link original ao clicar
+            element.onclick = () => window.open(item.link, '_blank');
 
             const title = item.title;
-            let mediaElementHTML = ''; // HTML para a mídia
-
-            // Tenta encontrar um iframe na descrição
+            let mediaElementHTML = '';
             const iframeSrc = findIframeFn(item.description);
 
             if (iframeSrc) {
-                // Se encontrou, usa iframe
                 mediaElementHTML = `
                     <iframe class="card-media-video" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
                 `;
-                 //console.log(`Vídeo encontrado para NOTÍCIA "${title}": ${iframeSrc}`); // Descomente para debug
             } else {
-                // Senão, usa imagem thumbnail
                 const imageUrl = item.thumbnail || placeholderImg;
                 mediaElementHTML = `
                     <img src="${imageUrl}" alt="${title}" class="news-card-img"
@@ -577,14 +491,13 @@
                 `;
             }
 
-            // Monta o HTML interno do card de notícia
             element.innerHTML = `
                 <div class="news-card-media-container">
                     ${mediaElementHTML}
                 </div>
                 <div class="p-3 sm:p-4 flex flex-col justify-between flex-grow">
                     <div>
-                         <h3 class="font-semibold text-base sm:text-md text-white mb-1 group-hover:text-sky-400 transition duration-200 truncate-3-lines" title="${title}">${title}</h3>
+                        <h3 class="font-semibold text-base sm:text-md text-white mb-1 group-hover:text-sky-400 transition duration-200 truncate-3-lines" title="${title}">${title}</h3>
                         <p class="text-[11px] sm:text-xs text-gray-400">
                             Fonte: ${feed.title || 'G1'} - <time datetime="${item.pubDate}">${formatTimeAgo(item.pubDate)}</time>
                         </p>
@@ -594,33 +507,23 @@
             return element;
         }
 
-
-        /**
-         * Formata uma string de data para tempo relativo (ex: "há 5 minutos", "ontem").
-         * Tenta lidar com diferentes formatos de data comuns em RSS.
-         * @param {string} dateString - A string da data vinda do feed.
-         * @returns {string} - A data formatada ou a string original em caso de erro.
-         */
         function formatTimeAgo(dateString) {
             let date;
             try {
-                // Tenta diferentes formatos/correções para a data
                 const dateFormats = [
-                    dateString, // Tenta o formato original
-                    dateString.replace(/ (\+\d{4})$/, ' UTC$1'), // Tenta adicionar UTC se houver timezone (+0000)
-                    dateString.replace(/-/g, "/") // Tenta substituir hífens por barras
+                    dateString,
+                    dateString.replace(/ (\+\d{4})$/, ' UTC$1'),
+                    dateString.replace(/-/g, "/")
                 ];
                 for (const format of dateFormats) {
                     date = new Date(format);
-                    if (!isNaN(date)) break; // Para no primeiro formato que funcionar
+                    if (!isNaN(date)) break;
                 }
-                // Se nenhuma tentativa funcionou, avisa e retorna a string original
                 if (isNaN(date)) {
                     console.warn("Data inválida encontrada no feed:", dateString);
                     return dateString;
                 }
             } catch (e) {
-                // Se ocorrer erro na análise, avisa e retorna a string original
                 console.error("Erro ao analisar data do feed:", dateString, e);
                 return dateString;
             }
@@ -631,7 +534,6 @@
             const hours = Math.round(minutes / 60);
             const days = Math.round(hours / 24);
 
-            // Retorna a string de tempo relativo apropriada
             if (seconds < 60) return `há segundos`;
             if (minutes === 1) return `há 1 minuto`;
             if (minutes < 60) return `há ${minutes} minutos`;
@@ -639,52 +541,36 @@
             if (hours < 24) return `há ${hours} horas`;
             if (days === 1) return `ontem`;
             if (days < 7) return `há ${days} dias`;
-            // Para datas mais antigas, retorna a data formatada (DD/Mês/AAAA)
             return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
         }
 
-        /**
-         * Atualiza o ano no rodapé para o ano atual.
-         */
         function updateFooterYear() {
             const yearSpan = document.getElementById('current-year');
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
         }
 
-        // --- Execução Principal (Quando o HTML estiver carregado) ---
         document.addEventListener('DOMContentLoaded', () => {
             const splashScreen = document.getElementById('splash-screen');
-            const minSplashTime = 2000; // Tempo mínimo de exibição do splash (2 segundos)
-            const startTime = Date.now(); // Marca o tempo de início
+            const minSplashTime = 2000;
+            const startTime = Date.now();
 
-            // Esconde as mensagens de 'Carregando...' do HTML inicial, pois o JS vai controlar
             const highlightsLoading = document.getElementById('highlights-loading');
             const newsLoading = document.getElementById('news-loading');
             if (highlightsLoading) highlightsLoading.style.display = 'none';
             if (newsLoading) newsLoading.style.display = 'none';
 
+            const fetchHighlightsPromise = fetchRSS(GE_RSS_URL, 'highlights-container', 'highlights-loading', createHighlightCard, 8);
+            const fetchNewsPromise = fetchRSS(G1_RSS_URL, 'news-grid', 'news-loading', createNewsCard, 6);
 
-            // Inicia a busca dos feeds RSS em paralelo
-            // Passa as URLs, IDs dos containers, IDs das mensagens de loading,
-            // as funções construtoras de card apropriadas, o limite de itens,
-            // e a função findIframeSrc para tentar buscar vídeos.
-            const fetchHighlightsPromise = fetchRSS(GE_RSS_URL, 'highlights-container', 'highlights-loading', createHighlightCard, 8); // Busca 8 destaques
-            const fetchNewsPromise = fetchRSS(G1_RSS_URL, 'news-grid', 'news-loading', createNewsCard, 6); // Busca 6 notícias
-
-            // Espera que AMBAS as buscas terminem (com sucesso ou erro)
             Promise.allSettled([fetchHighlightsPromise, fetchNewsPromise])
                 .then(() => {
-                    // Calcula quanto tempo se passou desde o início
                     const elapsedTime = Date.now() - startTime;
-                    // Calcula quanto tempo falta para atingir o tempo mínimo do splash
                     const remainingTime = Math.max(0, minSplashTime - elapsedTime);
-                    // Agenda para esconder o splash screen após o tempo restante
                     setTimeout(() => {
                         if (splashScreen) splashScreen.classList.add('hidden');
                     }, remainingTime);
                 });
 
-            // Atualiza o ano no rodapé
             updateFooterYear();
         });
     </script>
