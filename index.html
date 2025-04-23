@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusStreaming - Seu Portal Definitivo de Entretenimento</title>
+    <title>Nexus<span class="font-light">Streaming</span> - Seu Portal Definitivo de Entretenimento</title>
     <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20230309/ourmid/pngtree-letter-n-logo-vector-png-image_6639640.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
         :root {
-            --nexus-blue: #0ea5e9; /* sky-500 */
+            --nexus-blue: #0ea5e9;
             --nexus-dark-bg: #0f0f0f;
-            --nexus-card-bg: #1a1a1a; /* gray-800 or similar */
-            --nexus-card-hover-bg: #2a2a2a; /* Slightly lighter gray */
-            --nexus-text-primary: #e1e1e1; /* Light gray/White */
-            --nexus-text-secondary: #a0a0a0; /* Medium gray */
+            --nexus-card-bg: #1a1a1a;
+            --nexus-card-hover-bg: #2a2a2a;
+            --nexus-text-primary: #e1e1e1;
+            --nexus-text-secondary: #a0a0a0;
         }
         html {
             scroll-behavior: smooth;
@@ -62,7 +62,6 @@
         ::-webkit-scrollbar-thumb { background-color: #444; border-radius: 4px; border: 2px solid #1f1f1f; }
         ::-webkit-scrollbar-thumb:hover { background-color: #555; }
 
-        /* Estilos Swiper */
         .main-swiper-container { width: 100%; padding-bottom: 50px; }
         .main-swiper-container .swiper-slide {
             background-position: center; background-size: cover; width: 300px; height: 169px;
@@ -86,7 +85,6 @@
         .hero-swiper-container .swiper-slide img { display: block; width: 45%; height: 45%; object-fit: contain; filter: brightness(0) invert(1); }
         .hero-swiper-container .swiper-button-next, .hero-swiper-container .swiper-button-prev, .hero-swiper-container .swiper-pagination { display: none; }
 
-        /* Estilos FAQ */
         details { background-color: var(--nexus-card-bg); border-radius: 0.5rem; border: 1px solid #333; }
         details summary { list-style: none; cursor: pointer; padding: 1rem 1.5rem; font-weight: 600; color: var(--nexus-text-primary); transition: background-color 0.2s ease; display: flex; justify-content: space-between; align-items: center; border-radius: 0.5rem; }
         details[open] summary { background-color: var(--nexus-card-hover-bg); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
@@ -98,7 +96,6 @@
         .section-divider { height: 1px; background: linear-gradient(to right, transparent, rgba(14, 165, 233, 0.2), transparent); margin: 3rem auto; width: 70%; max-width: 500px; border: 0; }
         @media (min-width: 640px) { .section-divider { margin: 4rem auto; } }
 
-        /* Estilos Cards de Compatibilidade */
         .compatibility-card { background-color: var(--nexus-card-bg); border-radius: 0.75rem; padding: 1.25rem; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; border: 1px solid #333; cursor: default; }
         @media (min-width: 768px) { .compatibility-card { padding: 1.5rem; } }
         .compatibility-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); background-color: var(--nexus-card-hover-bg); border-color: rgba(14, 165, 233, 0.4); }
@@ -107,33 +104,27 @@
         .compatibility-card p { color: var(--nexus-text-primary); font-weight: 500; margin-top: 0.5rem; font-size: 0.875rem; }
         @media (min-width: 768px) { .compatibility-card p { font-size: 1rem; } }
 
-        /* --- ESTILOS DOS CARDS DE PLANO --- */
         .plan-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            /* Efeito hover adicionado diretamente nas classes do Tailwind */
         }
         .plan-card:hover {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra mais pronunciada no hover */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             border-color: rgba(14, 165, 233, 0.3);
-            /* A translação Y será adicionada via classe Tailwind */
         }
         .recommended-card {
             border-color: var(--nexus-blue);
             transform: scale(1.03);
             z-index: 10;
         }
-        @media (max-width: 767px) { /* Abaixo de md */
+        @media (max-width: 767px) {
              .recommended-card {
-                 transform: scale(1); /* Remove o scale no mobile */
+                 transform: scale(1);
              }
          }
         .recommended-card:hover {
             box-shadow: 0 0 25px rgba(14, 165, 233, 0.3);
-            /* Mantém a borda azul */
         }
-         /* Garante que o 'font-light' herde a cor */
          .text-sky-500 .font-light {
-             /* Não precisa de regra específica, herdará a cor */
          }
     </style>
 </head>
@@ -256,7 +247,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto w-full relative">
 
-                <div class="plan-card bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700/50 flex flex-col hover:shadow-xl hover:-translate-y-1"> {/* Efeito hover adicionado */}
+                <div class="plan-card bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700/50 flex flex-col hover:shadow-xl hover:-translate-y-1">
                     <h3 class="text-2xl font-semibold text-center text-sky-400 mb-5">Básico</h3>
                     <div class="text-center mb-6">
                         <span class="text-4xl font-bold text-white">R$ 19,90</span>
@@ -275,7 +266,7 @@
                     <a href="#" class="block w-full text-center bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-300 ease-in-out mt-auto"> Escolher Plano Básico </a>
                 </div>
 
-                <div class="plan-card recommended-card relative bg-gray-800 p-6 rounded-xl shadow-xl border-2 flex flex-col order-first md:order-none"> {/* Mantém hover padrão do recommended-card */}
+                <div class="plan-card recommended-card relative bg-gray-800 p-6 rounded-xl shadow-xl border-2 flex flex-col order-first md:order-none">
                     <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20"> <span class="bg-sky-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">MAIS POPULAR</span> </div>
                     <h3 class="text-2xl font-semibold text-center text-sky-400 mb-5 mt-3">Padrão</h3>
                     <div class="text-center mb-6">
@@ -296,7 +287,7 @@
                     <a href="#" class="block w-full text-center bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 mt-auto"> Escolher Plano Padrão </a>
                 </div>
 
-                <div class="plan-card bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700/50 flex flex-col hover:shadow-xl hover:-translate-y-1"> {/* Efeito hover adicionado */}
+                <div class="plan-card bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700/50 flex flex-col hover:shadow-xl hover:-translate-y-1">
                     <h3 class="text-2xl font-semibold text-center text-sky-400 mb-5">Premium</h3>
                     <div class="text-center mb-6">
                         <span class="text-4xl font-bold text-white">R$ 45,90</span>
@@ -327,23 +318,81 @@
          </div>
     </section>
 
-    <footer class="bg-black mt-1 py-8 sm:py-10 border-t border-gray-800">
-        <div class="container mx-auto px-4 sm:px-6 text-center text-[var(--nexus-text-secondary)] text-sm">
-            <p class="mb-3">&copy; <span id="current-year"></span> <span class="text-sky-500">Nexus<span class="font-light">Streaming</span></span>. Todos os direitos reservados.</p>
-            <div class="space-x-4">
-                <a href="#" class="hover:text-sky-400 transition duration-300">Termos de Uso</a>
-                <span>|</span>
-                <a href="#" class="hover:text-sky-400 transition duration-300">Política de Privacidade</a>
-                <span>|</span>
-                <a href="#" class="hover:text-sky-400 transition duration-300">Suporte</a>
+    <footer class="bg-black text-gray-400 py-12 sm:py-16 border-t border-gray-800/50">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-10">
+
+                <div class="md:col-span-1 lg:col-span-2">
+                    <a href="#" class="text-2xl sm:text-3xl font-bold text-sky-500 tracking-wide hover:text-sky-400 transition duration-300 mb-4 inline-block">
+                        Nexus<span class="font-light">Streaming</span>
+                    </a>
+                    <p class="text-sm leading-relaxed pr-4">
+                        Sua conexão definitiva com o entretenimento. TV ao vivo, rádios, filmes, séries e mais, tudo em um só lugar.
+                    </p>
+                </div>
+
+                <div>
+                    <h5 class="text-lg font-semibold text-white mb-4">Navegação</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#recursos" class="hover:text-sky-400 transition duration-300">Recursos</a></li>
+                        <li><a href="#porque-nexus" class="hover:text-sky-400 transition duration-300">Por que Nexus?</a></li>
+                        <li><a href="#planos" class="hover:text-sky-400 transition duration-300">Planos</a></li>
+                        <li><a href="#faq" class="hover:text-sky-400 transition duration-300">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-lg font-semibold text-white mb-4">Empresa</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-sky-400 transition duration-300">Sobre Nós</a></li>
+                        <li><a href="#" class="hover:text-sky-400 transition duration-300">Blog</a></li>
+                        <li><a href="#" class="hover:text-sky-400 transition duration-300">Carreiras</a></li>
+                        <li><a href="#" class="hover:text-sky-400 transition duration-300">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-lg font-semibold text-white mb-4">Suporte</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#faq" class="hover:text-sky-400 transition duration-300">Ajuda / FAQ</a></li>
+                        <li><a href="#" class="hover:text-sky-400 transition duration-300">Status do Serviço</a></li>
+                        <li><a href="#" class="hover:text-sky-400 transition duration-300">Fale Conosco</a></li>
+                    </ul>
+                </div>
+
             </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center border-t border-gray-700/50 pt-8">
+                 <div class="mb-4 sm:mb-0">
+                    <p class="text-sm font-semibold text-white mb-2">Siga-nos</p>
+                    <div class="flex space-x-4">
+                        <a href="#" aria-label="Facebook" class="text-gray-400 hover:text-sky-400 transition duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12Z"/></svg>
+                        </a>
+                        <a href="#" aria-label="Instagram" class="text-gray-400 hover:text-sky-400 transition duration-300">
+                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.315 2.34a.75.75 0 0 1 .75.75V5.25h-.006a7.5 7.5 0 1 0 0 13.5h.006v2.16a.75.75 0 1 1-1.5 0V18.75h-.006a9 9 0 1 1 0-18h.006v2.16a.75.75 0 0 1 .75-.75ZM12.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Zm-1.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm4.508-2.453a.75.75 0 1 1-1.06 1.061.75.75 0 0 1 1.06-1.06Z" clip-rule="evenodd"/></svg>
+                        </a>
+                        <a href="#" aria-label="Twitter / X" class="text-gray-400 hover:text-sky-400 transition duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-xs text-center sm:text-right">
+                    <p class="mb-2">&copy; <span id="current-year">2024</span> <span class="text-sky-500 font-medium">Nexus<span class="font-light">Streaming</span></span>. Todos os direitos reservados.</p>
+                    <div class="space-x-4">
+                        <a href="#" class="hover:text-sky-400 transition duration-300">Termos de Uso</a>
+                        <span>|</span>
+                        <a href="#" class="hover:text-sky-400 transition duration-300">Política de Privacidade</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
     <script>
-        // Funções da Landing Page
         function updateFooterYear() {
             const yearSpan = document.getElementById('current-year');
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
@@ -369,11 +418,11 @@
         }
 
         const heroBackgroundImages = [
-            'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2070&q=80', // Code on screen
-            'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=2070&q=80', // Retro gaming
-            'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=2070&q=80', // Cinema seats
-            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=2070&q=80', // Concert/DJ
-            'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1974&q=80'  // Logos (YouTube, Netflix, etc.)
+            'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1974&q=80'
         ];
         let currentBgIndex = 0;
         const heroSectionElement = document.querySelector('.hero-section');
@@ -383,7 +432,6 @@
             if (!heroSectionElement || heroBackgroundImages.length === 0) return;
             currentBgIndex = (currentBgIndex + 1) % heroBackgroundImages.length;
             const nextImageUrl = heroBackgroundImages[currentBgIndex];
-            // Preload the next image to reduce flicker
             const img = new Image();
             img.src = nextImageUrl;
             img.onload = () => {
@@ -400,7 +448,7 @@
                     if(targetElement) {
                         const headerOffset = document.querySelector('header')?.offsetHeight || 0;
                         const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // 20px extra space
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
 
                         window.scrollTo({
                              top: offsetPosition,
@@ -415,37 +463,29 @@
             const planButtons = document.querySelectorAll('.plan-card a');
             planButtons.forEach(button => {
                 button.addEventListener('click', (event) => {
-                    event.preventDefault(); // Previne o comportamento padrão do link
+                    event.preventDefault();
                     const planCard = button.closest('.plan-card');
-                    const planNameElement = planCard.querySelector('h3'); // Pega o nome do plano do h3
+                    const planNameElement = planCard.querySelector('h3');
                     const planName = planNameElement ? planNameElement.textContent.trim() : 'Plano Desconhecido';
 
                     console.log(`Botão do "${planName}" clicado!`);
-                    // Exibe um alerta simples. Numa aplicação real, redirecionaria ou abriria um modal.
                     alert(`Você selecionou o ${planName}. Redirecionando para a página de assinatura... (Simulação)`);
 
-                    // Exemplo de como redirecionar (comentar/descomentar para usar):
-                    // const checkoutUrl = `/checkout?plan=${encodeURIComponent(planName.toLowerCase())}`;
-                    // window.location.href = checkoutUrl;
                 });
             });
          }
 
-        // Garante que o DOM está carregado antes de executar scripts
         document.addEventListener('DOMContentLoaded', () => {
             updateFooterYear();
             initializeMainSwiper();
             initializeHeroSwiper();
             setupSmoothScroll();
-            setupPlanButtons(); // Configura os botões de plano
+            setupPlanButtons();
 
-            // Inicializa o background da Hero Section e o intervalo
             if (heroSectionElement && heroBackgroundImages.length > 0) {
-                 // Define a imagem inicial imediatamente
                 heroSectionElement.style.backgroundImage = `linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.85) 70%, var(--nexus-dark-bg) 100%), url('${heroBackgroundImages[0]}')`;
-                // Limpa qualquer intervalo anterior e inicia um novo
                 if (backgroundIntervalId) clearInterval(backgroundIntervalId);
-                backgroundIntervalId = setInterval(changeHeroBackground, 7000); // Intervalo de 7 segundos
+                backgroundIntervalId = setInterval(changeHeroBackground, 7000);
             }
         });
     </script>
