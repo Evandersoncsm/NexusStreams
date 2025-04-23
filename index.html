@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus<span class="font-light">Streaming</span> - Seu Portal Definitivo de Entretenimento</title>
+    <title>NexusStreaming - Seu Portal Definitivo de Entretenimento</title>
     <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20230309/ourmid/pngtree-letter-n-logo-vector-png-image_6639640.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,8 +21,6 @@
         }
         html {
             scroll-behavior: smooth;
-            overflow-x: hidden;
-            scroll-padding-top: 80px;
         }
         body {
             background-color: var(--nexus-dark-bg);
@@ -298,7 +296,7 @@
                     <div class="mb-8 flex-grow">
                         <ul class="space-y-3 text-sm text-gray-300">
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Tudo do Plano Padrão</span> </li>
-                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso a Músicas Premium</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso a Músicas Premium</span> </li> {/* <-- Linha adicionada aqui --> */}
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade Ultra HD (4K) + HDR</span> </li>
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>4 Telas simultâneas</span> </li>
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Downloads em até 6 dispositivos</span> </li>
@@ -451,7 +449,7 @@
                     if(targetElement) {
                         const headerOffset = document.querySelector('header')?.offsetHeight || 0;
                         const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
 
                         window.scrollTo({
                              top: offsetPosition,
