@@ -552,20 +552,20 @@
             });
         }
 
+        // --- UPDATED: Plan Button Function ---
         function setupPlanButtons() {
             const planButtons = document.querySelectorAll('.choose-plan-button');
             planButtons.forEach(button => {
                 button.addEventListener('click', (event) => {
-                    event.preventDefault();
+                    event.preventDefault(); // Prevent default anchor behavior
                     const planCard = button.closest('.plan-card');
-                    const planNameElement = planCard?.querySelector('h3');
+                    const planNameElement = planCard?.querySelector('h3'); // Use optional chaining
+                    // Default to 'Desconhecido' if plan name isn't found
                     const planName = planNameElement ? planNameElement.textContent.trim() : 'Desconhecido';
+                    // Encode the plan name to safely include it in a URL
                     const encodedPlanName = encodeURIComponent(planName);
-                    // Simulate navigation for example purposes
-                    console.log(`Navigating to payment for plan: ${planName}`);
-                    // Uncomment the line below to enable actual navigation
-                    // window.location.href = `payment.html?plan=${encodedPlanName}`;
-                    alert(`Redirecionando para pagamento do Plano ${planName}... (Simulação)`);
+                    // **ACTUAL REDIRECTION**
+                    window.location.href = `payment.html?plan=${encodedPlanName}`;
                 });
             });
          }
@@ -684,7 +684,7 @@
             initializeMainSwiper();
             initializeHeroSwiper();
             setupSmoothScroll(); // Needs to run after header height is known
-            setupPlanButtons();
+            setupPlanButtons(); // Setup the updated plan button logic
             setupMobileMenu();
             preloadHeroImages(); // Start preloading other hero images
 
