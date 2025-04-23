@@ -3,575 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Streaming - TV Ao Vivo, Rádios e Notícias</title>
+    <title>NexusStreaming - Seu Portal Definitivo de Entretenimento</title>
     <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20230309/ourmid/pngtree-letter-n-logo-vector-png-image_6639640.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
-        body { background-color: #0f0f0f; color: #e1e1e1; font-family: 'Inter', sans-serif; }
-        .channel-card:hover .card-image-overlay, .channel-card:hover .play-icon { opacity: 1; }
-        .channel-card:hover .play-icon { transform: scale(1.1); }
-        .channel-card:hover .channel-name { color: #ffffff; }
+        :root {
+            --nexus-blue: #0ea5e9; /* sky-500 */
+            --nexus-dark-bg: #0f0f0f;
+            --nexus-card-bg: #1a1a1a; /* gray-800 or similar */
+            --nexus-card-hover-bg: #2a2a2a; /* Slightly lighter gray */
+            --nexus-text-primary: #e1e1e1; /* Light gray/White */
+            --nexus-text-secondary: #a0a0a0; /* Medium gray */
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: var(--nexus-dark-bg);
+            color: var(--nexus-text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .hero-section {
+            background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.85) 70%, var(--nexus-dark-bg) 100%);
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+        .icon-base { width: 3rem; height: 3rem; margin-bottom: 1rem; color: var(--nexus-blue); }
+        .cta-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2);
+            transform-origin: center;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 7px 25px rgba(14, 165, 233, 0.4);
+        }
+        .hover-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+            border: 1px solid transparent;
+            background-color: var(--nexus-card-bg);
+        }
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border-color: rgba(14, 165, 233, 0.5);
+            background-color: var(--nexus-card-hover-bg);
+        }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background-color: #404040; border-radius: 4px; border: 2px solid #1a1a1a; }
+        ::-webkit-scrollbar-track { background: #1f1f1f; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background-color: #444; border-radius: 4px; border: 2px solid #1f1f1f; }
         ::-webkit-scrollbar-thumb:hover { background-color: #555; }
-        .play-icon::before { content: '▶'; font-size: 1.5rem; color: rgba(255, 255, 255, 0.9); }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(14, 165, 233, 0.6); }
-          50% { opacity: 0.8; box-shadow: 0 0 10px rgba(14, 165, 233, 0.9); }
+
+        /* Estilos Swiper */
+        .main-swiper-container { width: 100%; padding-bottom: 50px; }
+        .main-swiper-container .swiper-slide {
+            background-position: center; background-size: cover; width: 300px; height: 169px;
+            border-radius: 0.75rem; overflow: hidden; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); position: relative;
         }
-        .badge-live { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .card-media-video {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border: none;
-            display: block;
+        @media (min-width: 640px) { .main-swiper-container .swiper-slide { width: 320px; height: 180px; } }
+        .main-swiper-container .swiper-slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .main-swiper-container .slide-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0)); color: white; font-size: 0.875rem; padding: 1.5rem 0.75rem 0.75rem; text-align: center; font-weight: 500; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+        .main-swiper-container .swiper-slide:hover .slide-caption { opacity: 1; }
+        .main-swiper-container .swiper-pagination-bullet { background-color: var(--nexus-text-secondary); opacity: 0.6; }
+        .main-swiper-container .swiper-pagination-bullet-active { background-color: var(--nexus-blue); opacity: 1; }
+        .main-swiper-container .swiper-button-next, .main-swiper-container .swiper-button-prev { color: var(--nexus-text-primary); background-color: rgba(0,0,0,0.4); border-radius: 50%; width: 40px; height: 40px; transition: background-color 0.2s ease, transform 0.2s ease; }
+        .main-swiper-container .swiper-button-next:hover, .main-swiper-container .swiper-button-prev:hover { background-color: rgba(0,0,0,0.7); transform: scale(1.1); }
+        .main-swiper-container .swiper-button-next::after, .main-swiper-container .swiper-button-prev::after { font-size: 1rem; font-weight: bold; }
+
+        .hero-swiper-container { width: 100%; max-width: 800px; margin: 2rem auto 0 auto; overflow: hidden; padding-bottom: 20px; }
+        @media (min-width: 640px) { .hero-swiper-container { margin-top: 2.5rem; } }
+        .hero-swiper-container .swiper-slide { width: 80px; height: 80px; border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); display: flex; justify-content: center; align-items: center; filter: grayscale(50%); opacity: 0.7; transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease; box-shadow: none; }
+        @media (min-width: 640px) { .hero-swiper-container .swiper-slide { width: 100px; height: 100px; } }
+        .hero-swiper-container .swiper-slide:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.05); }
+        .hero-swiper-container .swiper-slide img { display: block; width: 45%; height: 45%; object-fit: contain; filter: brightness(0) invert(1); }
+        .hero-swiper-container .swiper-button-next, .hero-swiper-container .swiper-button-prev, .hero-swiper-container .swiper-pagination { display: none; }
+
+        /* Estilos FAQ */
+        details { background-color: var(--nexus-card-bg); border-radius: 0.5rem; border: 1px solid #333; }
+        details summary { list-style: none; cursor: pointer; padding: 1rem 1.5rem; font-weight: 600; color: var(--nexus-text-primary); transition: background-color 0.2s ease; display: flex; justify-content: space-between; align-items: center; border-radius: 0.5rem; }
+        details[open] summary { background-color: var(--nexus-card-hover-bg); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+        details summary:hover { background-color: var(--nexus-card-hover-bg); }
+        details summary::after { content: '＋'; font-size: 1.2em; transition: transform 0.3s ease; color: var(--nexus-blue); }
+        details[open] summary::after { transform: rotate(45deg); }
+        details > div { padding: 1rem 1.5rem; background-color: var(--nexus-card-bg); border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; color: var(--nexus-text-secondary); border-top: 1px solid #333; line-height: 1.6; }
+
+        .section-divider { height: 1px; background: linear-gradient(to right, transparent, rgba(14, 165, 233, 0.2), transparent); margin: 3rem auto; width: 70%; max-width: 500px; border: 0; }
+        @media (min-width: 640px) { .section-divider { margin: 4rem auto; } }
+
+        /* Estilos Cards de Compatibilidade */
+        .compatibility-card { background-color: var(--nexus-card-bg); border-radius: 0.75rem; padding: 1.25rem; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; border: 1px solid #333; cursor: default; }
+        @media (min-width: 768px) { .compatibility-card { padding: 1.5rem; } }
+        .compatibility-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); background-color: var(--nexus-card-hover-bg); border-color: rgba(14, 165, 233, 0.4); }
+        .compatibility-card .icon-base { width: 2.5rem; height: 2.5rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem; }
+        @media (min-width: 768px) { .compatibility-card .icon-base { width: 3rem; height: 3rem; margin-bottom: 1rem; } }
+        .compatibility-card p { color: var(--nexus-text-primary); font-weight: 500; margin-top: 0.5rem; font-size: 0.875rem; }
+        @media (min-width: 768px) { .compatibility-card p { font-size: 1rem; } }
+
+        /* --- ESTILOS DOS CARDS DE PLANO --- */
+        .plan-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            /* Efeito hover adicionado diretamente nas classes do Tailwind */
         }
-        .highlight-card-img {
-             width: 100%;
-             height: 10rem;
-             object-fit: cover;
-             transition: filter 0.3s;
-             display: block;
+        .plan-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra mais pronunciada no hover */
+            border-color: rgba(14, 165, 233, 0.3);
+            /* A translação Y será adicionada via classe Tailwind */
         }
-        .group:hover .highlight-card-img {
-             filter: brightness(0.9);
+        .recommended-card {
+            border-color: var(--nexus-blue);
+            transform: scale(1.03);
+            z-index: 10;
         }
-        .news-card-media-container {
-             width: 100%;
-             flex-shrink: 0;
+        @media (max-width: 767px) { /* Abaixo de md */
+             .recommended-card {
+                 transform: scale(1); /* Remove o scale no mobile */
+             }
+         }
+        .recommended-card:hover {
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.3);
+            /* Mantém a borda azul */
         }
-        @media (min-width: 640px) {
-             .news-card-media-container { width: 33.333333%; }
-        }
-        .news-card-img {
-            width: 100%;
-            height: 10rem;
-            object-fit: cover;
-            transition: opacity 0.3s;
-            display: block;
-        }
-        .group:hover .news-card-img { opacity: 0.9; }
-        .truncate-2-lines { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .truncate-3-lines { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-        .channel-card { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); }
-        .channel-card:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); }
-        .btn, .btn-more { transition: background-color 0.3s ease, transform 0.2s ease; }
-        .btn:hover, .btn-more:hover { transform: translateY(-1px); }
-        .radio-card .card-image { aspect-ratio: 1 / 1; object-fit: contain; padding: 8px; background-color: #2a2a2a; }
-        .radio-card .play-icon::before { font-size: 1.2rem; }
-        .radio-card:hover .card-image { filter: brightness(0.85); }
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #0f0f0f;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999;
-            color: #e1e1e1;
-            opacity: 1; visibility: visible;
-            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
-            text-align: center;
-        }
-        #splash-screen.hidden {
-            opacity: 0; visibility: hidden; pointer-events: none;
-        }
-        #splash-screen h1 {
-            font-size: 2.5rem; font-weight: 700;
-            color: #0ea5e9;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
-        }
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-left-color: #0ea5e9;
-            border-radius: 50%; width: 50px; height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+         /* Garante que o 'font-light' herde a cor */
+         .text-sky-500 .font-light {
+             /* Não precisa de regra específica, herdará a cor */
+         }
     </style>
 </head>
 <body class="antialiased">
 
-    <div id="splash-screen">
-        <h1>Nexus Streaming</h1>
-        <div class="spinner"></div>
-        <p class="text-yellow-400 text-base font-medium mb-1">Versão de Teste</p>
-        <p class="text-gray-400 text-sm">Em Desenvolvimento</p>
-    </div>
-
-    <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
-        <nav class="container mx-auto px-0 sm:px-6 flex flex-wrap justify-between items-center">
-             <a href="#" class="text-2xl sm:text-3xl font-bold text-sky-500 tracking-wide hover:text-sky-600 transition duration-300">Nexus Streaming</a>
-            <div class="flex items-center space-x-3 sm:space-x-5 mt-2 sm:mt-0 flex-wrap">
-                 <a href="#ao-vivo" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Ao Vivo</a>
-                 <a href="#radios" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Rádios</a>
-                 <a href="music.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Music</a>
-                 <a href="streams.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Filmes & Séries</a>
-                 <a href="#destaques" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Destaques</a>
-                 <a href="#noticias" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Notícias</a>
-                 <a href="creditos.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Créditos</a>
-                 <a href="planos.html" class="btn bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full transition duration-300">Assine Já</a>
+    <header class="bg-black/80 backdrop-blur-sm sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6 shadow-lg">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-xl sm:text-3xl font-bold text-sky-500 tracking-wide hover:text-sky-400 transition duration-300">
+                Nexus<span class="font-light">Streaming</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#recursos" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm">Recursos</a>
+                <a href="#porque-nexus" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm">Por que Nexus?</a>
+                <a href="#planos" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm">Planos</a>
+                <a href="#faq" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm">FAQ</a>
             </div>
+             <a href="#planos" class="cta-button bg-sky-600 hover:bg-sky-500 text-white text-xs sm:text-sm font-semibold px-4 py-1.5 sm:px-6 sm:py-2 rounded-full shadow-md">
+                 Assine Já
+             </a>
         </nav>
     </header>
 
-    <section class="container mx-auto px-4 sm:px-6 py-8 md:py-12 text-center bg-gray-900/30 rounded-lg mb-10 mt-4 sm:mb-12 shadow-lg border border-gray-800/50">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Bem-vindo à Nexus Streaming</h1>
-        <p class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Sua central de canais ao vivo, filmes e séries, músicas, rádios, destaques e notícias.</p>
-        <div class="max-w-lg mx-auto px-2 sm:px-0 mb-8">
-             <div class="relative">
-                 <input type="search" placeholder="Buscar canais, rádios, notícias..."
-                        class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
-                 <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                 </svg>
-             </div>
+    <section class="hero-section relative pt-16 pb-20 sm:pt-28 sm:pb-32 text-center overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6 relative z-10">
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 sm:mb-5 leading-tight drop-shadow-lg">
+                A <span class="text-sky-400">Conexão Definitiva</span><br class="hidden sm:block"> com Seu Entretenimento.
+            </h1>
+            <p class="text-base sm:text-xl text-gray-200 mb-8 sm:mb-10 max-w-3xl mx-auto drop-shadow-md">
+                Descomplique sua vida digital: TV ao vivo, rádios, filmes, séries, músicas e notícias, tudo em uma única assinatura imbatível.
+            </p>
+            <a href="#planos" class="cta-button inline-block bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-10 sm:py-3.5 sm:px-12 rounded-full text-base sm:text-xl shadow-xl">
+                Ver Planos
+            </a>
+            <p class="text-gray-300 text-xs sm:text-sm mt-4 sm:mt-5 mb-8 sm:mb-10 drop-shadow-sm">Cancelamento fácil a qualquer hora.</p>
+
+            <div class="hero-swiper-container">
+                <div class="swiper-wrapper">
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/tv-show.png" alt="TV Ao Vivo" loading="lazy"> </div>
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/radio.png" alt="Rádios Online" loading="lazy"> </div>
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/movie-projector.png" alt="Filmes e Séries" loading="lazy"> </div>
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/news.png" alt="Notícias" loading="lazy"> </div>
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/music.png" alt="Música" loading="lazy"> </div>
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/multiple-devices.png" alt="Multiplataforma" loading="lazy"> </div>
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/tv-show.png" alt="TV Ao Vivo" loading="lazy"> </div>
+                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/radio.png" alt="Rádios Online" loading="lazy"> </div>
+                </div>
+            </div>
         </div>
-         <div>
-             <a href="planos.html" class="btn inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2.5 px-8 rounded-full transition duration-300 text-base sm:text-lg transform hover:scale-105">
-                 Assine Já por R$ 29,90/mês
-             </a>
+    </section>
+
+    <section id="carrossel" class="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-[#0f0f0f] to-[#141414]">
+        <div class="container mx-auto px-0">
+            <h2 class="text-2xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12 px-4 sm:px-6">
+                Sempre Algo Novo Para <span class="text-sky-400">Explorar</span>
+            </h2>
+            <div class="main-swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"> <img src="https://placehold.co/640x360/0284c7/white?text=Lançamento+Cinema" alt="Lançamento de Filme" loading="lazy"> <div class="slide-caption">Filmes Recém-Adicionados</div> </div>
+                    <div class="swiper-slide"> <img src="https://placehold.co/640x360/16a34a/white?text=Série+Premiada" alt="Série Premiada" loading="lazy"> <div class="slide-caption">Séries que Viciam</div> </div>
+                    <div class="swiper-slide"> <img src="https://placehold.co/640x360/f97316/white?text=Futebol+Ao+Vivo" alt="Futebol Ao Vivo" loading="lazy"> <div class="slide-caption">Grandes Jogos Ao Vivo</div> </div>
+                    <div class="swiper-slide"> <img src="https://placehold.co/640x360/dc2626/white?text=Notícias+Urgentes" alt="Notícias Urgentes" loading="lazy"> <div class="slide-caption">Notícias em Tempo Real</div> </div>
+                    <div class="swiper-slide"> <img src="https://placehold.co/640x360/9333ea/white?text=Rádio+Pop" alt="Rádio Pop" loading="lazy"> <div class="slide-caption">Sua Rádio Favorita Online</div> </div>
+                    <div class="swiper-slide"> <img src="https://placehold.co/640x360/db2777/white?text=Show+Exclusivo" alt="Show Exclusivo" loading="lazy"> <div class="slide-caption">Conteúdo Exclusivo Nexus</div> </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev" aria-label="Slide Anterior"></div>
+                <div class="swiper-button-next" aria-label="Próximo Slide"></div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section id="recursos" class="py-8 sm:py-12 md:py-16">
+         <div class="container mx-auto px-4 sm:px-6">
+             <h2 class="text-2xl sm:text-4xl font-bold text-center text-white mb-10 sm:mb-16">
+                 Tudo Que Você Precisa, <span class="text-sky-400">Integrado</span>
+             </h2>
+             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center"> <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" /></svg> </div> <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">TV Ao Vivo Direto</h3> <p class="text-[var(--nexus-text-secondary)] text-sm">Acompanhe a programação dos canais abertos líderes de audiência sem sair do app. Ideal para novelas, jornais e eventos ao vivo.</p> </div>
+                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center"> <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg> </div> <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Rádios Online</h3> <p class="text-[var(--nexus-text-secondary)] text-sm">Música, notícias e debates nas suas rádios AM/FM preferidas, com som digital de alta qualidade.</p> </div>
+                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center"> <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9A2.25 2.25 0 0 0 4.5 18.75Z" /></svg> </div> <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Filmes e Séries*</h3> <p class="text-[var(--nexus-text-secondary)] text-sm">Relaxe com um catálogo selecionado, perfeito para suas maratonas de fim de semana.</p> <p class="text-xs text-gray-500 mt-1">*Catálogo básico incluído.</p> </div>
+                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center"> <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" /></svg> </div> <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Informação Ágil</h3> <p class="text-[var(--nexus-text-secondary)] text-sm">Acesse rapidamente as últimas notícias do G1 e os destaques esportivos do ge sem precisar sair.</p> </div>
+             </div>
          </div>
     </section>
 
-    <main class="container mx-auto px-4 sm:px-6">
+    <section id="porque-nexus" class="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-[#141414] to-[#1a1a1a]">
+        <div class="container mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-2xl sm:text-4xl font-bold text-white mb-8 sm:mb-12"> Por Que Escolher <span class="text-sky-500">Nexus<span class="font-light">Streaming</span></span>? </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
+                <div class="flex flex-col items-center p-4"> <div class="icon-base text-sky-500"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg> </div> <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Conveniência Total</h3> <p class="text-[var(--nexus-text-secondary)] text-sm">Chega de pular entre apps! Tenha tudo organizado em um só lugar, economizando tempo e simplificando sua vida.</p> </div>
+                <div class="flex flex-col items-center p-4"> <div class="icon-base text-sky-500"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg> </div> <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Variedade Incrível</h3> <p class="text-[var(--nexus-text-secondary)] text-sm">Do jogo ao vivo ao filme cult, da rádio popular à notícia urgente. Conteúdo para todos os momentos e gostos.</p> </div>
+                <div class="flex flex-col items-center p-4"> <div class="icon-base text-sky-500"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.536a2.25 2.25 0 0 0 2.242 0l.879-.536M12 6V5.25A3.375 3.375 0 0 0 8.25 1.875h-3.75a3.375 3.375 0 0 0-3.375 3.375V18.75a3.375 3.375 0 0 0 3.375 3.375h11.25a3.375 3.375 0 0 0 3.375-3.375V5.25a3.375 3.375 0 0 0-3.375-3.375h-3.75a3.375 3.375 0 0 0-3.375 3.375V6Z" /></svg> </div> <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Preço Justo</h3> <p class="text-[var(--nexus-text-secondary)] text-sm">Acesse múltiplos serviços pelo preço de um. Excelente custo-benefício para seu bolso.</p> </div>
+            </div>
+        </div>
+    </section>
 
-        <section id="ao-vivo" class="mb-12 sm:mb-16">
-            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Canais Ao Vivo</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                 <a href="https://globoplay.globo.com/tv-globo/ao-vivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                     <div class="relative">
-                         <img src="https://assets.goal.com/images/v3/blt615b3ae591a82e71/1aad91a5b8fab93c575faf3d3ec4eb03c62409cc.png?auto=webp&format=pjpg&width=3840&quality=60" alt="Logo Globo" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                     </div>
-                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Globo</span></div>
-                 </a>
-                 <a href="https://www.sbt.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                      <div class="relative">
-                           <img src="https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2025/04/07/1431165982-sbt.jpg" alt="Logo SBT" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">SBT</span></div>
-                 </a>
-                 <a href="https://www.playplus.com/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                      <div class="relative">
-                           <img src="https://www.moneytimes.com.br/uploads/2023/05/microsoftteams-image-4.png" alt="Logo RecordTV" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">RecordTV</span></div>
-                 </a>
-                 <a href="https://www.band.uol.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                      <div class="relative">
-                           <img src="https://braziljournal.com/wp-content/uploads/2022/06/164bcbd7-9e1a-b098-6489-da08bb218aac.jpg" alt="Logo Band" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Band</span></div>
-                 </a>
-                 <a href="https://www.redetv.uol.com.br/aovivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                      <div class="relative">
-                           <img src="https://upload.wikimedia.org/wikipedia/pt/8/89/Logotipo_da_RedeTV%21.png" alt="Logo RedeTV!" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">RedeTV!</span></div>
-                 </a>
-                 <a href="https://cultura.uol.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                      <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                      <div class="relative">
-                           <img src="https://piauihoje.com/uploads/imagens/whatsapp-image-2024-09-05-at-09-18-49-1725538809.jpeg" alt="Logo TV Cultura" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                      </div>
-                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Cultura</span></div>
-                 </a>
-                  <a href="https://www.tvgazeta.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                       <div class="relative">
-                            <img src="https://neamp.pucsp.br/images/logos/tv-gazeta.png" alt="Logo TV Gazeta" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Gazeta</span></div>
-                  </a>
-                  <a href="https://www.a12.com/tv/tv-ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                       <div class="relative">
-                            <img src="https://images.a12.com/source/files/c/256354/tv-aparecida-ao-vivo1618383616_600-315-0-0.jpg" alt="Logo TV Aparecida" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Aparecida</span></div>
-                  </a>
-                  <a href="https://tvbrasil.ebc.com.br/webtv" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
-                       <div class="relative">
-                            <img src="https://imagem.natelinha.uol.com.br/televisao/emissora/tv-brasil_8669.jpeg" alt="Logo TV Brasil" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
-                            <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Brasil</span></div>
-                  </a>
-                  </div>
-        </section>
+    <section id="compatibilidade" class="py-8 sm:py-12 md:py-16 bg-[var(--nexus-dark-bg)]">
+        <div class="container mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-2xl sm:text-4xl font-bold text-white mb-8 md:mb-12"> Seu Nexus, <span class="text-sky-400">Seu Jeito</span> </h2>
+            <p class="text-base sm:text-lg text-gray-300 mb-10 md:mb-16 max-w-2xl mx-auto"> Acesse de onde estiver, nos seus dispositivos preferidos. </p>
+            <div class="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-8 lg:gap-10 max-w-4xl mx-auto">
+                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300 transition duration-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25Z" /></svg> </div> <p>Smart TVs</p> </div>
+                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300 transition duration-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m-6 0h6M5.25 9h13.5M3.75 12h16.5m-16.5 3h16.5M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" /></svg> </div> <p>Computador (Web)</p> </div>
+                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300 transition duration-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5h3m-6.75 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-15a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25Z" /></svg> </div> <p>Tablets</p> </div>
+                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300 transition duration-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> </div> <p>Smartphones</p> </div>
+            </div>
+        </div>
+    </section>
 
-        <hr class="border-t border-gray-800 my-12 sm:my-16">
+    <hr class="section-divider">
 
-        <section id="radios" class="mb-12 sm:mb-16">
-            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Rádios Online</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                <a href="https://jovempan.com.br/aovivo/fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                     <div class="relative">
-                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Jovem_Pan_logo_and_wordmark.svg/1200px-Jovem_Pan_logo_and_wordmark.svg.png" alt="Logo Jovem Pan FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                     </div>
-                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Jovem Pan FM</span></div>
-                </a>
-                <a href="https://www.band.uol.com.br/band-fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                     <div class="relative">
-                         <img src="https://upload.wikimedia.org/wikipedia/pt/e/e9/Logotipo_da_Band_FM.png" alt="Logo Band FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                     </div>
-                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Band FM</span></div>
-                  </a>
-                  <a href="https://cbn.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                     <div class="relative">
-                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/CBN_logo.svg/2560px-CBN_logo.svg.png" alt="Logo CBN" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                     </div>
-                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">CBN</span></div>
-                  </a>
-                   <a href="https://www.antena1.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="relative">
-                           <img src="https://media.rtp.pt/empresa/wp-content/uploads/sites/31/2015/07/Antena1_positivo_horiz_RGB.png" alt="Logo Antena 1" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Antena 1</span></div>
-                  </a>
-                   <a href="https://www.kissfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="relative">
-                           <img src="https://upload.wikimedia.org/wikipedia/pt/4/46/Logotipo_da_Kiss_FM.png" alt="Logo Kiss FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Kiss FM</span></div>
-                  </a>
-                   <a href="https://alphafm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="relative">
-                           <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Alpha_FM_Bras%C3%ADlia_logo.png" alt="Logo Alpha FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Alpha FM</span></div>
-                  </a>
-                   <a href="https://mixfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="relative">
-                           <img src="https://upload.wikimedia.org/wikipedia/pt/7/7c/Logotipo_da_Mix_FM.png" alt="Logo Mix FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Mix FM</span></div>
-                  </a>
-                   <a href="https://transamerica.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                       <div class="relative">
-                           <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Transam%C3%A9rica_100.1_FM_logo.png" alt="Logo Transamérica" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                       </div>
-                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Transamérica</span></div>
-                  </a>
-                     <a href="https://radioglobo.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                         <div class="relative">
-                              <img src="https://neamp.pucsp.br/images/logos/radio-globo.png" alt="Logo Rádio Globo" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                              <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                              <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                         </div>
-                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Rádio Globo</span></div>
-                    </a>
-                     <a href="https://www.radiorock.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                         <div class="relative">
-                              <img src="https://upload.wikimedia.org/wikipedia/pt/7/79/Logotipo_da_89_FM.png" alt="Logo 89 FM A Rádio Rock" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                              <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                              <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                         </div>
-                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">89 FM Rádio Rock</span></div>
-                    </a>
-                     <a href="https://radiodisney.disney.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                         <div class="relative">
-                              <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Logo_Radio_Disney_Brasil.png" alt="Logo Rádio Disney" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                              <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                              <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                         </div>
-                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Rádio Disney</span></div>
-                    </a>
-                     <a href="https://cultura.uol.com.br/radio/fm/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
-                         <div class="relative">
-                              <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/R%C3%A1dio_Cultura_Brasil_logo_2021.png" alt="Logo Cultura FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
-                              <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                              <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
-                         </div>
-                         <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Cultura FM</span></div>
-                    </a>
-                  </div>
-        </section>
+    <section id="planos" class="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-black">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-3">Escolha o plano ideal para você</h2>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto">Tenha acesso ao melhor do entretenimento com <span class="text-sky-500">Nexus<span class="font-light">Streaming</span></span>.</p>
+            </div>
 
-        <hr class="border-t border-gray-800 my-12 sm:my-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto w-full relative">
 
-        <section id="destaques" class="mb-12 sm:mb-16">
-             <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Destaques Esportivos (ge)</h2>
-            <div class="relative">
-                <div id="highlights-container" class="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 hide-scrollbar -mx-4 sm:mx-0 px-4 sm:px-1">
-                    <p id="highlights-loading" class="text-gray-400 px-4 sm:px-0" style="display: none;">Carregando destaques...</p>
+                <div class="plan-card bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700/50 flex flex-col hover:shadow-xl hover:-translate-y-1"> {/* Efeito hover adicionado */}
+                    <h3 class="text-2xl font-semibold text-center text-sky-400 mb-5">Básico</h3>
+                    <div class="text-center mb-6">
+                        <span class="text-4xl font-bold text-white">R$ 19,90</span>
+                        <span class="text-base font-medium text-gray-400">/mês</span>
+                    </div>
+                    <div class="mb-8 flex-grow">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso a Filmes e Séries selecionados</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Canais de TV Ao Vivo (básicos)</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade HD (720p)</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>1 Tela simultânea</span> </li>
+                            <li class="flex items-start text-gray-500"> <svg class="w-5 h-5 text-gray-600 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg> <span>Sem Rádios Online</span> </li>
+                            <li class="flex items-start text-gray-500"> <svg class="w-5 h-5 text-gray-600 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg> <span>Contém anúncios</span> </li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full text-center bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-300 ease-in-out mt-auto"> Escolher Plano Básico </a>
                 </div>
-                <div class="text-center mt-8 sm:mt-10">
-                     <button class="btn-more bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://ge.globo.com/', '_blank')">
-                        Ver mais no ge
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1.5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                    </button>
+
+                <div class="plan-card recommended-card relative bg-gray-800 p-6 rounded-xl shadow-xl border-2 flex flex-col order-first md:order-none"> {/* Mantém hover padrão do recommended-card */}
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20"> <span class="bg-sky-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">MAIS POPULAR</span> </div>
+                    <h3 class="text-2xl font-semibold text-center text-sky-400 mb-5 mt-3">Padrão</h3>
+                    <div class="text-center mb-6">
+                        <span class="text-4xl font-bold text-white">R$ 29,90</span>
+                        <span class="text-base font-medium text-gray-400">/mês</span>
+                    </div>
+                    <div class="mb-8 flex-grow">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso ilimitado a Filmes e Séries</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Todos os Canais de TV Ao Vivo</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Estações de Rádio Online</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade Full HD (1080p)</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>2 Telas simultâneas</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Sem anúncios</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Cancele quando quiser</span> </li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full text-center bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 mt-auto"> Escolher Plano Padrão </a>
+                </div>
+
+                <div class="plan-card bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700/50 flex flex-col hover:shadow-xl hover:-translate-y-1"> {/* Efeito hover adicionado */}
+                    <h3 class="text-2xl font-semibold text-center text-sky-400 mb-5">Premium</h3>
+                    <div class="text-center mb-6">
+                        <span class="text-4xl font-bold text-white">R$ 45,90</span>
+                        <span class="text-base font-medium text-gray-400">/mês</span>
+                    </div>
+                    <div class="mb-8 flex-grow">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Tudo do Plano Padrão</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade Ultra HD (4K) + HDR</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>4 Telas simultâneas</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Downloads em até 6 dispositivos</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Áudio Espacial (Imersivo)</span> </li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full text-center bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-300 ease-in-out mt-auto"> Escolher Plano Premium </a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <hr class="border-t border-gray-800 my-12 sm:my-16">
+    <section id="faq" class="py-8 sm:py-12 md:py-16 bg-[var(--nexus-dark-bg)]">
+        <div class="container mx-auto px-4 sm:px-6 max-w-3xl">
+             <h2 class="text-2xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12"> Ainda Tem <span class="text-sky-400">Dúvidas</span>? </h2>
+             <div class="space-y-3 sm:space-y-4">
+                 <details> <summary>Como funciona o cancelamento?</summary> <div> <p class="text-sm sm:text-base">Simples e online! Acesse sua conta, vá em 'Assinatura' e clique em 'Cancelar'. Sem multas ou burocracia. Você mantém o acesso até o fim do ciclo já pago.</p> </div> </details>
+                 <details> <summary>Em quantos dispositivos posso assistir ao mesmo tempo?</summary> <div> <p class="text-sm sm:text-base">Depende do plano! Básico: 1 tela, Padrão: 2 telas, Premium: 4 telas simultaneamente. Pode cadastrar quantos dispositivos quiser, mas o uso simultâneo é limitado pelo plano.</p> </div> </details> <details> <summary>Quais canais de TV estão disponíveis?</summary> <div> <p class="text-sm sm:text-base">Oferecemos os principais canais da TV aberta do Brasil (Globo, SBT, Record, Band, etc.) nos planos Padrão e Premium. O plano Básico inclui uma seleção reduzida. A disponibilidade exata pode variar regionalmente.</p> </div> </details> <details> <summary>O catálogo de Filmes e Séries é atualizado?</summary> <div> <p class="text-sm sm:text-base">Sim, nosso catálogo é atualizado periodicamente com novos títulos para garantir variedade em todos os planos. Os planos Padrão e Premium oferecem acesso ilimitado ao catálogo completo.</p> </div> </details> <details> <summary>Existe período de teste gratuito?</summary> <div> <p class="text-sm sm:text-base">Atualmente não oferecemos um teste gratuito padrão. Contudo, nosso cancelamento é flexível: assine e, se não gostar, cancele a qualquer momento sem complicação.</p> </div> </details>
+             </div>
+         </div>
+    </section>
 
-        <section id="noticias" class="mb-12 sm:mb-16">
-             <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Últimas Notícias (G1)</h2>
-            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                 <p id="news-loading" class="text-gray-400 md:col-span-2" style="display: none;">Carregando notícias...</p>
+    <footer class="bg-black mt-1 py-8 sm:py-10 border-t border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 text-center text-[var(--nexus-text-secondary)] text-sm">
+            <p class="mb-3">&copy; <span id="current-year"></span> <span class="text-sky-500">Nexus<span class="font-light">Streaming</span></span>. Todos os direitos reservados.</p>
+            <div class="space-x-4">
+                <a href="#" class="hover:text-sky-400 transition duration-300">Termos de Uso</a>
+                <span>|</span>
+                <a href="#" class="hover:text-sky-400 transition duration-300">Política de Privacidade</a>
+                <span>|</span>
+                <a href="#" class="hover:text-sky-400 transition duration-300">Suporte</a>
             </div>
-            <div class="text-center mt-8 sm:mt-10">
-                 <button class="btn-more bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://g1.globo.com/', '_blank')">
-                    Ver todas as notícias (G1)
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1.5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                </button>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-black mt-12 sm:mt-16 py-6 sm:py-8 border-t border-gray-800">
-        <div class="container mx-auto px-4 sm:px-6 text-center text-gray-500 text-xs sm:text-sm">
-            &copy; <span id="current-year">2025</span> Nexus Streaming. Todos os direitos reservados.
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
-        const G1_RSS_URL = 'https://g1.globo.com/rss/g1/';
-        const GE_RSS_URL = 'https://ge.globo.com/rss/ge/';
-        const placeholderImg = 'https://placehold.co/300x170/607D8B/FFFFFF?text=Notícia';
-
-        function findIframeSrc(htmlString) {
-            if (!htmlString) return null;
-            try {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlString, 'text/html');
-                const iframeElement = doc.querySelector('iframe');
-                if (iframeElement && iframeElement.src) {
-                    return iframeElement.src;
-                }
-            } catch (e) {
-                console.warn("Erro ao analisar HTML para iframe:", e);
-            }
-            return null;
-        }
-
-        async function fetchRSS(feedUrl, containerId, loadingId, cardBuilderFn, limit = 4) {
-            const container = document.getElementById(containerId);
-            const loadingMessage = document.getElementById(loadingId);
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
-
-            if (!container || !loadingMessage) {
-                const errorMsg = `Elementos HTML não encontrados: ${containerId} ou ${loadingId}`;
-                console.error(errorMsg);
-                return Promise.reject(errorMsg);
-            }
-
-            loadingMessage.style.display = 'block';
-            container.innerHTML = '';
-            container.appendChild(loadingMessage);
-
-            return fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error(`Erro HTTP: ${response.status} ao buscar ${feedUrl}`);
-                    return response.json();
-                })
-                .then(data => {
-                    if (loadingMessage.parentNode === container) container.removeChild(loadingMessage);
-
-                    if (data.status === 'ok' && data.items && data.items.length > 0) {
-                        const itemsToDisplay = data.items.slice(0, limit);
-                        itemsToDisplay.forEach(item => {
-                            const cardElement = cardBuilderFn(item, data.feed, placeholderImg, findIframeSrc);
-                            if (cardElement) container.appendChild(cardElement);
-                        });
-                    } else {
-                        console.warn(`Nenhum item encontrado ou erro no feed: ${feedUrl}`, data);
-                        container.innerHTML = `<p class="text-gray-400 ${containerId === 'news-grid' ? 'md:col-span-2' : ''}">Nenhuma notícia/destaque encontrado neste feed.</p>`;
-                    }
-                    return true;
-                })
-                .catch(error => {
-                    console.error(`Falha ao buscar/processar RSS (${feedUrl}):`, error);
-                    if (loadingMessage.parentNode === container) container.removeChild(loadingMessage);
-                    container.innerHTML = `<p class="text-red-500 ${containerId === 'news-grid' ? 'md:col-span-2' : ''}">Não foi possível carregar o conteúdo. Tente novamente mais tarde.</p>`;
-                    throw error;
-                });
-        }
-
-        function createHighlightCard(item, feed, placeholderImg, findIframeFn) {
-            const element = document.createElement('div');
-            element.className = 'flex-shrink-0 w-64 sm:w-72 bg-gray-800 rounded-lg shadow-lg overflow-hidden group cursor-pointer transform transition duration-300 hover:scale-103 hover:shadow-xl border border-gray-700/50';
-            element.onclick = () => window.open(item.link, '_blank');
-
-            const title = item.title.replace(/ - [^-]+?\.(com|globo)\/?$/, '').trim();
-            let mediaElementHTML = '';
-            const iframeSrc = findIframeFn(item.description);
-
-            if (iframeSrc) {
-                mediaElementHTML = `
-                    <iframe class="card-media-video" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
-                `;
-            } else {
-                const imageUrl = item.thumbnail || placeholderImg;
-                mediaElementHTML = `
-                    <img src="${imageUrl}" alt="${title}" class="highlight-card-img"
-                         loading="lazy" onerror="this.onerror=null; this.src='${placeholderImg}';">
-                `;
-            }
-
-            element.innerHTML = `
-                ${mediaElementHTML}
-                <div class="p-3 sm:p-4">
-                    <h3 class="font-semibold text-white mb-1 sm:mb-1.5 text-sm sm:text-base truncate-3-lines" title="${title}">${title}</h3>
-                    <p class="text-[11px] sm:text-xs text-gray-400">${feed.title || 'Esporte'} - ${formatTimeAgo(item.pubDate)}</p>
-                </div>
-            `;
-            return element;
-        }
-
-        function createNewsCard(item, feed, placeholderImg, findIframeFn) {
-            const element = document.createElement('div');
-            element.className = 'bg-gray-800/80 rounded-lg shadow-md hover:bg-gray-700/80 transition duration-300 group flex flex-col sm:flex-row overflow-hidden cursor-pointer border border-gray-700/50 hover:border-gray-600';
-            element.onclick = () => window.open(item.link, '_blank');
-
-            const title = item.title;
-            let mediaElementHTML = '';
-            const iframeSrc = findIframeFn(item.description);
-
-            if (iframeSrc) {
-                mediaElementHTML = `
-                    <iframe class="card-media-video" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
-                `;
-            } else {
-                const imageUrl = item.thumbnail || placeholderImg;
-                mediaElementHTML = `
-                    <img src="${imageUrl}" alt="${title}" class="news-card-img"
-                         loading="lazy" onerror="this.onerror=null; this.src='${placeholderImg}';">
-                `;
-            }
-
-            element.innerHTML = `
-                <div class="news-card-media-container">
-                    ${mediaElementHTML}
-                </div>
-                <div class="p-3 sm:p-4 flex flex-col justify-between flex-grow">
-                    <div>
-                        <h3 class="font-semibold text-base sm:text-md text-white mb-1 group-hover:text-sky-400 transition duration-200 truncate-3-lines" title="${title}">${title}</h3>
-                        <p class="text-[11px] sm:text-xs text-gray-400">
-                            Fonte: ${feed.title || 'G1'} - <time datetime="${item.pubDate}">${formatTimeAgo(item.pubDate)}</time>
-                        </p>
-                    </div>
-                </div>
-            `;
-            return element;
-        }
-
-        function formatTimeAgo(dateString) {
-            let date;
-            try {
-                const dateFormats = [
-                    dateString,
-                    dateString.replace(/ (\+\d{4})$/, ' UTC$1'),
-                    dateString.replace(/-/g, "/")
-                ];
-                for (const format of dateFormats) {
-                    date = new Date(format);
-                    if (!isNaN(date)) break;
-                }
-                if (isNaN(date)) {
-                    console.warn("Data inválida encontrada no feed:", dateString);
-                    return dateString;
-                }
-            } catch (e) {
-                console.error("Erro ao analisar data do feed:", dateString, e);
-                return dateString;
-            }
-
-            const now = new Date();
-            const seconds = Math.round((now - date) / 1000);
-            const minutes = Math.round(seconds / 60);
-            const hours = Math.round(minutes / 60);
-            const days = Math.round(hours / 24);
-
-            if (seconds < 60) return `há segundos`;
-            if (minutes === 1) return `há 1 minuto`;
-            if (minutes < 60) return `há ${minutes} minutos`;
-            if (hours === 1) return `há 1 hora`;
-            if (hours < 24) return `há ${hours} horas`;
-            if (days === 1) return `ontem`;
-            if (days < 7) return `há ${days} dias`;
-            return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
-        }
-
+        // Funções da Landing Page
         function updateFooterYear() {
             const yearSpan = document.getElementById('current-year');
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const splashScreen = document.getElementById('splash-screen');
-            const minSplashTime = 2000;
-            const startTime = Date.now();
+        function initializeMainSwiper() {
+            const mainSwiper = new Swiper('.main-swiper-container', {
+                loop: true, slidesPerView: 'auto', centeredSlides: true, spaceBetween: 20, grabCursor: true,
+                autoplay: { delay: 4000, disableOnInteraction: false },
+                pagination: { el: '.main-swiper-container .swiper-pagination', clickable: true },
+                navigation: { nextEl: '.main-swiper-container .swiper-button-next', prevEl: '.main-swiper-container .swiper-button-prev' },
+                breakpoints: { 640: { spaceBetween: 30 }, 1024: { spaceBetween: 40 } }
+            });
+        }
 
-            const highlightsLoading = document.getElementById('highlights-loading');
-            const newsLoading = document.getElementById('news-loading');
-            if (highlightsLoading) highlightsLoading.style.display = 'none';
-            if (newsLoading) newsLoading.style.display = 'none';
+        function initializeHeroSwiper() {
+            const heroSwiper = new Swiper('.hero-swiper-container', {
+                loop: true, slidesPerView: 'auto', spaceBetween: 15, centeredSlides: true, grabCursor: true,
+                autoplay: { delay: 2500, disableOnInteraction: false },
+                pagination: false, navigation: false,
+                breakpoints: { 640: { spaceBetween: 20 }, 1024: { spaceBetween: 25 } }
+            });
+        }
 
-            const fetchHighlightsPromise = fetchRSS(GE_RSS_URL, 'highlights-container', 'highlights-loading', createHighlightCard, 8);
-            const fetchNewsPromise = fetchRSS(G1_RSS_URL, 'news-grid', 'news-loading', createNewsCard, 6);
+        const heroBackgroundImages = [
+            'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2070&q=80', // Code on screen
+            'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=2070&q=80', // Retro gaming
+            'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=2070&q=80', // Cinema seats
+            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=2070&q=80', // Concert/DJ
+            'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1974&q=80'  // Logos (YouTube, Netflix, etc.)
+        ];
+        let currentBgIndex = 0;
+        const heroSectionElement = document.querySelector('.hero-section');
+        let backgroundIntervalId = null;
 
-            Promise.allSettled([fetchHighlightsPromise, fetchNewsPromise])
-                .then(() => {
-                    const elapsedTime = Date.now() - startTime;
-                    const remainingTime = Math.max(0, minSplashTime - elapsedTime);
-                    setTimeout(() => {
-                        if (splashScreen) splashScreen.classList.add('hidden');
-                    }, remainingTime);
+        function changeHeroBackground() {
+            if (!heroSectionElement || heroBackgroundImages.length === 0) return;
+            currentBgIndex = (currentBgIndex + 1) % heroBackgroundImages.length;
+            const nextImageUrl = heroBackgroundImages[currentBgIndex];
+            // Preload the next image to reduce flicker
+            const img = new Image();
+            img.src = nextImageUrl;
+            img.onload = () => {
+                heroSectionElement.style.backgroundImage = `linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.85) 70%, var(--nexus-dark-bg) 100%), url('${nextImageUrl}')`;
+            }
+        }
+
+        function setupSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        const headerOffset = document.querySelector('header')?.offsetHeight || 0;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // 20px extra space
+
+                        window.scrollTo({
+                             top: offsetPosition,
+                             behavior: "smooth"
+                        });
+                    }
                 });
+            });
+        }
 
+         function setupPlanButtons() {
+            const planButtons = document.querySelectorAll('.plan-card a');
+            planButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault(); // Previne o comportamento padrão do link
+                    const planCard = button.closest('.plan-card');
+                    const planNameElement = planCard.querySelector('h3'); // Pega o nome do plano do h3
+                    const planName = planNameElement ? planNameElement.textContent.trim() : 'Plano Desconhecido';
+
+                    console.log(`Botão do "${planName}" clicado!`);
+                    // Exibe um alerta simples. Numa aplicação real, redirecionaria ou abriria um modal.
+                    alert(`Você selecionou o ${planName}. Redirecionando para a página de assinatura... (Simulação)`);
+
+                    // Exemplo de como redirecionar (comentar/descomentar para usar):
+                    // const checkoutUrl = `/checkout?plan=${encodeURIComponent(planName.toLowerCase())}`;
+                    // window.location.href = checkoutUrl;
+                });
+            });
+         }
+
+        // Garante que o DOM está carregado antes de executar scripts
+        document.addEventListener('DOMContentLoaded', () => {
             updateFooterYear();
+            initializeMainSwiper();
+            initializeHeroSwiper();
+            setupSmoothScroll();
+            setupPlanButtons(); // Configura os botões de plano
+
+            // Inicializa o background da Hero Section e o intervalo
+            if (heroSectionElement && heroBackgroundImages.length > 0) {
+                 // Define a imagem inicial imediatamente
+                heroSectionElement.style.backgroundImage = `linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.85) 70%, var(--nexus-dark-bg) 100%), url('${heroBackgroundImages[0]}')`;
+                // Limpa qualquer intervalo anterior e inicia um novo
+                if (backgroundIntervalId) clearInterval(backgroundIntervalId);
+                backgroundIntervalId = setInterval(changeHeroBackground, 7000); // Intervalo de 7 segundos
+            }
         });
     </script>
 
