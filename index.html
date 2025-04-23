@@ -21,6 +21,8 @@
         }
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
+            scroll-padding-top: 80px;
         }
         body {
             background-color: var(--nexus-dark-bg);
@@ -296,6 +298,7 @@
                     <div class="mb-8 flex-grow">
                         <ul class="space-y-3 text-sm text-gray-300">
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Tudo do Plano Padrão</span> </li>
+                            <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso a Músicas Premium</span> </li>
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade Ultra HD (4K) + HDR</span> </li>
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>4 Telas simultâneas</span> </li>
                             <li class="flex items-start"> <svg class="w-5 h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Downloads em até 6 dispositivos</span> </li>
@@ -379,7 +382,7 @@
                 </div>
 
                 <div class="text-xs text-center sm:text-right">
-                    <p class="mb-2">&copy; <span id="current-year">2024</span> <span class="text-sky-500 font-medium">Nexus<span class="font-light">Streaming</span></span>. Todos os direitos reservados.</p>
+                    <p class="mb-2">&copy; <span id="current-year">2025</span> <span class="text-sky-500 font-medium">Nexus<span class="font-light">Streaming</span></span>. Todos os direitos reservados.</p>
                     <div class="space-x-4">
                         <a href="#" class="hover:text-sky-400 transition duration-300">Termos de Uso</a>
                         <span>|</span>
@@ -448,7 +451,7 @@
                     if(targetElement) {
                         const headerOffset = document.querySelector('header')?.offsetHeight || 0;
                         const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
                         window.scrollTo({
                              top: offsetPosition,
