@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Streaming - TV Ao Vivo, Rádios e Notícias</title>
+    <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20230309/ourmid/pngtree-letter-n-logo-vector-png-image_6639640.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0f0f0f; color: #e1e1e1; font-family: 'Inter', sans-serif; }
+        .channel-card:hover .card-image-overlay, .channel-card:hover .play-icon { opacity: 1; }
+        .channel-card:hover .play-icon { transform: scale(1.1); }
+        .channel-card:hover .channel-name { color: #ffffff; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background-color: #404040; border-radius: 4px; border: 2px solid #1a1a1a; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #555; }
+        .play-icon::before { content: '▶'; font-size: 1.5rem; color: rgba(255, 255, 255, 0.9); }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(14, 165, 233, 0.6); }
+          50% { opacity: 0.8; box-shadow: 0 0 10px rgba(14, 165, 233, 0.9); }
+        }
+        .badge-live { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .card-media-video {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+            display: block;
+        }
+        .highlight-card-img {
+            width: 100%;
+            height: 10rem;
+            object-fit: cover;
+            transition: filter 0.3s;
+            display: block;
+        }
+        .group:hover .highlight-card-img {
+            filter: brightness(0.9);
+        }
+        .news-card-media-container {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        @media (min-width: 640px) {
+            .news-card-media-container { width: 33.333333%; }
+        }
+        .news-card-img {
+            width: 100%;
+            height: 10rem;
+            object-fit: cover;
+            transition: opacity 0.3s;
+            display: block;
+        }
+        .group:hover .news-card-img { opacity: 0.9; }
+
+        .truncate-2-lines { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .truncate-3-lines { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+        .channel-card { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); }
+        .channel-card:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); }
+        .btn, .btn-more { transition: background-color 0.3s ease, transform 0.2s ease; }
+        .btn:hover, .btn-more:hover { transform: translateY(-1px); }
+
+        .radio-card .card-image { aspect-ratio: 1 / 1; object-fit: contain; padding: 8px; background-color: #2a2a2a; }
+        .radio-card .play-icon::before { font-size: 1.2rem; }
+        .radio-card:hover .card-image { filter: brightness(0.85); }
+
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0f0f0f;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999;
+            color: #e1e1e1;
+            opacity: 1; visibility: visible;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+            text-align: center;
+        }
+        #splash-screen.hidden {
+            opacity: 0; visibility: hidden; pointer-events: none;
+        }
+        #splash-screen h1 {
+            font-size: 2.5rem; font-weight: 700;
+            color: #0ea5e9;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #0ea5e9;
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="splash-screen">
+        <h1>Nexus Streaming</h1>
+        <div class="spinner"></div>
+        <p class="text-yellow-400 text-base font-medium mb-1">Versão de Teste</p>
+        <p class="text-gray-400 text-sm">Em Desenvolvimento</p>
+    </div>
+
+    <header class="bg-gradient-to-b from-black/90 via-black/70 to-transparent sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6">
+        <nav class="container mx-auto px-0 sm:px-6 flex flex-wrap justify-between items-center">
+            <a href="#" class="text-2xl sm:text-3xl font-bold text-sky-500 tracking-wide hover:text-sky-600 transition duration-300">Nexus Streaming</a>
+            <div class="flex items-center space-x-3 sm:space-x-5 mt-2 sm:mt-0 flex-wrap">
+                <a href="#ao-vivo" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Ao Vivo</a>
+                <a href="#radios" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Rádios</a>
+                <a href="music.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Music</a>
+                <a href="streams.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Filmes & Séries</a>
+                <a href="#destaques" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Destaques</a>
+                <a href="#noticias" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Notícias</a>
+                <a href="creditos.html" class="text-gray-300 hover:text-white transition duration-200 text-sm sm:text-base font-medium">Créditos</a>
+                <a href="planos.html" class="btn bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full transition duration-300">Assine Já</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="container mx-auto px-4 sm:px-6 py-8 md:py-12 text-center bg-gray-900/30 rounded-lg mb-10 mt-4 sm:mb-12 shadow-lg border border-gray-800/50">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Bem-vindo à Nexus Streaming</h1>
+        <p class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Sua central de canais ao vivo, filmes e séries, músicas, rádios, destaques e notícias.</p>
+        <div class="max-w-lg mx-auto px-2 sm:px-0 mb-8">
+            <div class="relative">
+                <input type="search" placeholder="Buscar canais, rádios, notícias..."
+                       class="w-full py-2.5 px-4 sm:py-3 sm:px-5 bg-gray-800/70 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition duration-300 shadow-sm text-sm sm:text-base">
+                <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+        </div>
+        <div>
+            <a href="planos.html" class="btn inline-block bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2.5 px-8 rounded-full transition duration-300 text-base sm:text-lg transform hover:scale-105">
+                Assine Já por R$ 29,90/mês
+            </a>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-4 sm:px-6">
+
+        <section id="ao-vivo" class="mb-12 sm:mb-16">
+            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Canais Ao Vivo</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                <a href="https://globoplay.globo.com/tv-globo/ao-vivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                    <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                    <div class="relative">
+                        <img src="https://assets.goal.com/images/v3/blt615b3ae591a82e71/1aad91a5b8fab93c575faf3d3ec4eb03c62409cc.png?auto=webp&format=pjpg&width=3840&quality=60" alt="Logo Globo" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                        <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                        <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                    </div>
+                    <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Globo</span></div>
+                </a>
+                 <a href="https://www.sbt.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                     <div class="relative">
+                         <img src="https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2025/04/07/1431165982-sbt.jpg" alt="Logo SBT" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">SBT</span></div>
+                 </a>
+                <a href="https://www.playplus.com/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                    <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                    <div class="relative">
+                        <img src="https://www.moneytimes.com.br/uploads/2023/05/microsoftteams-image-4.png" alt="Logo RecordTV" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                        <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                        <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                    </div>
+                    <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">RecordTV</span></div>
+                </a>
+                 <a href="https://www.band.uol.com.br/ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                     <div class="relative">
+                         <img src="https://braziljournal.com/wp-content/uploads/2022/06/164bcbd7-9e1a-b098-6489-da08bb218aac.jpg" alt="Logo Band" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Band</span></div>
+                 </a>
+                <a href="https://www.redetv.uol.com.br/aovivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                    <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                    <div class="relative">
+                        <img src="https://upload.wikimedia.org/wikipedia/pt/8/89/Logotipo_da_RedeTV%21.png" alt="Logo RedeTV!" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                        <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                        <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                    </div>
+                    <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">RedeTV!</span></div>
+                </a>
+                <a href="https://cultura.uol.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                     <div class="relative">
+                         <img src="https://piauihoje.com/uploads/imagens/whatsapp-image-2024-09-05-at-09-18-49-1725538809.jpeg" alt="Logo TV Cultura" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Cultura</span></div>
+                 </a>
+                <a href="https://www.tvgazeta.com.br/aovivo/" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                    <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                    <div class="relative">
+                        <img src="https://neamp.pucsp.br/images/logos/tv-gazeta.png" alt="Logo TV Gazeta" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                        <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                        <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                    </div>
+                    <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Gazeta</span></div>
+                </a>
+                 <a href="https://www.a12.com/tv/tv-ao-vivo" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                     <div class="relative">
+                         <img src="https://images.a12.com/source/files/c/256354/tv-aparecida-ao-vivo1618383616_600-315-0-0.jpg" alt="Logo TV Aparecida" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Aparecida</span></div>
+                 </a>
+                 <a href="https://tvbrasil.ebc.com.br/webtv" target="_blank" rel="noopener noreferrer" class="channel-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="badge-live absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-sky-500 text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded z-20">AO VIVO</div>
+                     <div class="relative">
+                         <img src="https://imagem.natelinha.uol.com.br/televisao/emissora/tv-brasil_8669.jpeg" alt="Logo TV Brasil" class="card-image w-full h-auto object-cover transition-transform duration-300 group-hover:brightness-75" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">TV Brasil</span></div>
+                 </a>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-800 my-12 sm:my-16">
+
+        <section id="radios" class="mb-12 sm:mb-16">
+            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Rádios Online</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                 <a href="https://jovempan.com.br/aovivo/fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="relative">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Jovem_Pan_logo_and_wordmark.svg/1200px-Jovem_Pan_logo_and_wordmark.svg.png" alt="Logo Jovem Pan FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Jovem Pan FM</span></div>
+                 </a>
+                 <a href="https://www.band.uol.com.br/band-fm" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="relative">
+                         <img src="https://upload.wikimedia.org/wikipedia/pt/e/e9/Logotipo_da_Band_FM.png" alt="Logo Band FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Band FM</span></div>
+                 </a>
+                 <a href="https://cbn.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                     <div class="relative">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/CBN_logo.svg/2560px-CBN_logo.svg.png" alt="Logo CBN" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                         <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                         <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                     </div>
+                     <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">CBN</span></div>
+                 </a>
+                  <a href="https://www.antena1.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="relative">
+                          <img src="https://media.rtp.pt/empresa/wp-content/uploads/sites/31/2015/07/Antena1_positivo_horiz_RGB.png" alt="Logo Antena 1" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Antena 1</span></div>
+                  </a>
+                  <a href="https://www.kissfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="relative">
+                          <img src="https://upload.wikimedia.org/wikipedia/pt/4/46/Logotipo_da_Kiss_FM.png" alt="Logo Kiss FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Kiss FM</span></div>
+                  </a>
+                  <a href="https://alphafm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="relative">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Alpha_FM_Bras%C3%ADlia_logo.png" alt="Logo Alpha FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Alpha FM</span></div>
+                  </a>
+                  <a href="https://mixfm.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="relative">
+                          <img src="https://upload.wikimedia.org/wikipedia/pt/7/7c/Logotipo_da_Mix_FM.png" alt="Logo Mix FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Mix FM</span></div>
+                  </a>
+                  <a href="https://transamerica.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="relative">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Transam%C3%A9rica_100.1_FM_logo.png" alt="Logo Transamérica" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Transamérica</span></div>
+                  </a>
+                  <a href="https://radioglobo.globo.com/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="relative">
+                          <img src="https://neamp.pucsp.br/images/logos/radio-globo.png" alt="Logo Rádio Globo" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Rádio Globo</span></div>
+                  </a>
+                  <a href="https://www.radiorock.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                      <div class="relative">
+                          <img src="https://upload.wikimedia.org/wikipedia/pt/7/79/Logotipo_da_89_FM.png" alt="Logo 89 FM A Rádio Rock" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                          <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                          <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                      </div>
+                      <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">89 FM Rádio Rock</span></div>
+                  </a>
+                   <a href="https://radiodisney.disney.com.br/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                       <div class="relative">
+                           <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Logo_Radio_Disney_Brasil.png" alt="Logo Rádio Disney" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                       </div>
+                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Rádio Disney</span></div>
+                   </a>
+                   <a href="https://cultura.uol.com.br/radio/fm/" target="_blank" rel="noopener noreferrer" class="channel-card radio-card group block bg-gray-800 rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105 relative border border-transparent hover:border-sky-500/50">
+                       <div class="relative">
+                           <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/R%C3%A1dio_Cultura_Brasil_logo_2021.png" alt="Logo Cultura FM" class="card-image w-full h-auto transition-transform duration-300" loading="lazy">
+                           <div class="card-image-overlay absolute inset-0 bg-gradient-to-t from-black/70 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                           <div class="play-icon absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-90 group-hover:scale-100 z-10"></div>
+                       </div>
+                       <div class="p-2 sm:p-3 text-center bg-gray-800"><span class="channel-name text-gray-300 text-xs sm:text-sm font-semibold transition-colors duration-300">Cultura FM</span></div>
+                   </a>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-800 my-12 sm:my-16">
+
+        <section id="destaques" class="mb-12 sm:mb-16">
+            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Destaques Esportivos (ge)</h2>
+            <div class="relative">
+                <div id="highlights-container" class="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 hide-scrollbar -mx-4 sm:mx-0 px-4 sm:px-1">
+                    <p id="highlights-loading" class="text-gray-400 px-4 sm:px-0" style="display: none;">Carregando destaques...</p>
+                </div>
+                <div class="text-center mt-8 sm:mt-10">
+                    <button class="btn-more bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://ge.globo.com/', '_blank')">
+                         Ver mais no ge
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1.5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                         </svg>
+                     </button>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-800 my-12 sm:my-16">
+
+        <section id="noticias" class="mb-12 sm:mb-16">
+            <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-white border-l-4 border-sky-500 pl-3 sm:pl-4">Últimas Notícias (G1)</h2>
+            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <p id="news-loading" class="text-gray-400 md:col-span-2" style="display: none;">Carregando notícias...</p>
+            </div>
+            <div class="text-center mt-8 sm:mt-10">
+                <button class="btn-more bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 sm:px-6 rounded-full inline-flex items-center text-sm" onclick="window.open('https://g1.globo.com/', '_blank')">
+                    Ver todas as notícias (G1)
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1.5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black mt-12 sm:mt-16 py-6 sm:py-8 border-t border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 text-center text-gray-500 text-xs sm:text-sm">
+            &copy; <span id="current-year">2025</span> Nexus Streaming. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script>
+        const G1_RSS_URL = 'https://g1.globo.com/rss/g1/';
+        const GE_RSS_URL = 'https://ge.globo.com/rss/ge/';
+        const placeholderImg = 'https://placehold.co/300x170/607D8B/FFFFFF?text=Notícia';
+
+        function findIframeSrc(htmlString) {
+            if (!htmlString) return null;
+            try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlString, 'text/html');
+                const iframeElement = doc.querySelector('iframe');
+                if (iframeElement && iframeElement.src) {
+                    if (iframeElement.src.startsWith('http://') || iframeElement.src.startsWith('https://')) {
+                         return iframeElement.src;
+                    }
+                }
+            } catch (e) {
+                console.warn("Erro ao analisar HTML para iframe:", e);
+            }
+            return null;
+        }
+
+        async function fetchRSS(feedUrl, containerId, loadingId, cardBuilderFn, limit = 4) {
+            const container = document.getElementById(containerId);
+            const loadingMessage = document.getElementById(loadingId);
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
+
+            if (!container || !loadingMessage) {
+                const errorMsg = `Elementos HTML não encontrados: ${containerId} ou ${loadingId}`;
+                console.error(errorMsg);
+                return Promise.reject(new Error(errorMsg));
+            }
+
+            loadingMessage.style.display = 'block';
+            container.innerHTML = '';
+            container.appendChild(loadingMessage);
+
+            return fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                       throw new Error(`Erro HTTP: ${response.status} (${response.statusText}) ao buscar ${feedUrl}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (loadingMessage.parentNode === container) {
+                        container.removeChild(loadingMessage);
+                    }
+
+                    if (data.status === 'ok' && data.items && data.items.length > 0) {
+                        const itemsToDisplay = data.items.slice(0, limit);
+                        itemsToDisplay.forEach(item => {
+                            try {
+                                const cardElement = cardBuilderFn(item, data.feed, placeholderImg, findIframeSrc);
+                                if (cardElement instanceof HTMLElement) {
+                                    container.appendChild(cardElement);
+                                } else {
+                                    console.warn("Função cardBuilderFn não retornou um elemento HTML válido para o item:", item);
+                                }
+                            } catch (cardError) {
+                                console.error("Erro ao criar card para o item:", item, cardError);
+                            }
+                        });
+                    } else {
+                        console.warn(`Nenhum item encontrado ou erro no status do feed: ${feedUrl}`, data);
+                        container.innerHTML = `<p class="text-gray-400 ${containerId === 'news-grid' ? 'md:col-span-2' : ''} p-4">Nenhum conteúdo encontrado neste feed no momento.</p>`;
+                    }
+                    return true;
+                })
+                .catch(error => {
+                    console.error(`Falha ao buscar/processar RSS (${feedUrl}):`, error);
+                     if (loadingMessage.parentNode === container) {
+                         container.removeChild(loadingMessage);
+                     }
+                     container.innerHTML = `<div class="text-red-500 ${containerId === 'news-grid' ? 'md:col-span-2' : ''} p-4 border border-red-600/50 rounded-md bg-red-900/20">
+                                            <p><strong>Erro ao carregar conteúdo.</strong></p>
+                                            <p class="text-sm text-red-400">${error.message || 'Verifique sua conexão ou tente novamente mais tarde.'}</p>
+                                           </div>`;
+                    throw error;
+                });
+        }
+
+        function createHighlightCard(item, feed, placeholderImg, findIframeFn) {
+           if (!item || !item.link || !item.title) {
+               console.warn("Item de destaque inválido:", item);
+               return null;
+           }
+            const element = document.createElement('div');
+            element.className = 'flex-shrink-0 w-64 sm:w-72 bg-gray-800 rounded-lg shadow-lg overflow-hidden group cursor-pointer transform transition duration-300 hover:scale-103 hover:shadow-xl border border-gray-700/50';
+            element.onclick = () => window.open(item.link, '_blank', 'noopener,noreferrer');
+
+            let title = item.title;
+            const commonSuffixes = [" - ge.globo", " - globoesporte.com", " | ge.globo", " | globoesporte.com"];
+            for (const suffix of commonSuffixes) {
+                if (title.endsWith(suffix)) {
+                    title = title.substring(0, title.length - suffix.length);
+                    break;
+                }
+            }
+            title = title.trim();
+
+            let mediaElementHTML = '';
+            const iframeSrc = findIframeFn(item.description);
+
+            if (iframeSrc) {
+                 mediaElementHTML = `
+                     <div class="aspect-video w-full">
+                         <iframe class="card-media-video w-full h-full" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
+                     </div>
+                 `;
+            } else {
+                const imageUrl = item.thumbnail || placeholderImg;
+                mediaElementHTML = `
+                    <picture>
+                        <img src="${imageUrl}" alt="${title}" class="highlight-card-img"
+                            loading="lazy" onerror="this.onerror=null; this.src='${placeholderImg}'; console.warn('Erro ao carregar imagem: ${imageUrl}')">
+                     </picture>
+                `;
+            }
+
+            element.innerHTML = `
+                ${mediaElementHTML}
+                <div class="p-3 sm:p-4">
+                    <h3 class="font-semibold text-white mb-1 sm:mb-1.5 text-sm sm:text-base truncate-3-lines" title="${title}">${title}</h3>
+                    <p class="text-[11px] sm:text-xs text-gray-400">${feed.title || 'Esporte'} - ${formatTimeAgo(item.pubDate)}</p>
+                </div>
+            `;
+            return element;
+        }
+
+        function createNewsCard(item, feed, placeholderImg, findIframeFn) {
+            if (!item || !item.link || !item.title) {
+                 console.warn("Item de notícia inválido:", item);
+                 return null;
+             }
+            const element = document.createElement('div');
+            element.className = 'bg-gray-800/80 rounded-lg shadow-md hover:bg-gray-700/80 transition duration-300 group flex flex-col sm:flex-row overflow-hidden cursor-pointer border border-gray-700/50 hover:border-gray-600';
+            element.onclick = () => window.open(item.link, '_blank', 'noopener,noreferrer');
+
+            const title = item.title;
+            let mediaElementHTML = '';
+            const iframeSrc = findIframeFn(item.description);
+
+            if (iframeSrc) {
+                mediaElementHTML = `
+                     <div class="aspect-video w-full sm:w-1/3">
+                        <iframe class="card-media-video w-full h-full" src="${iframeSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy" title="Vídeo sobre ${title}"></iframe>
+                     </div>
+                `;
+            } else {
+                const imageUrl = item.thumbnail || placeholderImg;
+                 mediaElementHTML = `
+                    <div class="news-card-media-container">
+                         <picture>
+                             <img src="${imageUrl}" alt="${title}" class="news-card-img"
+                                 loading="lazy" onerror="this.onerror=null; this.src='${placeholderImg}'; console.warn('Erro ao carregar imagem: ${imageUrl}')">
+                         </picture>
+                    </div>
+                `;
+            }
+
+            element.innerHTML = `
+                 ${mediaElementHTML}
+                <div class="p-3 sm:p-4 flex flex-col justify-between flex-grow">
+                     <div>
+                         <h3 class="font-semibold text-base sm:text-md text-white mb-1 group-hover:text-sky-400 transition duration-200 truncate-3-lines" title="${title}">${title}</h3>
+                         <p class="text-[11px] sm:text-xs text-gray-400">
+                             Fonte: ${feed.title || 'G1'} - <time datetime="${item.pubDate}">${formatTimeAgo(item.pubDate)}</time>
+                         </p>
+                     </div>
+                </div>
+             `;
+            return element;
+        }
+
+        function formatTimeAgo(dateString) {
+            if (!dateString) return '';
+
+            let date;
+            try {
+                date = new Date(dateString.replace(/-/g, '/'));
+                if (isNaN(date.getTime())) {
+                    throw new Error("Data inválida após análise inicial.");
+                }
+            } catch (e) {
+                console.warn("Erro ao analisar data do feed:", dateString, e);
+                return dateString.split(' ')[0] || dateString;
+            }
+
+            const now = new Date();
+            const seconds = Math.round((now.getTime() - date.getTime()) / 1000);
+            const minutes = Math.round(seconds / 60);
+            const hours = Math.round(minutes / 60);
+            const days = Math.round(hours / 24);
+            const weeks = Math.round(days / 7);
+            const months = Math.round(days / 30);
+            const years = Math.round(days / 365);
+
+            if (seconds < 60) return `há segundos`;
+            if (minutes === 1) return `há 1 minuto`;
+            if (minutes < 60) return `há ${minutes} minutos`;
+            if (hours === 1) return `há 1 hora`;
+            if (hours < 24) return `há ${hours} horas`;
+            if (days === 1) return `ontem`;
+            if (days < 7) return `há ${days} dias`;
+            if (weeks === 1) return `há 1 semana`;
+            if (weeks < 5) return `há ${weeks} semanas`;
+            return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function updateFooterYear() {
+            const yearSpan = document.getElementById('current-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const splashScreen = document.getElementById('splash-screen');
+            const minSplashTime = 1500;
+            const startTime = Date.now();
+
+            const highlightsLoading = document.getElementById('highlights-loading');
+            const newsLoading = document.getElementById('news-loading');
+            if (highlightsLoading) highlightsLoading.style.display = 'none';
+            if (newsLoading) newsLoading.style.display = 'none';
+
+             const fetchHighlightsPromise = fetchRSS(GE_RSS_URL, 'highlights-container', 'highlights-loading', createHighlightCard, 8)
+                                            .catch(err => console.error("Erro final ao buscar destaques:", err));
+             const fetchNewsPromise = fetchRSS(G1_RSS_URL, 'news-grid', 'news-loading', createNewsCard, 6)
+                                            .catch(err => console.error("Erro final ao buscar notícias:", err));
+
+            Promise.allSettled([fetchHighlightsPromise, fetchNewsPromise])
+                .then((results) => {
+                     results.forEach((result, index) => {
+                        if (result.status === 'rejected') {
+                            console.warn(`A busca do feed ${index === 0 ? 'GE' : 'G1'} falhou.`);
+                        }
+                    });
+
+                    const elapsedTime = Date.now() - startTime;
+                    const remainingTime = Math.max(0, minSplashTime - elapsedTime);
+
+                    setTimeout(() => {
+                        if (splashScreen) {
+                             splashScreen.classList.add('hidden');
+                        }
+                    }, remainingTime);
+                });
+
+            updateFooterYear();
+        });
+    </script>
+
+</body>
+</html>
