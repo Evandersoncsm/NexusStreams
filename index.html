@@ -10,9 +10,9 @@
     <script>
         // Define o tema (claro/escuro)
         if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-          document.documentElement.classList.remove('dark')
+            document.documentElement.classList.remove('dark')
         } else {
-          document.documentElement.classList.add('dark')
+            document.documentElement.classList.add('dark')
         }
     </script>
     <style>
@@ -26,17 +26,37 @@
         .pricing-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
         .pricing-card.featured { border-color: theme('colors.nexus-blue'); transform: scale(1.02); }
         .swiper-container { width: 100%; padding: 10px 0 30px 0; position: relative; }
-        .swiper-slide { text-align: center; font-size: 18px; background: transparent; display: flex; justify-content: center; align-items: center; width: 150px; }
-        @media (min-width: 640px) { .swiper-slide { width: 180px; } }
-        @media (min-width: 1024px) { .swiper-slide { width: 200px; } }
-        .show-card { transition: transform 0.3s ease, box-shadow 0.3s ease; width: 100%; background-color: theme('colors.white'); border-radius: 0.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px; /* Reduzido para melhor encaixe */
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* LARGURA REMOVIDA: Deixamos o Swiper JS controlar a largura com slidesPerView */
+            /* width: 150px; */
+            height: auto; /* Garantir altura automática */
+        }
+        /* @media (min-width: 640px) { .swiper-slide { width: 180px; } } */
+        /* @media (min-width: 1024px) { .swiper-slide { width: 200px; } } */
+        .show-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            background-color: theme('colors.white');
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            display: flex; /* Adicionado para garantir layout interno */
+            flex-direction: column; /* Adicionado */
+            height: 100%; /* Adicionado */
+        }
         .dark .show-card { background-color: theme('colors.nexus-stream-card'); }
         .show-card:hover { transform: scale(1.05); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); }
         .show-card.movie-card-clickable:hover { box-shadow: 0 10px 15px -3px theme('colors.nexus-blue' / 0.3), 0 4px 6px -2px theme('colors.nexus-blue' / 0.2); }
         .show-card img { width: 100%; object-fit: cover; aspect-ratio: 2 / 3; }
-        .show-card .show-info { padding: 0.75rem; }
-        .show-card h4 { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .show-card .rating { display: flex; align-items: center; margin-top: 0.25rem; font-size: 0.75rem; }
+        .show-card .show-info { padding: 0.75rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; } /* Flex-grow adicionado */
+        .show-card h4 { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.25rem; } /* Margem adicionada */
+        .show-card .rating { display: flex; align-items: center; margin-top: auto; font-size: 0.75rem; } /* Margin-top auto e removido */
         .swiper-button-next, .swiper-button-prev { color: theme('colors.nexus-blue'); background-color: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 36px; height: 36px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.2s ease, color 0.2s ease; }
         .swiper-button-next:hover, .swiper-button-prev:hover { background-color: theme('colors.nexus-blue'); color: white; }
         .dark .swiper-button-next, .dark .swiper-button-prev { background-color: rgba(31, 41, 55, 0.7); color: theme('colors.blue.400'); }
@@ -125,7 +145,7 @@
             </div>
         </section>
 
-        <section id="now-playing-movies" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+        <section id="now-playing-movies" class="py-12 sm:py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
             <div class="container mx-auto px-4 sm:px-6">
                  <div class="text-center mb-10 md:mb-12">
                      <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Novidades</span>
@@ -144,64 +164,64 @@
             </div>
         </section>
 
-        <section id="popular-movies" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+        <section id="popular-movies" class="py-12 sm:py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
             <div class="container mx-auto px-4 sm:px-6">
-                 <div class="text-center mb-10 md:mb-12">
-                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Tendências</span>
-                      <div class="section-divider"></div>
+                <div class="text-center mb-10 md:mb-12">
+                    <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Tendências</span>
+                     <div class="section-divider"></div>
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
                         Filmes Populares
                     </h2>
-                 </div>
-                 <div class="swiper-container swiper-movies-popular">
-                     <div class="swiper-wrapper" id="popular-movies-container">
-                         <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
-                     </div>
-                     <div class="swiper-button-next"></div>
-                     <div class="swiper-button-prev"></div>
-                 </div>
+                </div>
+                <div class="swiper-container swiper-movies-popular">
+                    <div class="swiper-wrapper" id="popular-movies-container">
+                        <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
         </section>
 
-        <section id="upcoming-movies" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+        <section id="upcoming-movies" class="py-12 sm:py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
             <div class="container mx-auto px-4 sm:px-6">
-                 <div class="text-center mb-10 md:mb-12">
-                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Aguarde</span>
-                     <div class="section-divider"></div>
+                <div class="text-center mb-10 md:mb-12">
+                    <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Aguarde</span>
+                    <div class="section-divider"></div>
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
                         Próximos Lançamentos
                     </h2>
-                 </div>
-                 <div class="swiper-container swiper-movies-upcoming">
-                     <div class="swiper-wrapper" id="upcoming-movies-container">
-                         <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
-                     </div>
-                     <div class="swiper-button-next"></div>
-                     <div class="swiper-button-prev"></div>
-                 </div>
+                </div>
+                <div class="swiper-container swiper-movies-upcoming">
+                    <div class="swiper-wrapper" id="upcoming-movies-container">
+                        <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
         </section>
 
-        <section id="top-rated-movies" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+        <section id="top-rated-movies" class="py-12 sm:py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
             <div class="container mx-auto px-4 sm:px-6">
-                 <div class="text-center mb-10 md:mb-12">
-                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Os Favoritos</span>
-                      <div class="section-divider"></div>
+                <div class="text-center mb-10 md:mb-12">
+                    <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Os Favoritos</span>
+                     <div class="section-divider"></div>
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
                         Filmes Mais Bem Avaliados
                     </h2>
-                 </div>
-                 <div class="swiper-container swiper-movies-top-rated">
-                     <div class="swiper-wrapper" id="top-rated-movies-container">
-                         <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
-                     </div>
-                     <div class="swiper-button-next"></div>
-                     <div class="swiper-button-prev"></div>
-                 </div>
+                </div>
+                <div class="swiper-container swiper-movies-top-rated">
+                    <div class="swiper-wrapper" id="top-rated-movies-container">
+                        <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
         </section>
 
-        <section id="top-rated-tv" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+        <section id="top-rated-tv" class="py-12 sm:py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
             <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-10 md:mb-12">
                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Maratonar</span>
@@ -220,7 +240,7 @@
             </div>
         </section>
 
-        <section id="features" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+        <section id="features" class="py-12 sm:py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
             <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12 md:mb-16">
                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Por que NexusStreaming?</span>
@@ -232,42 +252,42 @@
                     </p>
                 </div>
                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                     <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
-                         <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                    <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
+                        <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
                              <svg class="w-6 h-6 md:w-7 md:h-7 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                         </div>
-                         <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Assista Onde Quiser</h3>
-                         <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
-                              Acesse em sua TV, computador, tablet ou smartphone. Leve a NexusStreaming com você para todo lugar.
-                         </p>
-                     </div>
-                     <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
-                         <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                               <svg class="w-6 h-6 md:w-7 md:h-7 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                         </div>
-                         <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Downloads Offline</h3>
-                         <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
-                             Baixe seus títulos favoritos para assistir mesmo sem conexão com a internet. Perfeito para viagens!
-                         </p>
-                     </div>
-                     <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
-                         <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Assista Onde Quiser</h3>
+                        <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
+                             Acesse em sua TV, computador, tablet ou smartphone. Leve a NexusStreaming com você para todo lugar.
+                        </p>
+                    </div>
+                    <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
+                        <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                             <svg class="w-6 h-6 md:w-7 md:h-7 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Downloads Offline</h3>
+                        <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
+                            Baixe seus títulos favoritos para assistir mesmo sem conexão com a internet. Perfeito para viagens!
+                        </p>
+                    </div>
+                    <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
+                        <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
                              <svg class="w-6 h-6 md:w-7 md:h-7 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M12 10a4 4 0 110-5.292A4 4 0 0112 10z"></path></svg>
-                         </div>
-                         <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Múltiplos Perfis</h3>
-                         <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Múltiplos Perfis</h3>
+                        <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
                              Crie perfis individuais para cada membro da família, com recomendações personalizadas para cada um.
-                         </p>
-                     </div>
+                        </p>
+                    </div>
                  </div>
             </div>
         </section>
 
-        <section id="pricing" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+        <section id="pricing" class="py-12 sm:py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
             <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12 md:mb-16">
                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Escolha Seu Acesso</span>
-                     <div class="section-divider"></div>
+                    <div class="section-divider"></div>
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
                         Planos Flexíveis para Você
                     </h2>
@@ -279,69 +299,69 @@
                     <div>
                         <h3 class="text-xl sm:text-2xl font-semibold text-center text-nexus-heading dark:text-nexus-dark-heading mb-8">Planos com <span class="text-nexus-blue">1 Acesso</span> Simultâneo</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Mensal</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 29,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">/mês</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>1 Crédito</li><li>Cancele quando quiser</li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
-                             <div class="pricing-card featured bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border-2 flex flex-col text-center relative">
-                                  <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-nexus-blue text-white text-xs font-semibold px-4 py-1 rounded-full uppercase tracking-wider">Popular</span>
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 mt-4">Trimestral</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 69,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 3 meses (≈ R$23,30/mês)</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>3 Créditos</li><li>Economize <span class="font-medium">22%</span></li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
-                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Semestral</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 129,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 6 meses (≈ R$21,65/mês)</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>6 Créditos</li><li>Economize <span class="font-medium">27%</span></li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
-                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Anual</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 219,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">por ano (≈ R$18,32/mês)</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>12 Créditos</li><li>Economize <span class="font-medium">38%</span></li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
+                            <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Mensal</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 29,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">/mês</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>1 Crédito</li><li>Cancele quando quiser</li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
+                            <div class="pricing-card featured bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border-2 flex flex-col text-center relative">
+                                 <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-nexus-blue text-white text-xs font-semibold px-4 py-1 rounded-full uppercase tracking-wider">Popular</span>
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 mt-4">Trimestral</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 69,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 3 meses (≈ R$23,30/mês)</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>3 Créditos</li><li>Economize <span class="font-medium">22%</span></li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
+                            <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Semestral</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 129,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 6 meses (≈ R$21,65/mês)</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>6 Créditos</li><li>Economize <span class="font-medium">27%</span></li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
+                            <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Anual</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 219,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">por ano (≈ R$18,32/mês)</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>12 Créditos</li><li>Economize <span class="font-medium">38%</span></li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
                         </div>
                     </div>
                     <div>
                         <h3 class="text-xl sm:text-2xl font-semibold text-center text-nexus-heading dark:text-nexus-dark-heading mb-8">Planos com <span class="text-nexus-blue">2 Acessos</span> Simultâneos</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Mensal</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 39,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">/mês</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>2 Créditos</li><li>Cancele quando quiser</li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
-                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Trimestral</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 99,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 3 meses (≈ R$33,30/mês)</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>6 Créditos</li><li>Economize <span class="font-medium">16%</span></li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
-                              <div class="pricing-card featured bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border-2 flex flex-col text-center relative">
+                            <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Mensal</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 39,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">/mês</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>2 Créditos</li><li>Cancele quando quiser</li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
+                            <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Trimestral</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 99,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 3 meses (≈ R$33,30/mês)</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>6 Créditos</li><li>Economize <span class="font-medium">16%</span></li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
+                             <div class="pricing-card featured bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border-2 flex flex-col text-center relative">
                                  <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-nexus-blue text-white text-xs font-semibold px-4 py-1 rounded-full uppercase tracking-wider">Popular</span>
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 mt-4">Semestral</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 179,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 6 meses (≈ R$29,98/mês)</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>12 Créditos</li><li>Economize <span class="font-medium">25%</span></li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
-                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
-                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Anual</h4>
-                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 299,90</p>
-                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">por ano (≈ R$24,99/mês)</p>
-                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>24 Créditos</li><li>Economize <span class="font-medium">37%</span></li></ul>
-                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
-                             </div>
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 mt-4">Semestral</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 179,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 6 meses (≈ R$29,98/mês)</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>12 Créditos</li><li>Economize <span class="font-medium">25%</span></li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
+                            <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Anual</h4>
+                                <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 299,90</p>
+                                <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">por ano (≈ R$24,99/mês)</p>
+                                <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>24 Créditos</li><li>Economize <span class="font-medium">37%</span></li></ul>
+                                <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -351,75 +371,74 @@
             </div>
         </section>
 
-        <section id="contact" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
-             <div class="container mx-auto px-4 sm:px-6">
-                 <div class="text-center mb-12 md:mb-16">
-                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Dúvidas?</span>
-                      <div class="section-divider"></div>
-                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
-                          Fale Conosco!
-                     </h2>
-                     <p class="text-base sm:text-lg text-nexus-gray dark:text-nexus-dark-text mt-4 md:mt-5 max-w-xl md:max-w-2xl mx-auto">
-                           Nossa equipe está pronta para ajudar você a escolher o melhor plano ou responder a qualquer pergunta.
-                     </p>
-                      <div class="mt-8">
-                           <a href="https://wa.me/5511957461222?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20a%20NexusStreaming." target="_blank" class="bg-green-500 text-white px-8 py-3 rounded-full text-base font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center">
-                                <svg fill="currentColor" viewBox="0 0 16 16" class="w-5 h-5 mr-3"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/> </svg>
-                                Conversar via WhatsApp
-                           </a>
-                      </div>
-                 </div>
-             </div>
+        <section id="contact" class="py-12 sm:py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+              <div class="container mx-auto px-4 sm:px-6">
+                   <div class="text-center mb-12 md:mb-16">
+                         <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Dúvidas?</span>
+                          <div class="section-divider"></div>
+                         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                               Fale Conosco!
+                         </h2>
+                         <p class="text-base sm:text-lg text-nexus-gray dark:text-nexus-dark-text mt-4 md:mt-5 max-w-xl md:max-w-2xl mx-auto">
+                                 Nossa equipe está pronta para ajudar você a escolher o melhor plano ou responder a qualquer pergunta.
+                         </p>
+                          <div class="mt-8">
+                                <a href="https://wa.me/5511957461222?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20a%20NexusStreaming." target="_blank" class="bg-green-500 text-white px-6 py-3 sm:px-8 sm:py-3 rounded-full text-base font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center">
+                                     <svg fill="currentColor" viewBox="0 0 16 16" class="w-5 h-5 mr-3"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/> </svg>
+                                     Conversar via WhatsApp
+                                </a>
+                          </div>
+                   </div>
+              </div>
         </section>
     </main>
 
     <footer class="bg-nexus-light dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
          <div class="container mx-auto px-4 sm:px-6 py-12">
-             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-                 <div class="sm:col-span-2">
-                     <a href="#hero" class="text-lg font-bold text-nexus-blue dark:text-white">NexusStreaming</a>
-                     <p class="mt-3 text-sm text-nexus-gray dark:text-nexus-dark-text leading-relaxed max-w-xs">
+             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center sm:text-left">
+                  <div class="sm:col-span-2 md:col-span-1 lg:col-span-2"> <a href="#hero" class="text-lg font-bold text-nexus-blue dark:text-white inline-block">NexusStreaming</a>
+                      <p class="mt-3 text-sm text-nexus-gray dark:text-nexus-dark-text leading-relaxed max-w-xs mx-auto sm:mx-0">
                            Sua dose diária de entretenimento. Filmes, séries e muito mais, sempre ao seu alcance.
-                     </p>
-                      <div class="flex space-x-5 mt-5">
-                          <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Facebook"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
-                          <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Instagram"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.667 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07-3.204 0-3.584-.012-4.85-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.646-.07-4.85 0-3.204.013-3.583.07-4.85.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.28-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.28.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.28-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                          <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Twitter"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.61.823 3.027 2.071 3.863-.766-.024-1.485-.234-2.11-.583v.06c0 2.256 1.605 4.14 3.737 4.568-.39.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.598 1.846 2.339 3.197 4.401 3.235-1.593 1.246-3.604 1.991-5.789 1.991-.376 0-.746-.022-1.112-.065 2.062 1.323 4.51 2.094 7.14 2.094 8.57 0 13.255-7.098 13.255-13.254 0-.202-.005-.403-.014-.602.91-.658 1.7-1.47 2.323-2.404z"/></svg></a>
-                      </div>
-                 </div>
-                 <div>
-                     <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Navegação</h3>
-                     <ul class="mt-4 space-y-2.5">
-                         <li><a href="#hero" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Início</a></li>
-                         <li><a href="#now-playing-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Em Cartaz</a></li>
-                         <li><a href="#popular-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Populares</a></li>
-                         <li><a href="#upcoming-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Em Breve</a></li>
-                         <li><a href="#pricing" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Planos</a></li>
-                         <li><a href="#features" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Recursos</a></li>
-                         <li><a href="#contact" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Contato</a></li>
-                     </ul>
-                 </div>
+                      </p>
+                       <div class="flex space-x-5 mt-5 justify-center sm:justify-start">
+                           <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Facebook"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+                           <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Instagram"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.667 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07-3.204 0-3.584-.012-4.85-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.646-.07-4.85 0-3.204.013-3.583.07-4.85.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.28-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.28.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.28-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                           <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Twitter"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.61.823 3.027 2.071 3.863-.766-.024-1.485-.234-2.11-.583v.06c0 2.256 1.605 4.14 3.737 4.568-.39.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.598 1.846 2.339 3.197 4.401 3.235-1.593 1.246-3.604 1.991-5.789 1.991-.376 0-.746-.022-1.112-.065 2.062 1.323 4.51 2.094 7.14 2.094 8.57 0 13.255-7.098 13.255-13.254 0-.202-.005-.403-.014-.602.91-.658 1.7-1.47 2.323-2.404z"/></svg></a>
+                       </div>
+                  </div>
                   <div>
-                      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Ajuda</h3>
+                      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Navegação</h3>
                       <ul class="mt-4 space-y-2.5">
-                          <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Central de Ajuda</a></li>
-                          <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Dispositivos Compatíveis</a></li>
-                           <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Perguntas Frequentes</a></li>
+                          <li><a href="#hero" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Início</a></li>
+                          <li><a href="#now-playing-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Em Cartaz</a></li>
+                          <li><a href="#popular-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Populares</a></li>
+                          <li><a href="#upcoming-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Em Breve</a></li>
+                          <li><a href="#pricing" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Planos</a></li>
+                          <li><a href="#features" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Recursos</a></li>
+                          <li><a href="#contact" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Contato</a></li>
                       </ul>
                   </div>
-                 <div>
-                     <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Legal</h3>
-                     <ul class="mt-4 space-y-2.5">
-                         <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Privacidade</a></li>
-                         <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Termos de Uso</a></li>
-                     </ul>
-                 </div>
-             </div>
-              <div class="mt-10 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-6 md:pt-8 text-center">
-                  <p class="text-xs text-nexus-gray dark:text-gray-400">© 2025 NexusStreaming (Parte da Nexus Tecnologia CNPJ: 56.309.584/0001-36). Todos os direitos reservados.</p>
+                   <div>
+                       <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Ajuda</h3>
+                       <ul class="mt-4 space-y-2.5">
+                           <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Central de Ajuda</a></li>
+                           <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Dispositivos Compatíveis</a></li>
+                            <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Perguntas Frequentes</a></li>
+                       </ul>
+                   </div>
+                  <div>
+                      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Legal</h3>
+                      <ul class="mt-4 space-y-2.5">
+                          <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Privacidade</a></li>
+                          <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Termos de Uso</a></li>
+                      </ul>
+                  </div>
               </div>
+               <div class="mt-10 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-6 md:pt-8 text-center">
+                   <p class="text-xs text-nexus-gray dark:text-gray-400">© 2025 NexusStreaming (Parte da Nexus Tecnologia CNPJ: 56.309.584/0001-36). Todos os direitos reservados.</p>
+               </div>
          </div>
-     </footer>
+       </footer>
 
     <div id="chat-widget" class="bg-chat-bg-light dark:bg-chat-bg-dark rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
         <div class="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
@@ -440,7 +459,7 @@
              </div>
          </div>
          <div class="bg-gray-50 dark:bg-gray-800/50 px-4 py-2 text-center text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700"> Clique para iniciar via <span class="font-medium">WhatsApp</span> </div>
-     </div>
+       </div>
     <button id="whatsapp-button" aria-label="Abrir chat" class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 dark:focus:ring-offset-nexus-dark">
         <svg fill="currentColor" viewBox="0 0 16 16" class="w-6 h-6"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/> </svg>
     </button>
@@ -479,21 +498,31 @@
 
             let mobileMenuOpen = false;
             const mobileNavContent = navLinksContainer.cloneNode(true);
-            mobileNavContent.classList.remove('hidden', 'md:flex', 'space-x-6', 'lg:space-x-8', 'items-center');
-            mobileNavContent.classList.add('flex', 'flex-col', 'py-4', 'px-4', 'bg-white', 'dark:bg-gray-800', 'shadow-lg');
+            // Limpa e adiciona classes base para o menu mobile
+            mobileNavContent.className = 'flex flex-col py-4 px-4 bg-white dark:bg-gray-800 shadow-lg space-y-1'; // Usando space-y para espaçamento
 
             mobileNavContent.querySelectorAll('a, button').forEach(node => {
-                node.classList.add('py-2', 'px-2', 'rounded-md', 'text-left');
-                node.classList.remove('ml-4', 'p-1');
-                if (node.tagName === 'A' && node.classList.contains('bg-gradient-to-r')) {
-                     node.classList.remove('px-5','py-2','lg:px-6','rounded-full','shadow','hover:shadow-md','transform','hover:scale-105');
-                     node.classList.add('w-full', 'text-center', 'py-2.5', 'mt-2');
-                } else if (node.tagName === 'A') {
-                     node.classList.add('w-full');
+                node.className = ''; // Limpa classes existentes
+                node.classList.add(
+                    'py-2.5', 'px-3', 'rounded-md', 'text-left', 'w-full',
+                    'transition-colors', 'duration-200',
+                    'text-gray-600', 'dark:text-gray-300',
+                    'hover:text-nexus-blue', 'dark:hover:text-blue-400',
+                    'hover:bg-gray-100', 'dark:hover:bg-gray-700'
+                );
+
+                if (node.tagName === 'A' && node.textContent === 'Assine Agora') {
+                     node.classList.remove(...node.classList); // Limpa de novo para este botão
+                     node.classList.add(
+                         'w-full', 'text-center', 'py-2.5', 'mt-3', 'bg-gradient-to-r',
+                         'from-blue-500', 'to-nexus-blue', 'text-white', 'rounded-full',
+                         'font-semibold', 'hover:from-blue-600', 'hover:to-blue-600',
+                         'transition-all', 'duration-300'
+                     );
                 } else if (node.tagName === 'BUTTON' && node.getAttribute('onclick') === 'toggleDarkMode()') {
                     const btnHtml = node.innerHTML;
                     node.innerHTML = `<span>Alternar Tema</span>` + btnHtml;
-                    node.classList.add('flex', 'items-center', 'justify-between', 'w-full');
+                    node.classList.add('flex', 'items-center', 'justify-between');
                 }
             });
 
@@ -517,6 +546,7 @@
                 link.addEventListener('click', () => { if (mobileMenuOpen) toggleMenu(); });
             });
         })();
+
 
         // --- Chat Widget Script ---
         (() => {
@@ -567,10 +597,21 @@
                 $videoIframe.attr('src', ''); $modalMessage.removeClass('hidden').text('Carregando trailer...'); openModal();
                 $.ajax(settings).done(function (response) {
                     const videos = response.results; let trailerKey = null;
-                    const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && (v.official === true || videos.length === 1));
-                    trailerKey = trailer?.key || videos.find(v => v.site === 'YouTube' && v.type === 'Trailer')?.key || videos.find(v => v.site === 'YouTube')?.key;
-                    if (trailerKey) { $videoIframe.attr('src', `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`); $modalMessage.addClass('hidden'); }
-                    else { $modalMessage.text('Trailer não encontrado.'); setTimeout(closeModal, 2000); }
+                    // Procura pelo trailer oficial ou o primeiro trailer disponível
+                    const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && v.iso_639_1 === 'pt') || // Trailer PT
+                                  videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && v.official === true) || // Trailer Oficial (EN ou outros)
+                                  videos.find(v => v.site === 'YouTube' && v.type === 'Trailer') || // Primeiro Trailer
+                                  videos.find(v => v.site === 'YouTube'); // Qualquer vídeo do YouTube
+
+                    trailerKey = trailer?.key;
+
+                    if (trailerKey) {
+                        // **CORREÇÃO APLICADA AQUI**
+                        $videoIframe.attr('src', `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`);
+                        $modalMessage.addClass('hidden');
+                    } else {
+                        $modalMessage.text('Trailer não encontrado.'); setTimeout(closeModal, 2000);
+                    }
                 }).fail(function() { $modalMessage.text('Erro ao buscar o trailer.'); setTimeout(closeModal, 2000); });
             }
 
@@ -595,7 +636,22 @@
                     </div>`;
             }
 
-            function initSwiper(selector) { return new Swiper(selector, { slidesPerView: 2, spaceBetween: 15, navigation: { nextEl: `${selector} .swiper-button-next`, prevEl: `${selector} .swiper-button-prev`, }, breakpoints: { 640: { slidesPerView: 3, spaceBetween: 20 }, 768: { slidesPerView: 4, spaceBetween: 25 }, 1024: { slidesPerView: 5, spaceBetween: 30 }, 1280: { slidesPerView: 6, spaceBetween: 30 }, } }); }
+            // **MELHORIA APLICADA AQUI**
+            // Ajustamos slidesPerView para 2.3 em telas muito pequenas, para indicar que há mais slides.
+            function initSwiper(selector) {
+                return new Swiper(selector, {
+                    slidesPerView: 2.3, // Mostra 2 slides e um pedaço do terceiro em telas pequenas
+                    spaceBetween: 15,
+                    navigation: { nextEl: `${selector} .swiper-button-next`, prevEl: `${selector} .swiper-button-prev`, },
+                    breakpoints: {
+                        480: { slidesPerView: 3, spaceBetween: 15 }, // Ajuste para telas um pouco maiores
+                        640: { slidesPerView: 3, spaceBetween: 20 },
+                        768: { slidesPerView: 4, spaceBetween: 25 },
+                        1024: { slidesPerView: 5, spaceBetween: 30 },
+                        1280: { slidesPerView: 6, spaceBetween: 30 },
+                    }
+                });
+            }
 
             function loadAndInitSwiper(endpoint, containerId, swiperSelector, type) {
                 const container = $(`#${containerId}`), settings = { async: true, crossDomain: true, url: `https://api.themoviedb.org/3/${endpoint}?language=pt-BR&page=1`, method: 'GET', headers: { accept: 'application/json', Authorization: tmdbApiKey } };
