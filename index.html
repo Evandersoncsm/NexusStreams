@@ -8,11 +8,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script>
-        // Define o tema (claro/escuro)
-        if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-            document.documentElement.classList.remove('dark')
+        // Define o tema (claro/escuro) - Priorizando o Dark como Padrão
+        if (localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
         } else {
-            document.documentElement.classList.add('dark')
+            document.documentElement.classList.add('dark');
         }
     </script>
     <style>
@@ -31,7 +31,7 @@
         .show-card { transition: transform 0.3s ease, box-shadow 0.3s ease; width: 100%; background-color: theme('colors.white'); border-radius: 0.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); display: flex; flex-direction: column; height: 100%; }
         .dark .show-card { background-color: theme('colors.nexus-stream-card'); }
         .show-card:hover { transform: scale(1.05); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); }
-        .show-card.movie-card-clickable:hover { box-shadow: 0 10px 15px -3px theme('colors.nexus-blue' / 0.3), 0 4px 6px -2px theme('colors.nexus-blue' / 0.2); }
+        .show-card.media-card-clickable:hover { box-shadow: 0 10px 15px -3px theme('colors.nexus-blue' / 0.3), 0 4px 6px -2px theme('colors.nexus-blue' / 0.2); } /* Atualizado */
         .show-card img { width: 100%; object-fit: cover; aspect-ratio: 2 / 3; }
         .show-card .show-info { padding: 0.75rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .show-card h4 { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.25rem; }
@@ -49,7 +49,7 @@
         #whatsapp-button.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
         #whatsapp-button.hidden { opacity: 0; transform: scale(0.8); pointer-events: none; }
         @media (max-width: 400px) { #chat-widget { width: calc(100% - 2rem); right: 1rem; left: 1rem; bottom: 1rem; } #whatsapp-button { bottom: 1rem; right: 1rem; } }
-        #search-results-grid .show-card { margin-bottom: 1.5rem; /* Espaçamento para cards na grade de busca */ }
+        #search-results-grid .show-card { margin-bottom: 1.5rem; }
     </style>
     <script>
         tailwind.config = {
@@ -469,7 +469,6 @@
                         <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Termos de Uso</a></li>
                     </ul>
                 </div>
-
             </div>
 
             <div class="mt-10 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-6 md:pt-8 text-center">
@@ -477,6 +476,8 @@
             </div>
         </div>
     </footer>
+
+
     <div id="chat-widget" class="bg-chat-bg-light dark:bg-chat-bg-dark rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
         <div class="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
             <div class="flex items-center space-x-2">
@@ -635,43 +636,84 @@
             $closeModalButton.on('click', closeModal);
             $videoModal.on('click', function(event) { if ($(event.target).is($videoModal)) closeModal(); });
 
-            function fetchAndShowTrailer(movieId) {
-                const settings = { async: true, crossDomain: true, url: `https://api.themoviedb.org/3/movie/${movieId}/videos?language=pt-BR,en-US`, method: 'GET', headers: { accept: 'application/json', Authorization: tmdbApiKey } };
-                $videoIframe.attr('src', ''); $modalMessage.removeClass('hidden').text('Carregando trailer...'); openModal();
+            // ### FUNÇÃO GENERALIZADA PARA BUSCAR VÍDEOS DE FILMES E SÉRIES ###
+            function fetchAndShowMediaVideos(mediaId, mediaType) {
+                let apiUrl;
+                // Define a URL da API baseada no tipo de mídia (filme ou série)
+                if (mediaType === 'movie') {
+                    apiUrl = `https://api.themoviedb.org/3/movie/${mediaId}/videos?language=pt-BR,en-US`;
+                } else if (mediaType === 'tv') {
+                    apiUrl = `https://api.themoviedb.org/3/tv/${mediaId}/videos?language=pt-BR,en-US`; // Endpoint para séries de TV
+                } else {
+                    console.error('Tipo de mídia não suportado para vídeos:', mediaType);
+                    $modalMessage.text('Tipo de mídia não suportado para vídeos.');
+                     setTimeout(closeModal, 2000);
+                    return;
+                }
+
+                const settings = {
+                    async: true,
+                    crossDomain: true,
+                    url: apiUrl,
+                    method: 'GET',
+                    headers: {
+                        accept: 'application/json',
+                        Authorization: tmdbApiKey
+                    }
+                };
+
+                $videoIframe.attr('src', ''); // Limpa o iframe
+                $modalMessage.removeClass('hidden').text('Carregando trailer...');
+                openModal();
+
                 $.ajax(settings).done(function (response) {
-                    const videos = response.results; let trailerKey = null;
+                    const videos = response.results;
+                    let trailerKey = null;
+
+                    // Lógica para encontrar o melhor trailer (prioriza PT, depois EN oficial, depois qualquer oficial, depois qualquer trailer)
                     const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && v.iso_639_1 === 'pt') ||
+                                    videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && v.iso_639_1 === 'en' && v.official === true) ||
                                     videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && v.official === true) ||
                                     videos.find(v => v.site === 'YouTube' && v.type === 'Trailer') ||
-                                    videos.find(v => v.site === 'YouTube');
+                                    videos.find(v => v.site === 'YouTube'); // Como último recurso, pega qualquer vídeo do YouTube
+
                     trailerKey = trailer?.key;
+
                     if (trailerKey) {
-                        $videoIframe.attr('src', `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`); // Corrigido URL do Youtube
+                        // Usa a URL de embed padrão do YouTube
+                        $videoIframe.attr('src', `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`);
                         $modalMessage.addClass('hidden');
-                    } else { $modalMessage.text('Trailer não encontrado.'); setTimeout(closeModal, 2000); }
-                }).fail(function() { $modalMessage.text('Erro ao buscar o trailer.'); setTimeout(closeModal, 2000); });
+                    } else {
+                        $modalMessage.text('Trailer não encontrado.');
+                        setTimeout(closeModal, 2000);
+                    }
+                }).fail(function() {
+                    $modalMessage.text('Erro ao buscar o trailer.');
+                    setTimeout(closeModal, 2000);
+                });
             }
 
+            // ### FUNÇÃO createCard ATUALIZADA ###
             function createCard(item, type, isSearchResult = false) {
-                const isMovie = type === 'movie';
-                const title = isMovie ? item.title : item.name;
+                const title = (type === 'movie') ? item.title : item.name;
                 const posterPath = item.poster_path;
                 const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
                 const itemId = item.id;
 
-                if (!posterPath) return '';
+                if (!posterPath) return ''; // Não cria card se não tiver poster
 
-                const clickableClass = isMovie ? 'movie-card-clickable' : '';
-                const dataIdAttr = isMovie ? `data-id="${itemId}"` : '';
-                const cursorStyle = isMovie ? 'pointer' : 'default';
-                const mediaTypeLabel = isMovie ? 'Filme' : 'Série';
+                // Adiciona classe e atributos para tornar o card clicável para ambos os tipos
+                const clickableClass = 'media-card-clickable';
+                const dataAttrs = `data-id="${itemId}" data-type="${type}"`;
+                const cursorStyle = 'pointer';
+                const mediaTypeLabel = (type === 'movie') ? 'Filme' : 'Série';
 
                 const cardHtml = `
-                    <div class="show-card ${clickableClass} transform transition duration-300 hover:scale-105 hover:shadow-lg" ${dataIdAttr} style="cursor: ${cursorStyle};">
+                    <div class="show-card ${clickableClass}" ${dataAttrs} style="cursor: ${cursorStyle};">
                         <img src="${imageBaseUrl}${posterPath}" alt="${title}" loading="lazy" class="w-full object-cover aspect-[2/3]">
                         <div class="show-info p-3 flex flex-col flex-grow justify-between">
                             <div>
-                                ${isSearchResult ? `<span class="text-xs font-semibold uppercase tracking-wider ${isMovie ? 'text-blue-400' : 'text-green-400'}">${mediaTypeLabel}</span>` : ''}
+                                ${isSearchResult ? `<span class="text-xs font-semibold uppercase tracking-wider ${ (type === 'movie') ? 'text-blue-400' : 'text-green-400'}">${mediaTypeLabel}</span>` : ''}
                                 <h4 class="text-nexus-heading dark:text-nexus-dark-heading ${isSearchResult ? 'mt-1' : ''}" title="${title}">${title}</h4>
                             </div>
                             <div class="rating text-nexus-gray dark:text-gray-400 mt-1">
@@ -705,7 +747,7 @@
             loadAndInitSwiper('discover/movie?language=pt-BR&page=1&sort_by=popularity.desc&with_genres=12', 'discover-movies-container', '.swiper-movies-discover', 'movie');
             loadAndInitSwiper('movie/upcoming?language=pt-BR&page=1', 'upcoming-movies-container', '.swiper-movies-upcoming', 'movie');
             loadAndInitSwiper('movie/top_rated?language=pt-BR&page=1', 'top-rated-movies-container', '.swiper-movies-top-rated', 'movie');
-            loadAndInitSwiper('tv/top_rated?language=pt-BR&page=1', 'top-rated-tv-container', '.swiper-tv-top-rated', 'tv');
+            loadAndInitSwiper('tv/top_rated?language=pt-BR&page=1', 'top-rated-tv-container', '.swiper-tv-top-rated', 'tv'); // Carrega séries
 
             function performSearch(query) {
                 const trimmedQuery = query.trim();
@@ -744,6 +786,7 @@
                 }
 
                 filteredItems.forEach(item => {
+                    // Passa item.media_type para createCard
                     const cardHtml = createCard(item, item.media_type, true);
                     $searchResultsGrid.append(cardHtml);
                 });
@@ -767,9 +810,13 @@
                 }, 500);
             });
 
-            $('body').on('click', '.movie-card-clickable', function() {
-                const movieId = $(this).data('id');
-                if (movieId) fetchAndShowTrailer(movieId);
+            // ### EVENT LISTENER ATUALIZADO PARA '.media-card-clickable' ###
+            $('body').on('click', '.media-card-clickable', function() {
+                const mediaId = $(this).data('id');
+                const mediaType = $(this).data('type'); // Pega o tipo de mídia (movie ou tv)
+                if (mediaId && mediaType) {
+                    fetchAndShowMediaVideos(mediaId, mediaType); // Chama a função generalizada
+                }
             });
         });
     </script>
