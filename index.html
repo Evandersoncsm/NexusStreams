@@ -1,707 +1,620 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusStreaming - Seu Portal Definitivo de Entretenimento</title>
-    <link rel="icon" type="image/x-icon" href="https://png.pngtree.com/png-vector/20230309/ourmid/pngtree-letter-n-logo-vector-png-image_6639640.png">
+    <title>NexusStreaming - Seu Universo de Filmes e Séries</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script>
+        // Define o tema (claro/escuro)
+        if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+          document.documentElement.classList.remove('dark')
+        } else {
+          document.documentElement.classList.add('dark')
+        }
+    </script>
     <style>
-        :root {
-            --nexus-blue: #0ea5e9; /* sky-500 */
-            --nexus-dark-bg: #0f0f0f;
-            --nexus-card-bg: #1a1a1a;
-            --nexus-card-hover-bg: #2a2a2a;
-            --nexus-text-primary: #e1e1e1;
-            --nexus-text-secondary: #a0a0a0;
-        }
-        html {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-            /* Adjust scroll padding dynamically based on header height */
-        }
-        body {
-            background-color: var(--nexus-dark-bg);
-            color: var(--nexus-text-primary);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .hero-section {
-            /* Preload the first image */
-            background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.85) 70%, var(--nexus-dark-bg) 100%), url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
-            transition: background-image 1s ease-in-out;
-        }
-        .icon-base { width: 2.5rem; height: 2.5rem; margin-bottom: 0.75rem; color: var(--nexus-blue); }
-        @media (min-width: 640px) { .icon-base { width: 3rem; height: 3rem; margin-bottom: 1rem; } }
-
-        .cta-button {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2);
-            transform-origin: center;
-        }
-        .cta-button:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 7px 25px rgba(14, 165, 233, 0.4);
-        }
-        .hover-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
-            border: 1px solid transparent;
-            background-color: var(--nexus-card-bg);
-        }
-        .hover-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            border-color: rgba(14, 165, 233, 0.5);
-            background-color: var(--nexus-card-hover-bg);
-            background-image: linear-gradient(to bottom right, var(--nexus-card-hover-bg), rgba(14, 165, 233, 0.05));
-        }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #1f1f1f; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb { background-color: #444; border-radius: 3px; border: 1px solid #1f1f1f; }
-        ::-webkit-scrollbar-thumb:hover { background-color: #555; }
-
-        .main-swiper-container { width: 100%; padding-bottom: 50px; /* Reduced padding */ overflow: hidden; }
-        .main-swiper-container .swiper-slide {
-            background-position: center; background-size: cover;
-            width: 260px; /* Slightly smaller base width */
-            height: 146px; /* Maintain 16:9 aspect ratio */
-            border-radius: 0.5rem; /* Slightly smaller radius */
-            overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); position: relative;
-            transition: transform 0.3s ease;
-        }
-        .main-swiper-container .swiper-slide:hover {
-            transform: scale(1.03);
-        }
-        @media (min-width: 640px) { .main-swiper-container .swiper-slide { width: 300px; height: 169px; border-radius: 0.75rem; } }
-        @media (min-width: 1024px) { .main-swiper-container .swiper-slide { width: 320px; height: 180px; } }
-
-        .main-swiper-container .swiper-slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
-        .main-swiper-container .slide-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0)); color: white; font-size: 0.8rem; padding: 1.5rem 0.75rem 0.75rem; text-align: center; font-weight: 500; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
-        @media (min-width: 640px) { .main-swiper-container .slide-caption { font-size: 0.875rem; } }
-        .main-swiper-container .swiper-slide:hover .slide-caption { opacity: 1; }
-        .main-swiper-container .swiper-pagination-bullet { background-color: var(--nexus-text-secondary); opacity: 0.6; transition: background-color 0.2s ease, opacity 0.2s ease; width: 6px; height: 6px; }
-        @media (min-width: 640px) { .main-swiper-container .swiper-pagination-bullet { width: 8px; height: 8px; } }
-        .main-swiper-container .swiper-pagination-bullet-active { background-color: var(--nexus-blue); opacity: 1; }
-        .main-swiper-container .swiper-button-next, .main-swiper-container .swiper-button-prev { color: var(--nexus-text-primary); background-color: rgba(0,0,0,0.4); border-radius: 50%; width: 36px; height: 36px; transition: background-color 0.2s ease, transform 0.2s ease; }
-        @media (min-width: 640px) { .main-swiper-container .swiper-button-next, .main-swiper-container .swiper-button-prev { width: 44px; height: 44px; } }
-        .main-swiper-container .swiper-button-next:hover, .main-swiper-container .swiper-button-prev:hover { background-color: rgba(0,0,0,0.7); transform: scale(1.1); }
-        .main-swiper-container .swiper-button-next::after, .main-swiper-container .swiper-button-prev::after { font-size: 0.8rem; font-weight: bold; }
-        @media (min-width: 640px) { .main-swiper-container .swiper-button-next::after, .main-swiper-container .swiper-button-prev::after { font-size: 1rem; } }
-
-
-        .hero-swiper-container { width: 100%; max-width: 800px; margin: 2rem auto 0 auto; overflow: hidden; padding-bottom: 15px; }
-        @media (min-width: 640px) { .hero-swiper-container { margin-top: 2.5rem; padding-bottom: 20px; } }
-        @media (min-width: 1024px) { .hero-swiper-container { margin-top: 3rem; } }
-        .hero-swiper-container .swiper-slide {
-            width: 70px; height: 70px; /* Smaller base size */
-            border-radius: 0.5rem; background-color: rgba(255, 255, 255, 0.05); display: flex; justify-content: center; align-items: center; filter: grayscale(50%); opacity: 0.7; transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease; box-shadow: none;
-        }
-        @media (min-width: 640px) { .hero-swiper-container .swiper-slide { width: 85px; height: 85px; } }
-        @media (min-width: 1024px) { .hero-swiper-container .swiper-slide { width: 100px; height: 100px; } }
-        .hero-swiper-container .swiper-slide:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.08); }
-        .hero-swiper-container .swiper-slide img { display: block; width: 45%; height: 45%; object-fit: contain; filter: brightness(0) invert(1); transition: transform 0.3s ease; }
-        @media (min-width: 640px) { .hero-swiper-container .swiper-slide img { width: 50%; height: 50%; } }
-        .hero-swiper-container .swiper-slide:hover img { transform: scale(1.1); }
-        .hero-swiper-container .swiper-button-next, .hero-swiper-container .swiper-button-prev, .hero-swiper-container .swiper-pagination { display: none; }
-
-        details { background-color: var(--nexus-card-bg); border-radius: 0.5rem; border: 1px solid #333; transition: border-color 0.3s ease; }
-        details:hover { border-color: rgba(14, 165, 233, 0.3); }
-        details summary { list-style: none; cursor: pointer; padding: 1rem 1.25rem; font-weight: 600; color: var(--nexus-text-primary); transition: background-color 0.2s ease; display: flex; justify-content: space-between; align-items: center; border-radius: 0.5rem; font-size: 0.9rem; /* Smaller base font */ }
-        @media (min-width: 640px) { details summary { padding: 1.25rem 1.5rem; font-size: 1rem; } }
-        details[open] summary { background-color: var(--nexus-card-hover-bg); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-        details summary:hover { background-color: var(--nexus-card-hover-bg); }
-        details summary::after { content: '＋'; font-size: 1.1em; transition: transform 0.3s ease-out; color: var(--nexus-blue); margin-left: 0.5rem; flex-shrink: 0; }
-        @media (min-width: 640px) { details summary::after { font-size: 1.2em; } }
-        details[open] summary::after { transform: rotate(45deg); }
-        details > div { padding: 1rem 1.25rem; background-color: var(--nexus-card-bg); border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; color: var(--nexus-text-secondary); border-top: 1px solid #333; line-height: 1.6; font-size: 0.85rem; /* Smaller base font */ }
-        @media (min-width: 640px) { details > div { padding: 1.25rem 1.5rem; font-size: 0.95rem; } }
-
-        .section-divider { height: 1px; background: linear-gradient(to right, transparent, rgba(14, 165, 233, 0.2), transparent); margin: 2.5rem auto; width: 80%; max-width: 400px; border: 0; }
-        @media (min-width: 640px) { .section-divider { margin: 3.5rem auto; width: 70%; max-width: 500px; } }
-        @media (min-width: 1024px) { .section-divider { margin: 4.5rem auto; } }
-
-        .compatibility-card { background-color: var(--nexus-card-bg); border-radius: 0.5rem; padding: 1.25rem; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; border: 1px solid #333; cursor: default; }
-        @media (min-width: 768px) { .compatibility-card { padding: 1.5rem; border-radius: 0.75rem; } }
-        @media (min-width: 1024px) { .compatibility-card { padding: 1.75rem; } }
-        .compatibility-card:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); background-color: var(--nexus-card-hover-bg); border-color: rgba(14, 165, 233, 0.4); }
-        .compatibility-card .icon-base { width: 2.5rem; height: 2.5rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem; transition: transform 0.3s ease; }
-        @media (min-width: 768px) { .compatibility-card .icon-base { width: 3rem; height: 3rem; margin-bottom: 1rem; } }
-        @media (min-width: 1024px) { .compatibility-card .icon-base { width: 3.5rem; height: 3.5rem; margin-bottom: 1.25rem; } }
-        .compatibility-card:hover .icon-base { transform: scale(1.1); }
-        .compatibility-card p { color: var(--nexus-text-primary); font-weight: 500; margin-top: 0.5rem; font-size: 0.85rem; }
-        @media (min-width: 768px) { .compatibility-card p { font-size: 0.9rem; } }
-        @media (min-width: 1024px) { .compatibility-card p { font-size: 1rem; } }
-
-        .plan-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .plan-card:hover {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border-color: rgba(14, 165, 233, 0.4);
-            transform: translateY(-5px);
-        }
-        .recommended-card {
-            border-color: var(--nexus-blue);
-            transform: scale(1.02); /* Slightly less scale on mobile */
-            z-index: 10;
-            background-image: linear-gradient(to bottom, rgba(14, 165, 233, 0.05), transparent);
-            margin-top: 1rem; /* Add margin when stacked */
-            margin-bottom: 1rem;
-        }
-        @media (min-width: 768px) {
-            .recommended-card {
-                transform: scale(1.03);
-                 margin-top: 0; /* Reset margin on larger screens */
-                 margin-bottom: 0;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: middle; }
+        .section-divider::before { content: ''; display: block; height: 1px; width: 60px; background-image: linear-gradient(to right, transparent, theme('colors.nexus-blue' / 50%), transparent); margin: 0 auto 1rem auto; }
+        @media (min-width: 768px) { .section-divider::before { width: 80px; margin-bottom: 1.5rem; } }
+        *:focus-visible { outline: 2px solid theme('colors.nexus-blue' / 70%); outline-offset: 2px; border-radius: 4px; }
+        .pricing-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .pricing-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .pricing-card.featured { border-color: theme('colors.nexus-blue'); transform: scale(1.02); }
+        .swiper-container { width: 100%; padding: 10px 0 30px 0; position: relative; }
+        .swiper-slide { text-align: center; font-size: 18px; background: transparent; display: flex; justify-content: center; align-items: center; width: 150px; }
+        @media (min-width: 640px) { .swiper-slide { width: 180px; } }
+        @media (min-width: 1024px) { .swiper-slide { width: 200px; } }
+        .show-card { transition: transform 0.3s ease, box-shadow 0.3s ease; width: 100%; background-color: theme('colors.white'); border-radius: 0.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        .dark .show-card { background-color: theme('colors.nexus-stream-card'); }
+        .show-card:hover { transform: scale(1.05); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); }
+        .show-card.movie-card-clickable:hover { box-shadow: 0 10px 15px -3px theme('colors.nexus-blue' / 0.3), 0 4px 6px -2px theme('colors.nexus-blue' / 0.2); }
+        .show-card img { width: 100%; object-fit: cover; aspect-ratio: 2 / 3; }
+        .show-card .show-info { padding: 0.75rem; }
+        .show-card h4 { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .show-card .rating { display: flex; align-items: center; margin-top: 0.25rem; font-size: 0.75rem; }
+        .swiper-button-next, .swiper-button-prev { color: theme('colors.nexus-blue'); background-color: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 36px; height: 36px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.2s ease, color 0.2s ease; }
+        .swiper-button-next:hover, .swiper-button-prev:hover { background-color: theme('colors.nexus-blue'); color: white; }
+        .dark .swiper-button-next, .dark .swiper-button-prev { background-color: rgba(31, 41, 55, 0.7); color: theme('colors.blue.400'); }
+        .dark .swiper-button-next:hover, .dark .swiper-button-prev:hover { background-color: theme('colors.nexus-blue'); color: white; }
+        .swiper-button-next::after, .swiper-button-prev::after { font-size: 16px !important; font-weight: bold; }
+        .swiper-button-next { right: 0; } .swiper-button-prev { left: 0; }
+        .swiper-button-disabled { display: none; }
+        #chat-widget { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 320px; transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; opacity: 0; transform: translateY(20px) scale(0.95); z-index: 1000; pointer-events: none; will-change: transform, opacity; }
+        #chat-widget.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        #whatsapp-button { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 990; transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; will-change: transform, opacity; opacity: 0; transform: scale(0.8); pointer-events: none; }
+        #whatsapp-button.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+        #whatsapp-button.hidden { opacity: 0; transform: scale(0.8); pointer-events: none; }
+        @media (max-width: 400px) { #chat-widget { width: calc(100% - 2rem); right: 1rem; left: 1rem; bottom: 1rem; } #whatsapp-button { bottom: 1rem; right: 1rem; } }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'nexus-blue': '#007aff', 'nexus-stream-dark': '#0d1117', 'nexus-stream-card': '#161b22', 'nexus-light': '#f9fafb', 'nexus-dark': '#111827', 'nexus-gray': '#6b7280', 'nexus-heading': '#1f2937', 'nexus-dark-text': '#d1d5db', 'nexus-dark-heading': '#f9fafb', 'chat-bg-light': '#ffffff', 'chat-bg-dark': '#1f2937', 'chat-btn-bg-light': '#f3f4f6', 'chat-btn-bg-dark': '#374151', 'chat-btn-hover-bg-light': '#e5e7eb', 'chat-btn-hover-bg-dark': '#4b5563', },
+                    animation: { 'fade-in-up': 'fadeInUp 0.6s ease-out forwards', 'subtle-pulse': 'subtlePulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite' },
+                    keyframes: { fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' }, }, subtlePulse: { '0%, 100%': { opacity: 1 }, '50%': { opacity: .6 }, } }
+                }
             }
         }
-        .recommended-card:hover {
-            box-shadow: 0 0 30px rgba(14, 165, 233, 0.4);
-            transform: translateY(-5px) scale(1.03);
-        }
-        .popular-badge {
-            transform: translate(-50%, -50%);
-            padding: 0.25rem 1rem; /* Smaller padding */
-            font-size: 0.65rem; /* Smaller font */
-        }
-        @media (min-width: 640px) { .popular-badge { padding: 0.3rem 1.2rem; font-size: 0.7rem; } }
-
-        /* Focus ring styles */
-        .focus-visible-ring {
-            outline: none;
-            transition: box-shadow 0.2s ease;
-        }
-        .focus-visible-ring:focus-visible {
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.5);
-        }
-        .focus-visible-ring-inner {
-            outline: none;
-            transition: outline-offset 0.1s ease, outline-color 0.1s ease;
-        }
-        .focus-visible-ring-inner:focus-visible {
-            outline: 2px solid var(--nexus-blue);
-            outline-offset: 2px;
-        }
-
-        /* Mobile Menu Specific Styles */
-        #mobile-menu {
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            transform: translateY(-10%); /* Start slightly above */
-            opacity: 0;
-        }
-        #mobile-menu.active {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        #mobile-menu-button svg {
-            transition: transform 0.3s ease;
-        }
-         #mobile-menu-button.active .hamburger-icon { display: none; }
-         #mobile-menu-button:not(.active) .close-icon { display: none; }
-
-    </style>
+    </script>
 </head>
-<body class="antialiased">
+<body class="bg-nexus-light dark:bg-nexus-stream-dark text-nexus-gray dark:text-nexus-dark-text antialiased text-base">
 
-    <header id="main-header" class="bg-black/80 backdrop-blur-sm sticky top-0 z-50 py-3 sm:py-4 px-4 sm:px-6 shadow-lg">
-        <nav class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-xl sm:text-2xl lg:text-3xl font-bold text-sky-500 tracking-wide hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded">
-                Nexus<span class="font-light">Streaming</span>
-            </a>
-            <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
-                <a href="#recursos" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm lg:text-base focus-visible-ring-inner rounded px-1 py-0.5">Recursos</a>
-                <a href="#porque-nexus" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm lg:text-base focus-visible-ring-inner rounded px-1 py-0.5">Por que Nexus?</a>
-                <a href="#planos" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm lg:text-base focus-visible-ring-inner rounded px-1 py-0.5">Planos</a>
-                <a href="#faq" class="text-gray-300 hover:text-white transition duration-200 font-medium text-sm lg:text-base focus-visible-ring-inner rounded px-1 py-0.5">FAQ</a>
-            </div>
-            <div class="flex items-center space-x-3 md:space-x-0">
-                <a href="#planos" class="cta-button hidden sm:inline-block bg-sky-600 hover:bg-sky-500 text-white text-xs sm:text-sm font-semibold px-4 py-1.5 sm:px-5 sm:py-2 rounded-full shadow-md focus-visible-ring">
-                    Assine Já
+    <header class="bg-white/80 dark:bg-nexus-stream-dark/80 backdrop-blur-lg shadow-sm sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200/50 dark:border-white/10">
+        <nav class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <div>
+                <a href="#hero" class="text-lg sm:text-xl font-bold text-nexus-blue dark:text-white transition-transform hover:scale-105 inline-block">
+                    Nexus<span class="text-nexus-heading dark:text-nexus-dark-heading">Streaming</span>
                 </a>
-                 <button id="mobile-menu-button" class="md:hidden p-2 text-gray-300 hover:text-white focus:outline-none focus-visible-ring rounded-md" aria-label="Abrir Menu" aria-expanded="false">
-                    <svg class="hamburger-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    <svg class="close-icon w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </div>
+            <div class="hidden md:flex space-x-6 lg:space-x-8 items-center text-sm font-medium text-gray-600 dark:text-gray-300">
+                <a href="#hero" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Início</a>
+                <a href="#now-playing-movies" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Em Cartaz</a>
+                <a href="#popular-movies" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Populares</a>
+                <a href="#upcoming-movies" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Em Breve</a>
+                <a href="#top-rated-movies" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Mais Votados</a>
+                <a href="#top-rated-tv" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Séries</a>
+                <a href="#features" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Recursos</a>
+                <a href="#pricing" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Planos</a>
+                <a href="#contact" class="hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200">Contato</a>
+                <button onclick="toggleDarkMode()" aria-label="Alternar modo claro/escuro" class="ml-4 text-gray-500 dark:text-gray-400 hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:inline-block" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block dark:hidden" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 14.464A1 1 0 106.465 13.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM1 11a1 1 0 100-2H0a1 1 0 100 2h1zM4.54 5.46A1 1 0 005.953 6.874l.707-.707A1 1 0 005.243 4.757l-.707.707z" clip-rule="evenodd" /></svg>
+                </button>
+                <a href="#pricing" class="bg-gradient-to-r from-blue-500 to-nexus-blue text-white px-5 py-2 lg:px-6 rounded-full hover:from-blue-600 hover:to-blue-600 transition-all duration-300 text-sm font-medium shadow hover:shadow-md transform hover:scale-105">Assine Agora</a>
+            </div>
+            <div class="md:hidden flex items-center">
+                 <button onclick="toggleDarkMode()" aria-label="Alternar modo claro/escuro" class="text-gray-500 dark:text-gray-400 hover:text-nexus-blue dark:hover:text-blue-400 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:inline-block" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block dark:hidden" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 14.464A1 1 0 106.465 13.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM1 11a1 1 0 100-2H0a1 1 0 100 2h1zM4.54 5.46A1 1 0 005.953 6.874l.707-.707A1 1 0 005.243 4.757l-.707.707z" clip-rule="evenodd" /></svg>
+                </button>
+                <button id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 focus:outline-none p-1 ml-2" aria-label="Abrir menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </nav>
-         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-sm shadow-xl pb-4 z-40">
-            <div class="container mx-auto px-4 pt-2 space-y-2">
-                <a href="#recursos" class="block text-gray-200 hover:text-sky-400 transition duration-200 py-2 text-base font-medium rounded focus-visible-ring-inner">Recursos</a>
-                <a href="#porque-nexus" class="block text-gray-200 hover:text-sky-400 transition duration-200 py-2 text-base font-medium rounded focus-visible-ring-inner">Por que Nexus?</a>
-                <a href="#planos" class="block text-gray-200 hover:text-sky-400 transition duration-200 py-2 text-base font-medium rounded focus-visible-ring-inner">Planos</a>
-                <a href="#faq" class="block text-gray-200 hover:text-sky-400 transition duration-200 py-2 text-base font-medium rounded focus-visible-ring-inner">FAQ</a>
-                 <a href="#planos" class="block w-full text-center mt-3 cta-button bg-sky-600 hover:bg-sky-500 text-white text-base font-semibold px-6 py-2.5 rounded-full shadow-md focus-visible-ring">
-                    Assine Já
-                </a>
-            </div>
-        </div>
+        <div id="mobile-menu-container" class="md:hidden absolute top-full left-0 right-0 z-40"></div>
     </header>
 
-    <section class="hero-section relative pt-16 pb-20 sm:pt-20 sm:pb-24 md:pt-28 md:pb-32 text-center overflow-hidden">
-        <div class="container mx-auto px-4 sm:px-6 relative z-10">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 sm:mb-5 leading-tight drop-shadow-lg">
-                A <span class="text-sky-400">Conexão Definitiva</span><br class="hidden sm:block"> com Seu Entretenimento.
-            </h1>
-            <p class="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto drop-shadow-md leading-relaxed">
-                Descomplique sua vida digital: TV ao vivo, rádios, filmes, séries, músicas e notícias, tudo em uma única assinatura imbatível.
-            </p>
-            <a href="#planos" class="cta-button inline-block bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 px-8 sm:py-3 sm:px-10 md:py-3.5 md:px-12 rounded-full text-base sm:text-lg md:text-xl shadow-xl focus-visible-ring">
-                Ver Planos
-            </a>
-            <p class="text-gray-300 text-xs sm:text-sm mt-3 sm:mt-4 mb-6 sm:mb-8 drop-shadow-sm">Cancelamento fácil a qualquer hora.</p>
-
-            <div class="hero-swiper-container">
-                <div class="swiper-wrapper items-center">
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/tv-show.png" alt="TV Ao Vivo" loading="lazy"> </div>
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/radio.png" alt="Rádios Online" loading="lazy"> </div>
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/movie-projector.png" alt="Filmes e Séries" loading="lazy"> </div>
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/news.png" alt="Notícias" loading="lazy"> </div>
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/music.png" alt="Música" loading="lazy"> </div>
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/multiple-devices.png" alt="Multiplataforma" loading="lazy"> </div>
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/tv-show.png" alt="TV Ao Vivo" loading="lazy"> </div>
-                     <div class="swiper-slide"> <img src="https://img.icons8.com/ios-glyphs/90/ffffff/radio.png" alt="Rádios Online" loading="lazy"> </div>
-                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="carrossel" class="py-10 sm:py-12 md:py-16 bg-gradient-to-b from-[#0f0f0f] to-[#141414]">
-        <div class="container mx-auto px-0"> <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-8 sm:mb-10 md:mb-12 px-4 sm:px-6">
-                Sempre Algo Novo Para <span class="text-sky-400">Explorar</span>
-            </h2>
-            <div class="main-swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide group"> <img src="https://placehold.co/640x360/0284c7/white?text=Lançamento+Cinema" alt="Lançamento de Filme" loading="lazy"> <div class="slide-caption">Filmes Recém-Adicionados</div> </div>
-                    <div class="swiper-slide group"> <img src="https://placehold.co/640x360/16a34a/white?text=Série+Premiada" alt="Série Premiada" loading="lazy"> <div class="slide-caption">Séries que Viciam</div> </div>
-                    <div class="swiper-slide group"> <img src="https://placehold.co/640x360/f97316/white?text=Futebol+Ao+Vivo" alt="Futebol Ao Vivo" loading="lazy"> <div class="slide-caption">Grandes Jogos Ao Vivo</div> </div>
-                    <div class="swiper-slide group"> <img src="https://placehold.co/640x360/dc2626/white?text=Notícias+Urgentes" alt="Notícias Urgentes" loading="lazy"> <div class="slide-caption">Notícias em Tempo Real</div> </div>
-                    <div class="swiper-slide group"> <img src="https://placehold.co/640x360/9333ea/white?text=Rádio+Pop" alt="Rádio Pop" loading="lazy"> <div class="slide-caption">Sua Rádio Favorita Online</div> </div>
-                    <div class="swiper-slide group"> <img src="https://placehold.co/640x360/db2777/white?text=Show+Exclusivo" alt="Show Exclusivo" loading="lazy"> <div class="slide-caption">Conteúdo Exclusivo Nexus</div> </div>
-                </div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-prev focus-visible-ring rounded-full" aria-label="Slide Anterior"></div>
-                <div class="swiper-button-next focus-visible-ring rounded-full" aria-label="Próximo Slide"></div>
-            </div>
-        </div>
-    </section>
-
-    <hr class="section-divider">
-
-    <section id="recursos" class="py-10 sm:py-12 md:py-16">
-         <div class="container mx-auto px-4 sm:px-6">
-             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-10 sm:mb-12 md:mb-14">
-                 Tudo Que Você Precisa, <span class="text-sky-400">Integrado</span>
-             </h2>
-             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 md:gap-8">
-                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center flex flex-col">
-                     <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" /></svg> </div>
-                     <h3 class="text-base sm:text-lg font-semibold text-white mb-2 flex-grow">TV Ao Vivo Direto</h3>
-                     <p class="text-[var(--nexus-text-secondary)] text-xs sm:text-sm leading-relaxed">Acompanhe a programação dos canais abertos líderes de audiência sem sair do app. Ideal para novelas, jornais e eventos ao vivo.</p>
-                 </div>
-                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center flex flex-col">
-                     <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg> </div>
-                     <h3 class="text-base sm:text-lg font-semibold text-white mb-2 flex-grow">Rádios Online</h3>
-                     <p class="text-[var(--nexus-text-secondary)] text-xs sm:text-sm leading-relaxed">Música, notícias e debates nas suas rádios AM/FM preferidas, com som digital de alta qualidade.</p>
-                 </div>
-                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center flex flex-col">
-                     <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9A2.25 2.25 0 0 0 4.5 18.75Z" /></svg> </div>
-                     <h3 class="text-base sm:text-lg font-semibold text-white mb-2 flex-grow">Filmes e Séries*</h3>
-                     <p class="text-[var(--nexus-text-secondary)] text-xs sm:text-sm leading-relaxed">Relaxe com um catálogo selecionado, perfeito para suas maratonas de fim de semana.</p>
-                     <p class="text-xs text-gray-500 mt-2">*Catálogo básico incluído.</p>
-                 </div>
-                 <div class="hover-card p-5 sm:p-6 rounded-lg text-center flex flex-col">
-                     <div class="icon-base mx-auto"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" /></svg> </div>
-                     <h3 class="text-base sm:text-lg font-semibold text-white mb-2 flex-grow">Informação Ágil</h3>
-                     <p class="text-[var(--nexus-text-secondary)] text-xs sm:text-sm leading-relaxed">Acesse rapidamente as últimas notícias do G1 e os destaques esportivos do ge sem precisar sair.</p>
-                 </div>
-             </div>
-         </div>
-     </section>
-
-    <section id="porque-nexus" class="py-10 sm:py-12 md:py-16 bg-gradient-to-b from-[#141414] to-[#1a1a1a]">
-        <div class="container mx-auto px-4 sm:px-6 text-center">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8 sm:mb-10 md:mb-12"> Por Que Escolher <span class="text-sky-500">Nexus<span class="font-light">Streaming</span></span>? </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
-                <div class="flex flex-col items-center p-4">
-                    <div class="icon-base text-sky-500 mb-2 sm:mb-3"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg> </div>
-                    <h3 class="text-base sm:text-lg md:text-xl font-semibold text-white mb-2">Conveniência Total</h3>
-                    <p class="text-[var(--nexus-text-secondary)] text-xs sm:text-sm leading-relaxed">Chega de pular entre apps! Tenha tudo organizado em um só lugar, economizando tempo e simplificando sua vida.</p>
-                </div>
-                <div class="flex flex-col items-center p-4">
-                    <div class="icon-base text-sky-500 mb-2 sm:mb-3"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg> </div>
-                    <h3 class="text-base sm:text-lg md:text-xl font-semibold text-white mb-2">Variedade Incrível</h3>
-                    <p class="text-[var(--nexus-text-secondary)] text-xs sm:text-sm leading-relaxed">Do jogo ao vivo ao filme cult, da rádio popular à notícia urgente. Conteúdo para todos os momentos e gostos.</p>
-                </div>
-                 <div class="flex flex-col items-center p-4">
-                     <div class="icon-base text-sky-500 mb-2 sm:mb-3"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.536a2.25 2.25 0 0 0 2.242 0l.879-.536M12 6V5.25A3.375 3.375 0 0 0 8.25 1.875h-3.75a3.375 3.375 0 0 0-3.375 3.375V18.75a3.375 3.375 0 0 0 3.375 3.375h11.25a3.375 3.375 0 0 0 3.375-3.375V5.25a3.375 3.375 0 0 0-3.375-3.375h-3.75a3.375 3.375 0 0 0-3.375 3.375V6Z" /></svg> </div>
-                     <h3 class="text-base sm:text-lg md:text-xl font-semibold text-white mb-2">Preço Justo</h3>
-                     <p class="text-[var(--nexus-text-secondary)] text-xs sm:text-sm leading-relaxed">Acesse múltiplos serviços pelo preço de um. Excelente custo-benefício para seu bolso.</p>
-                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="compatibilidade" class="py-10 sm:py-12 md:py-16 bg-[var(--nexus-dark-bg)]">
-        <div class="container mx-auto px-4 sm:px-6 text-center">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 md:mb-8"> Seu Nexus, <span class="text-sky-400">Seu Jeito</span> </h2>
-            <p class="text-base sm:text-lg text-gray-300 mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed"> Acesse de onde estiver, nos seus dispositivos preferidos. </p>
-             <div class="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:gap-8 max-w-4xl mx-auto">
-                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25Z" /></svg> </div> <p>Smart TVs</p> </div>
-                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m-6 0h6M5.25 9h13.5M3.75 12h16.5m-16.5 3h16.5M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" /></svg> </div> <p>Computador (Web)</p> </div>
-                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5h3m-6.75 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-15a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25Z" /></svg> </div> <p>Tablets</p> </div>
-                <div class="compatibility-card group"> <div class="icon-base mx-auto text-sky-400 group-hover:text-sky-300"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg> </div> <p>Smartphones</p> </div>
-            </div>
-        </div>
-    </section>
-
-    <hr class="section-divider">
-
-    <section id="planos" class="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-black">
-         <div class="container mx-auto px-4 sm:px-6">
-             <div class="text-center mb-10 sm:mb-12 md:mb-14">
-                 <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 sm:mb-4">Escolha o plano ideal para você</h2>
-                 <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">Tenha acesso ao melhor do entretenimento com <span class="text-sky-500">Nexus<span class="font-light">Streaming</span></span>.</p>
-             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-stretch max-w-6xl mx-auto w-full relative">
-
-                <div class="plan-card bg-gray-800/80 backdrop-blur-sm p-5 sm:p-6 rounded-xl shadow-lg border border-gray-700/50 ring-1 ring-white/10 flex flex-col">
-                     <h3 class="text-xl sm:text-2xl font-semibold text-center text-sky-400 mb-4 sm:mb-5">Básico</h3>
-                     <div class="text-center mb-5 sm:mb-6">
-                         <span class="text-3xl sm:text-4xl font-bold text-white">R$ 19,90</span>
-                         <span class="text-sm sm:text-base font-medium text-gray-400">/mês</span>
-                     </div>
-                     <div class="mb-6 sm:mb-8 flex-grow">
-                         <ul class="space-y-3 text-xs sm:text-sm text-gray-300">
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso a Filmes e Séries selecionados</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Canais de TV Ao Vivo (básicos)</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade HD (720p)</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>1 Tela simultânea</span> </li>
-                             <li class="flex items-start text-gray-500"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg> <span>Sem Rádios Online</span> </li>
-                             <li class="flex items-start text-gray-500"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg> <span>Contém anúncios</span> </li>
-                         </ul>
-                     </div>
-                     <a href="#" class="choose-plan-button block w-full text-center bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2.5 sm:py-3 px-4 rounded-lg transition duration-300 ease-in-out mt-auto transform hover:scale-105 focus-visible-ring text-sm sm:text-base"> Escolher Plano Básico </a>
-                 </div>
-
-                <div class="plan-card recommended-card relative bg-gray-800/90 backdrop-blur-sm p-5 sm:p-6 rounded-xl shadow-xl border-2 flex flex-col order-first md:order-none"> <div class="absolute top-0 left-1/2 z-20 popular-badge"> <span class="bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">MAIS POPULAR</span> </div>
-                     <h3 class="text-xl sm:text-2xl font-semibold text-center text-sky-400 mb-4 sm:mb-5 mt-5 sm:mt-6">Padrão</h3>
-                     <div class="text-center mb-5 sm:mb-6">
-                         <span class="text-3xl sm:text-4xl font-bold text-white">R$ 29,90</span>
-                         <span class="text-sm sm:text-base font-medium text-gray-400">/mês</span>
-                     </div>
-                     <div class="mb-6 sm:mb-8 flex-grow">
-                         <ul class="space-y-3 text-xs sm:text-sm text-gray-300">
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso ilimitado a Filmes e Séries</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Todos os Canais de TV Ao Vivo</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Estações de Rádio Online</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade Full HD (1080p)</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>2 Telas simultâneas</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Sem anúncios</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Cancele quando quiser</span> </li>
-                         </ul>
-                     </div>
-                     <a href="#" class="choose-plan-button block w-full text-center bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 sm:py-3.5 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 mt-auto focus-visible-ring text-sm sm:text-base"> Escolher Plano Padrão </a>
-                 </div>
-
-                 <div class="plan-card bg-gray-800/80 backdrop-blur-sm p-5 sm:p-6 rounded-xl shadow-lg border border-gray-700/50 ring-1 ring-white/10 flex flex-col">
-                     <h3 class="text-xl sm:text-2xl font-semibold text-center text-sky-400 mb-4 sm:mb-5">Premium</h3>
-                     <div class="text-center mb-5 sm:mb-6">
-                         <span class="text-3xl sm:text-4xl font-bold text-white">R$ 45,90</span>
-                         <span class="text-sm sm:text-base font-medium text-gray-400">/mês</span>
-                     </div>
-                     <div class="mb-6 sm:mb-8 flex-grow">
-                         <ul class="space-y-3 text-xs sm:text-sm text-gray-300">
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Tudo do Plano Padrão</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Acesso a Músicas Premium</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Qualidade Ultra HD (4K) + HDR</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>4 Telas simultâneas</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Downloads em até 6 dispositivos</span> </li>
-                             <li class="flex items-start"> <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-500 mr-2 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> <span>Áudio Espacial (Imersivo)</span> </li>
-                         </ul>
-                     </div>
-                     <a href="#" class="choose-plan-button block w-full text-center bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2.5 sm:py-3 px-4 rounded-lg transition duration-300 ease-in-out mt-auto transform hover:scale-105 focus-visible-ring text-sm sm:text-base"> Escolher Plano Premium </a>
-                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="py-10 sm:py-12 md:py-16 bg-[var(--nexus-dark-bg)]">
-         <div class="container mx-auto px-4 sm:px-6 max-w-3xl">
-              <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-8 sm:mb-10 md:mb-12"> Ainda Tem <span class="text-sky-400">Dúvidas</span>? </h2>
-              <div class="space-y-3 sm:space-y-4">
-                 <details> <summary class="focus-visible-ring-inner rounded">Como funciona o cancelamento?</summary> <div> <p class="text-sm">Simples e online! Acesse sua conta, vá em 'Assinatura' e clique em 'Cancelar'. Sem multas ou burocracia. Você mantém o acesso até o fim do ciclo já pago.</p> </div> </details>
-                 <details> <summary class="focus-visible-ring-inner rounded">Em quantos dispositivos posso assistir ao mesmo tempo?</summary> <div> <p class="text-sm">Depende do plano! Básico: 1 tela, Padrão: 2 telas, Premium: 4 telas simultaneamente. Pode cadastrar quantos dispositivos quiser, mas o uso simultâneo é limitado pelo plano.</p> </div> </details>
-                 <details> <summary class="focus-visible-ring-inner rounded">Quais canais de TV estão disponíveis?</summary> <div> <p class="text-sm">Oferecemos os principais canais da TV aberta do Brasil (Globo, SBT, Record, Band, etc.) nos planos Padrão e Premium. O plano Básico inclui uma seleção reduzida. A disponibilidade exata pode variar regionalmente.</p> </div> </details>
-                 <details> <summary class="focus-visible-ring-inner rounded">O catálogo de Filmes e Séries é atualizado?</summary> <div> <p class="text-sm">Sim, nosso catálogo é atualizado periodicamente com novos títulos para garantir variedade em todos os planos. Os planos Padrão e Premium oferecem acesso ilimitado ao catálogo completo.</p> </div> </details>
-                 <details> <summary class="focus-visible-ring-inner rounded">Existe período de teste gratuito?</summary> <div> <p class="text-sm">Atualmente não oferecemos um teste gratuito padrão. Contudo, nosso cancelamento é flexível: assine e, se não gostar, cancele a qualquer momento sem complicação.</p> </div> </details>
-             </div>
-         </div>
-     </section>
-
-    <footer class="bg-black text-gray-400 py-12 sm:py-16 border-t border-gray-800/50">
-        <div class="container mx-auto px-4 sm:px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-10 mb-10 sm:mb-12">
-
-                <div class="md:col-span-4 lg:col-span-2">
-                    <a href="#" class="text-xl sm:text-2xl lg:text-3xl font-bold text-sky-500 tracking-wide hover:text-sky-400 transition duration-300 mb-3 inline-block focus-visible-ring-inner rounded">
-                        Nexus<span class="font-light">Streaming</span>
+    <main>
+        <section id="hero" class="relative overflow-hidden bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-gray-900 dark:via-nexus-stream-dark dark:to-gray-800 pt-20 pb-16 md:pt-32 md:pb-28 text-center">
+            <div class="absolute inset-0 opacity-10 dark:opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MiIgaGVpZ2h0PSI1MiIgdmlld0JveD0iMCAwIDUyIDUyIj48cGF0aCBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMyIgZD0iTTEzIDBINHY0aDEzdjRINHY0aDEzdjRINHY0aDEzdjRINHY0aDEzdjRINHY0aDEzdjRoNFYwaC00em0yNiAwaC00djRIMzV2NGgtNHY0SDM1djRoLTR2NEgzNXY0aC00djRIzV2NGgtNHY0aDR2NGg0djRIMzV2NEgzMXY0SDM1djRIzV2NGgtNFYwem0xMyAwaC00djRIMzl2NGgtNHY0SDM5djRoLTR2NEgzOXY0aC00djRIzlvNEgxM3Y0SDl2NEg1djRoOHYtNGg0di00aDR2LTRoNHYtNGg0di00aDR2LTRoNHYtNGg0djRoNHY0aDRWMEgiPjwvcGF0aD48L3N2Zz4=')]"></div>
+            <div class="absolute top-1/4 left-1/4 w-72 h-72 md:w-96 md:h-96 bg-blue-200 dark:bg-blue-900/50 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 dark:opacity-20 animate-subtle-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-60 h-60 md:w-72 md:h-72 bg-purple-200 dark:bg-purple-900/50 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 dark:opacity-20 animate-subtle-pulse animation-delay-2000"></div>
+            <div class="container mx-auto px-4 sm:px-6 relative z-10">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-nexus-heading dark:text-nexus-dark-heading mb-4 md:mb-6 leading-tight animate-fade-in-up" style="animation-delay: 0.1s;">
+                    Seu Portal para o <span class="text-nexus-blue">Universo</span> do Streaming
+                </h1>
+                <p class="text-base sm:text-lg md:text-xl text-nexus-gray dark:text-nexus-dark-text mb-8 md:mb-10 max-w-xl md:max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.3s;">
+                    Milhares de filmes, séries e documentários para você assistir onde e quando quiser. Explore novos mundos sem sair do sofá.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-5 animate-fade-in-up" style="animation-delay: 0.5s;">
+                    <a href="#pricing" class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-nexus-blue text-white px-6 py-3 sm:px-8 sm:py-3 rounded-full text-sm sm:text-base font-semibold hover:from-blue-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nexus-blue dark:focus:ring-offset-nexus-stream-dark">
+                        Escolha Seu Plano Ideal
                     </a>
-                    <p class="text-xs sm:text-sm leading-relaxed pr-4">
-                        Sua conexão definitiva com o entretenimento. TV ao vivo, rádios, filmes, séries e mais, tudo em um só lugar.
+                    <a href="#features" class="w-full mt-2 sm:mt-0 sm:w-auto bg-transparent text-nexus-blue px-6 py-3 sm:px-8 sm:py-3 rounded-full text-sm sm:text-base font-semibold border-2 border-nexus-blue hover:bg-blue-50 dark:text-blue-400 dark:border-blue-400 dark:hover:bg-blue-900/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                        Veja os Recursos
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="now-playing-movies" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+            <div class="container mx-auto px-4 sm:px-6">
+                 <div class="text-center mb-10 md:mb-12">
+                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Novidades</span>
+                     <div class="section-divider"></div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                        Filmes em Cartaz
+                    </h2>
+                 </div>
+                 <div class="swiper-container swiper-movies-now-playing">
+                     <div class="swiper-wrapper" id="now-playing-movies-container">
+                         <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                     </div>
+                     <div class="swiper-button-next"></div>
+                     <div class="swiper-button-prev"></div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="popular-movies" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+            <div class="container mx-auto px-4 sm:px-6">
+                 <div class="text-center mb-10 md:mb-12">
+                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Tendências</span>
+                      <div class="section-divider"></div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                        Filmes Populares
+                    </h2>
+                 </div>
+                 <div class="swiper-container swiper-movies-popular">
+                     <div class="swiper-wrapper" id="popular-movies-container">
+                         <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                     </div>
+                     <div class="swiper-button-next"></div>
+                     <div class="swiper-button-prev"></div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="upcoming-movies" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+            <div class="container mx-auto px-4 sm:px-6">
+                 <div class="text-center mb-10 md:mb-12">
+                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Aguarde</span>
+                     <div class="section-divider"></div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                        Próximos Lançamentos
+                    </h2>
+                 </div>
+                 <div class="swiper-container swiper-movies-upcoming">
+                     <div class="swiper-wrapper" id="upcoming-movies-container">
+                         <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                     </div>
+                     <div class="swiper-button-next"></div>
+                     <div class="swiper-button-prev"></div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="top-rated-movies" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+            <div class="container mx-auto px-4 sm:px-6">
+                 <div class="text-center mb-10 md:mb-12">
+                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Os Favoritos</span>
+                      <div class="section-divider"></div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                        Filmes Mais Bem Avaliados
+                    </h2>
+                 </div>
+                 <div class="swiper-container swiper-movies-top-rated">
+                     <div class="swiper-wrapper" id="top-rated-movies-container">
+                         <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                     </div>
+                     <div class="swiper-button-next"></div>
+                     <div class="swiper-button-prev"></div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="top-rated-tv" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="text-center mb-10 md:mb-12">
+                    <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Maratonar</span>
+                    <div class="section-divider"></div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                        Séries Mais Bem Avaliadas
+                    </h2>
+                </div>
+                <div class="swiper-container swiper-tv-top-rated">
+                    <div class="swiper-wrapper" id="top-rated-tv-container">
+                        <div class="swiper-slide text-center p-4 text-nexus-gray dark:text-nexus-dark-text">Carregando...</div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12 md:mb-16">
+                    <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Por que NexusStreaming?</span>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                        Tudo que Você Ama, em um Só Lugar
+                    </h2>
+                    <p class="text-base sm:text-lg text-nexus-gray dark:text-nexus-dark-text mt-4 md:mt-5 max-w-xl md:max-w-2xl mx-auto">
+                        Descubra uma experiência de streaming sem igual.
                     </p>
                 </div>
-
-                <div>
-                    <h5 class="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Navegação</h5>
-                    <ul class="space-y-2 text-xs sm:text-sm">
-                        <li><a href="#recursos" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Recursos</a></li>
-                        <li><a href="#porque-nexus" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Por que Nexus?</a></li>
-                        <li><a href="#planos" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Planos</a></li>
-                        <li><a href="#faq" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h5 class="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Empresa</h5>
-                    <ul class="space-y-2 text-xs sm:text-sm">
-                        <li><a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Sobre Nós</a></li>
-                        <li><a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Blog</a></li>
-                        <li><a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Carreiras</a></li>
-                        <li><a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Contato</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h5 class="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Suporte</h5>
-                    <ul class="space-y-2 text-xs sm:text-sm">
-                        <li><a href="#faq" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Ajuda / FAQ</a></li>
-                        <li><a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Status do Serviço</a></li>
-                        <li><a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Fale Conosco</a></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <div class="flex flex-col-reverse sm:flex-row justify-between items-center border-t border-gray-700/50 pt-8 sm:pt-10">
-                 <div class="text-xs text-center sm:text-left mt-6 sm:mt-0">
-                    <p class="mb-2">&copy; <span id="current-year"></span> <span class="text-sky-500 font-medium">Nexus<span class="font-light">Streaming</span></span>. Todos os direitos reservados.</p>
-                    <div class="space-x-3">
-                        <a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Termos de Uso</a>
-                        <span>|</span>
-                        <a href="#" class="hover:text-sky-400 transition duration-300 focus-visible-ring-inner rounded p-0.5">Política de Privacidade</a>
-                    </div>
-                </div>
-                 <div class="mb-6 sm:mb-0">
-                     <p class="text-sm sm:text-base font-semibold text-white mb-2 text-center sm:text-left">Siga-nos</p>
-                     <div class="flex space-x-4 sm:space-x-5 justify-center sm:justify-start">
-                         <a href="#" aria-label="Facebook" class="text-gray-400 hover:text-sky-400 transition duration-300 focus-visible-ring rounded-full p-1">
-                             <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12Z"/></svg>
-                         </a>
-                         <a href="#" aria-label="Instagram" class="text-gray-400 hover:text-sky-400 transition duration-300 focus-visible-ring rounded-full p-1">
-                              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.315 2.34a.75.75 0 0 1 .75.75V5.25h-.006a7.5 7.5 0 1 0 0 13.5h.006v2.16a.75.75 0 1 1-1.5 0V18.75h-.006a9 9 0 1 1 0-18h.006v2.16a.75.75 0 0 1 .75-.75ZM12.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Zm-1.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm4.508-2.453a.75.75 0 1 1-1.06 1.061.75.75 0 0 1 1.06-1.06Z" clip-rule="evenodd"/></svg>
-                         </a>
-                         <a href="#" aria-label="Twitter / X" class="text-gray-400 hover:text-sky-400 transition duration-300 focus-visible-ring rounded-full p-1">
-                             <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                         </a>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                     <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
+                         <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                             <svg class="w-6 h-6 md:w-7 md:h-7 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                         </div>
+                         <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Assista Onde Quiser</h3>
+                         <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
+                              Acesse em sua TV, computador, tablet ou smartphone. Leve a NexusStreaming com você para todo lugar.
+                         </p>
+                     </div>
+                     <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
+                         <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                               <svg class="w-6 h-6 md:w-7 md:h-7 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                         </div>
+                         <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Downloads Offline</h3>
+                         <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
+                             Baixe seus títulos favoritos para assistir mesmo sem conexão com a internet. Perfeito para viagens!
+                         </p>
+                     </div>
+                     <div class="bg-nexus-light dark:bg-nexus-stream-dark p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1">
+                         <div class="text-nexus-blue mb-4 md:mb-5 inline-flex items-center justify-center p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                             <svg class="w-6 h-6 md:w-7 md:h-7 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M12 10a4 4 0 110-5.292A4 4 0 0112 10z"></path></svg>
+                         </div>
+                         <h3 class="text-lg sm:text-xl font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 md:mb-3">Múltiplos Perfis</h3>
+                         <p class="text-nexus-gray dark:text-nexus-dark-text text-sm leading-relaxed">
+                             Crie perfis individuais para cada membro da família, com recomendações personalizadas para cada um.
+                         </p>
                      </div>
                  </div>
             </div>
+        </section>
+
+        <section id="pricing" class="py-16 md:py-24 bg-nexus-light dark:bg-nexus-stream-dark">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="text-center mb-12 md:mb-16">
+                    <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Escolha Seu Acesso</span>
+                     <div class="section-divider"></div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                        Planos Flexíveis para Você
+                    </h2>
+                    <p class="text-base sm:text-lg text-nexus-gray dark:text-nexus-dark-text mt-4 md:mt-5 max-w-xl md:max-w-2xl mx-auto">
+                        Selecione a opção que melhor se adapta à sua forma de assistir, com a economia que você merece.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-center text-nexus-heading dark:text-nexus-dark-heading mb-8">Planos com <span class="text-nexus-blue">1 Acesso</span> Simultâneo</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Mensal</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 29,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">/mês</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>1 Crédito</li><li>Cancele quando quiser</li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                             <div class="pricing-card featured bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border-2 flex flex-col text-center relative">
+                                  <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-nexus-blue text-white text-xs font-semibold px-4 py-1 rounded-full uppercase tracking-wider">Popular</span>
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 mt-4">Trimestral</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 69,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 3 meses (≈ R$23,30/mês)</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>3 Créditos</li><li>Economize <span class="font-medium">22%</span></li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Semestral</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 129,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 6 meses (≈ R$21,65/mês)</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>6 Créditos</li><li>Economize <span class="font-medium">27%</span></li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Anual</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 219,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">por ano (≈ R$18,32/mês)</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>1 Acesso Simultâneo</li><li>12 Créditos</li><li>Economize <span class="font-medium">38%</span></li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-center text-nexus-heading dark:text-nexus-dark-heading mb-8">Planos com <span class="text-nexus-blue">2 Acessos</span> Simultâneos</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Mensal</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 39,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">/mês</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>2 Créditos</li><li>Cancele quando quiser</li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Trimestral</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 99,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 3 meses (≈ R$33,30/mês)</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>6 Créditos</li><li>Economize <span class="font-medium">16%</span></li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                              <div class="pricing-card featured bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border-2 flex flex-col text-center relative">
+                                 <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-nexus-blue text-white text-xs font-semibold px-4 py-1 rounded-full uppercase tracking-wider">Popular</span>
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2 mt-4">Semestral</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 179,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">a cada 6 meses (≈ R$29,98/mês)</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>12 Créditos</li><li>Economize <span class="font-medium">25%</span></li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                             <div class="pricing-card bg-white dark:bg-nexus-stream-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col text-center">
+                                 <h4 class="text-lg font-semibold text-nexus-heading dark:text-nexus-dark-heading mb-2">Anual</h4>
+                                 <p class="text-3xl font-bold text-nexus-blue mb-1">R$ 299,90</p>
+                                 <p class="text-xs text-nexus-gray dark:text-gray-400 mb-4">por ano (≈ R$24,99/mês)</p>
+                                 <ul class="text-sm text-nexus-gray dark:text-nexus-dark-text space-y-2 mb-6 flex-grow text-left pl-4 list-disc list-inside"><li>2 Acessos Simultâneos</li><li>24 Créditos</li><li>Economize <span class="font-medium">37%</span></li></ul>
+                                 <a href="#" class="w-full bg-nexus-blue text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-300 mt-auto">Assinar Agora</a>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                 <p class="text-xs text-center text-nexus-gray dark:text-gray-500 mt-12">
+                     * Os custos e lucros são baseados nos valores fornecidos. Os preços sugeridos podem ser ajustados.
+                 </p>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 md:py-24 bg-white dark:bg-nexus-stream-card">
+             <div class="container mx-auto px-4 sm:px-6">
+                 <div class="text-center mb-12 md:mb-16">
+                     <span class="text-nexus-blue font-semibold text-sm uppercase tracking-wider mb-2 inline-block">Dúvidas?</span>
+                      <div class="section-divider"></div>
+                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-nexus-heading dark:text-nexus-dark-heading mt-1">
+                          Fale Conosco!
+                     </h2>
+                     <p class="text-base sm:text-lg text-nexus-gray dark:text-nexus-dark-text mt-4 md:mt-5 max-w-xl md:max-w-2xl mx-auto">
+                           Nossa equipe está pronta para ajudar você a escolher o melhor plano ou responder a qualquer pergunta.
+                     </p>
+                      <div class="mt-8">
+                           <a href="https://wa.me/5511957461222?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20a%20NexusStreaming." target="_blank" class="bg-green-500 text-white px-8 py-3 rounded-full text-base font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center">
+                                <svg fill="currentColor" viewBox="0 0 16 16" class="w-5 h-5 mr-3"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/> </svg>
+                                Conversar via WhatsApp
+                           </a>
+                      </div>
+                 </div>
+             </div>
+        </section>
+    </main>
+
+    <footer class="bg-nexus-light dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+         <div class="container mx-auto px-4 sm:px-6 py-12">
+             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                 <div class="sm:col-span-2">
+                     <a href="#hero" class="text-lg font-bold text-nexus-blue dark:text-white">NexusStreaming</a>
+                     <p class="mt-3 text-sm text-nexus-gray dark:text-nexus-dark-text leading-relaxed max-w-xs">
+                           Sua dose diária de entretenimento. Filmes, séries e muito mais, sempre ao seu alcance.
+                     </p>
+                      <div class="flex space-x-5 mt-5">
+                          <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Facebook"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+                          <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Instagram"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.667 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07-3.204 0-3.584-.012-4.85-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.646-.07-4.85 0-3.204.013-3.583.07-4.85.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.28-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.28.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.28-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                          <a href="#" class="text-gray-400 hover:text-nexus-blue dark:hover:text-white transition" aria-label="Twitter"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.727-.666 1.581-.666 2.477 0 1.61.823 3.027 2.071 3.863-.766-.024-1.485-.234-2.11-.583v.06c0 2.256 1.605 4.14 3.737 4.568-.39.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.598 1.846 2.339 3.197 4.401 3.235-1.593 1.246-3.604 1.991-5.789 1.991-.376 0-.746-.022-1.112-.065 2.062 1.323 4.51 2.094 7.14 2.094 8.57 0 13.255-7.098 13.255-13.254 0-.202-.005-.403-.014-.602.91-.658 1.7-1.47 2.323-2.404z"/></svg></a>
+                      </div>
+                 </div>
+                 <div>
+                     <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Navegação</h3>
+                     <ul class="mt-4 space-y-2.5">
+                         <li><a href="#hero" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Início</a></li>
+                         <li><a href="#now-playing-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Em Cartaz</a></li>
+                         <li><a href="#popular-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Populares</a></li>
+                         <li><a href="#upcoming-movies" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Em Breve</a></li>
+                         <li><a href="#pricing" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Planos</a></li>
+                         <li><a href="#features" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Recursos</a></li>
+                         <li><a href="#contact" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Contato</a></li>
+                     </ul>
+                 </div>
+                  <div>
+                      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Ajuda</h3>
+                      <ul class="mt-4 space-y-2.5">
+                          <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Central de Ajuda</a></li>
+                          <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Dispositivos Compatíveis</a></li>
+                           <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Perguntas Frequentes</a></li>
+                      </ul>
+                  </div>
+                 <div>
+                     <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">Legal</h3>
+                     <ul class="mt-4 space-y-2.5">
+                         <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Privacidade</a></li>
+                         <li><a href="#" class="text-sm text-nexus-gray dark:text-nexus-dark-text hover:text-nexus-blue dark:hover:text-white transition-colors duration-200">Termos de Uso</a></li>
+                     </ul>
+                 </div>
+             </div>
+              <div class="mt-10 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-6 md:pt-8 text-center">
+                  <p class="text-xs text-nexus-gray dark:text-gray-400">© 2025 NexusStreaming (Parte da Nexus Tecnologia CNPJ: 56.309.584/0001-36). Todos os direitos reservados.</p>
+              </div>
+         </div>
+     </footer>
+
+    <div id="chat-widget" class="bg-chat-bg-light dark:bg-chat-bg-dark rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+        <div class="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+             <div class="flex items-center space-x-2">
+                 <svg class="w-5 h-5 text-nexus-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.04 8.25-7.5 8.25a9.75 9.75 0 01-3.857-.777l-3.39 1.13a.75.75 0 01-.94-1.003l1.13-3.39A9.75 9.75 0 013 12c0-4.556 3.04-8.25 7.5-8.25s7.5 3.694 7.5 8.25z" /></svg>
+                 <h4 class="font-semibold text-nexus-heading dark:text-nexus-dark-heading text-sm">Precisa de Ajuda?</h4>
+             </div>
+             <button id="close-chat" aria-label="Fechar chat" class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600">
+                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+             </button>
+         </div>
+         <div class="p-4 space-y-3 flex-grow">
+             <p id="chat-greeting" class="text-sm text-nexus-gray dark:text-nexus-dark-text">Carregando...</p>
+             <div id="chat-options" class="space-y-2">
+                 <button class="chat-option w-full text-left text-sm px-3 py-2 bg-chat-btn-bg-light dark:bg-chat-btn-bg-dark hover:bg-chat-btn-hover-bg-light dark:hover:bg-chat-btn-hover-bg-dark rounded-lg transition-colors text-nexus-heading dark:text-nexus-dark-text flex items-center space-x-2" data-message="Qual a diferença entre os planos?"> <span>Diferença entre planos</span> </button>
+                 <button class="chat-option w-full text-left text-sm px-3 py-2 bg-chat-btn-bg-light dark:bg-chat-btn-bg-dark hover:bg-chat-btn-hover-bg-light dark:hover:bg-chat-btn-hover-bg-dark rounded-lg transition-colors text-nexus-heading dark:text-nexus-dark-text flex items-center space-x-2" data-message="Como funciona o cancelamento?"> <span>Como cancelar?</span> </button>
+                 <button class="chat-option w-full text-left text-sm px-3 py-2 bg-chat-btn-bg-light dark:bg-chat-btn-bg-dark hover:bg-chat-btn-hover-bg-light dark:hover:bg-chat-btn-hover-bg-dark rounded-lg transition-colors text-nexus-heading dark:text-nexus-dark-text flex items-center space-x-2" data-message="Quero falar com um atendente."> <span>Falar com atendente</span> </button>
+             </div>
+         </div>
+         <div class="bg-gray-50 dark:bg-gray-800/50 px-4 py-2 text-center text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700"> Clique para iniciar via <span class="font-medium">WhatsApp</span> </div>
+     </div>
+    <button id="whatsapp-button" aria-label="Abrir chat" class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 dark:focus:ring-offset-nexus-dark">
+        <svg fill="currentColor" viewBox="0 0 16 16" class="w-6 h-6"> <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/> </svg>
+    </button>
+
+    <div id="video-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[1001] hidden p-4">
+        <div class="bg-nexus-stream-card dark:bg-nexus-stream-dark rounded-xl shadow-2xl w-full max-w-3xl aspect-video relative overflow-hidden border border-gray-700">
+            <button id="close-modal" class="absolute top-2 right-3 text-white bg-black/40 hover:bg-black/70 rounded-full p-1.5 transition-colors z-10" aria-label="Fechar Vídeo">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div id="video-player-container" class="w-full h-full">
+                 <iframe id="video-iframe" class="w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div id="modal-message" class="absolute inset-0 flex justify-center items-center text-white bg-nexus-stream-card dark:bg-nexus-stream-dark hidden">
+                <p>Carregando trailer...</p>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
-        // --- Utility Functions ---
-        function updateFooterYear() {
-            const yearSpan = document.getElementById('current-year');
-            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+        // --- Dark Mode Toggle ---
+        function toggleDarkMode() {
+            const htmlElement = document.documentElement;
+            const isDarkMode = htmlElement.classList.contains('dark');
+            if (isDarkMode) { htmlElement.classList.remove('dark'); localStorage.theme = 'light'; }
+            else { htmlElement.classList.add('dark'); localStorage.theme = 'dark'; }
         }
 
-        function setupSmoothScroll() {
-            const header = document.getElementById('main-header');
-            const headerHeight = header ? header.offsetHeight : 70; // Fallback height
-            document.documentElement.style.scrollPaddingTop = `${headerHeight}px`; // Dynamic scroll padding
+        // --- Mobile Menu Script ---
+        (() => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const navLinksContainer = document.querySelector('.hidden.md\\:flex');
+            const mobileMenuContainer = document.getElementById('mobile-menu-container');
+            if (!mobileMenuButton || !navLinksContainer || !mobileMenuContainer) return;
 
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    const href = this.getAttribute('href');
-                    const targetElement = href && href !== "#" ? document.querySelector(href) : null;
+            let mobileMenuOpen = false;
+            const mobileNavContent = navLinksContainer.cloneNode(true);
+            mobileNavContent.classList.remove('hidden', 'md:flex', 'space-x-6', 'lg:space-x-8', 'items-center');
+            mobileNavContent.classList.add('flex', 'flex-col', 'py-4', 'px-4', 'bg-white', 'dark:bg-gray-800', 'shadow-lg');
 
-                    if (targetElement) {
-                        e.preventDefault();
-                        // No need to calculate offset manually due to scroll-padding-top
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-
-                        // Close mobile menu if open after clicking a link
-                        const mobileMenu = document.getElementById('mobile-menu');
-                        const menuButton = document.getElementById('mobile-menu-button');
-                        if (mobileMenu && mobileMenu.classList.contains('active')) {
-                            toggleMobileMenu(mobileMenu, menuButton);
-                        }
-                    }
-                });
-            });
-        }
-
-        // --- UPDATED: Plan Button Function ---
-        function setupPlanButtons() {
-            const planButtons = document.querySelectorAll('.choose-plan-button');
-            planButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    event.preventDefault(); // Prevent default anchor behavior
-                    const planCard = button.closest('.plan-card');
-                    const planNameElement = planCard?.querySelector('h3'); // Use optional chaining
-                    // Default to 'Desconhecido' if plan name isn't found
-                    const planName = planNameElement ? planNameElement.textContent.trim() : 'Desconhecido';
-                    // Encode the plan name to safely include it in a URL
-                    const encodedPlanName = encodeURIComponent(planName);
-                    // **ACTUAL REDIRECTION**
-                    window.location.href = `payment.html?plan=${encodedPlanName}`;
-                });
-            });
-         }
-
-         // --- Swiper Initializations ---
-         function initializeMainSwiper() {
-            new Swiper('.main-swiper-container', {
-                loop: true,
-                slidesPerView: 'auto',
-                centeredSlides: true,
-                spaceBetween: 15, // Reduced space for mobile
-                grabCursor: true,
-                autoplay: {
-                    delay: 4000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                },
-                pagination: {
-                    el: '.main-swiper-container .swiper-pagination',
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: '.main-swiper-container .swiper-button-next',
-                    prevEl: '.main-swiper-container .swiper-button-prev',
-                },
-                breakpoints: {
-                    640: { spaceBetween: 20 }, // Adjust space for sm screens
-                    1024: { spaceBetween: 30 } // Adjust space for lg screens
+            mobileNavContent.querySelectorAll('a, button').forEach(node => {
+                node.classList.add('py-2', 'px-2', 'rounded-md', 'text-left');
+                node.classList.remove('ml-4', 'p-1');
+                if (node.tagName === 'A' && node.classList.contains('bg-gradient-to-r')) {
+                     node.classList.remove('px-5','py-2','lg:px-6','rounded-full','shadow','hover:shadow-md','transform','hover:scale-105');
+                     node.classList.add('w-full', 'text-center', 'py-2.5', 'mt-2');
+                } else if (node.tagName === 'A') {
+                     node.classList.add('w-full');
+                } else if (node.tagName === 'BUTTON' && node.getAttribute('onclick') === 'toggleDarkMode()') {
+                    const btnHtml = node.innerHTML;
+                    node.innerHTML = `<span>Alternar Tema</span>` + btnHtml;
+                    node.classList.add('flex', 'items-center', 'justify-between', 'w-full');
                 }
             });
-        }
 
-        function initializeHeroSwiper() {
-            new Swiper('.hero-swiper-container', {
-                loop: true,
-                slidesPerView: 'auto',
-                spaceBetween: 15, // Reduced space for mobile
-                centeredSlides: true,
-                grabCursor: true,
-                autoplay: {
-                    delay: 2500,
-                    disableOnInteraction: false,
-                },
-                pagination: false,
-                navigation: false,
-                breakpoints: {
-                    640: { spaceBetween: 20 },
-                    1024: { spaceBetween: 25 }
-                }
+            while (mobileMenuContainer.firstChild) mobileMenuContainer.removeChild(mobileMenuContainer.firstChild);
+            mobileMenuContainer.appendChild(mobileNavContent);
+            mobileMenuContainer.classList.add('hidden', 'transition-opacity', 'duration-300', 'ease-in-out');
+            mobileMenuContainer.style.opacity = 0;
+
+            const toggleMenu = () => {
+                mobileMenuOpen = !mobileMenuOpen;
+                mobileMenuContainer.classList.toggle('hidden');
+                requestAnimationFrame(() => { mobileMenuContainer.style.opacity = mobileMenuOpen ? 1 : 0; });
+                mobileMenuButton.innerHTML = mobileMenuOpen
+                ? `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`
+                : `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>`;
+            };
+
+            mobileMenuButton.addEventListener('click', toggleMenu);
+
+            mobileNavContent.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => { if (mobileMenuOpen) toggleMenu(); });
             });
-        }
+        })();
 
-        // --- Hero Background Rotation ---
-        const heroBackgroundImages = [
-            'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2070&q=80', // Code / Tech
-            'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=2070&q=80', // Retro Gaming
-            'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=2070&q=80', // Cinema
-            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=2070&q=80', // Concert / Music
-            'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1974&q=80'  // Streaming Logos
-        ];
-        let currentBgIndex = 0;
-        let backgroundIntervalId = null;
+        // --- Chat Widget Script ---
+        (() => {
+            const chatWidget = document.getElementById('chat-widget');
+            const closeChatButton = document.getElementById('close-chat');
+            const greetingElement = document.getElementById('chat-greeting');
+            const chatOptions = document.querySelectorAll('.chat-option');
+            const whatsappButton = document.getElementById('whatsapp-button');
+            if (!chatWidget || !closeChatButton || !greetingElement || !whatsappButton) return;
 
-        function changeHeroBackground() {
-            const heroSectionElement = document.querySelector('.hero-section');
-            if (!heroSectionElement || heroBackgroundImages.length === 0) return;
+            const whatsappNumber = '5511957461222';
+            const currentHour = new Date().getHours();
+            let greeting = 'Olá! 👋 Como podemos ajudar?';
+            if (currentHour >= 5 && currentHour < 12) greeting = 'Bom dia! ☀️ Como podemos ajudar?';
+            else if (currentHour >= 12 && currentHour < 18) greeting = 'Boa tarde! 👋 Como podemos ajudar?';
+            else greeting = 'Boa noite! 🌙 Como podemos ajudar?';
+            greetingElement.textContent = greeting;
 
-            currentBgIndex = (currentBgIndex + 1) % heroBackgroundImages.length;
-            const nextImageUrl = heroBackgroundImages[currentBgIndex];
+            let chatTimeout;
+            const showWhatsappButton = () => { whatsappButton.classList.remove('hidden'); whatsappButton.classList.add('visible'); };
+            const hideWhatsappButton = () => { whatsappButton.classList.remove('visible'); whatsappButton.classList.add('hidden'); };
+            const showChatWidget = () => { hideWhatsappButton(); chatWidget.classList.add('visible'); };
+            const hideChatWidget = () => { chatWidget.classList.remove('visible'); showWhatsappButton(); };
+            setTimeout(() => { if (!chatWidget.classList.contains('visible')) showWhatsappButton(); }, 2500);
+            closeChatButton.addEventListener('click', () => { hideChatWidget(); clearTimeout(chatTimeout); });
+            whatsappButton.addEventListener('click', showChatWidget);
+            chatOptions.forEach(button => {
+                button.addEventListener('click', () => {
+                    const message = button.getAttribute('data-message');
+                    if (message) window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                });
+            });
+        })();
 
-            // Preload the next image
-            const img = new Image();
-            img.src = nextImageUrl;
-            img.onload = () => {
-                // Apply the new background once loaded
-                 heroSectionElement.style.backgroundImage = `linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.85) 70%, var(--nexus-dark-bg) 100%), url('${nextImageUrl}')`;
-            }
-             img.onerror = () => {
-                 console.error(`Failed to load background image: ${nextImageUrl}`);
-             }
-        }
+        // --- TMDb & Swiper Script ---
+        $(document).ready(function() {
+            const tmdbApiKey = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMmM1MjkyYThiMDg2YjI5NjM4Y2QyODFlM2MyNGIwMSIsIm5iZiI6MTcxNjk0OTU3Ny43MTgwMDAyLCJzdWIiOiI2NjU2OTI0OTA3YWJhZDkwM2ZhOGE5OWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.K_SwYlQ-mYAG9-NW1kmB2_xRkdUXnHAnhhrok5_3kHQ';
+            const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+            const $videoModal = $('#video-modal'), $closeModalButton = $('#close-modal'), $videoIframe = $('#video-iframe'), $modalMessage = $('#modal-message');
 
-        function preloadHeroImages() {
-             heroBackgroundImages.forEach(src => {
-                 const img = new Image();
-                 img.src = src;
-             });
-        }
+            function openModal() { $videoModal.removeClass('hidden').css('opacity', 0).animate({ opacity: 1 }, 300); }
+            function closeModal() { $videoModal.animate({ opacity: 0 }, 300, function() { $(this).addClass('hidden'); $videoIframe.attr('src', ''); $modalMessage.addClass('hidden'); }); }
+            $closeModalButton.on('click', closeModal);
+            $videoModal.on('click', function(event) { if ($(event.target).is($videoModal)) closeModal(); });
 
-         // --- Mobile Menu Logic ---
-        function toggleMobileMenu(menu, button) {
-             const isOpen = menu.classList.toggle('active');
-             menu.classList.toggle('hidden');
-             button.classList.toggle('active');
-             button.setAttribute('aria-expanded', isOpen.toString());
-
-             // Toggle icons visibility
-             button.querySelector('.hamburger-icon').classList.toggle('hidden', isOpen);
-             button.querySelector('.close-icon').classList.toggle('hidden', !isOpen);
-        }
-
-        function setupMobileMenu() {
-            const menuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-             if (menuButton && mobileMenu) {
-                 menuButton.addEventListener('click', () => {
-                     toggleMobileMenu(mobileMenu, menuButton);
-                 });
-             }
-        }
-
-        // --- DOMContentLoaded Event Listener ---
-        document.addEventListener('DOMContentLoaded', () => {
-            updateFooterYear();
-            initializeMainSwiper();
-            initializeHeroSwiper();
-            setupSmoothScroll(); // Needs to run after header height is known
-            setupPlanButtons(); // Setup the updated plan button logic
-            setupMobileMenu();
-            preloadHeroImages(); // Start preloading other hero images
-
-            // Start background rotation
-            const heroSectionElement = document.querySelector('.hero-section');
-            if (heroSectionElement && heroBackgroundImages.length > 1) {
-                 // Set initial background immediately (already done via inline style/CSS)
-                 if (backgroundIntervalId) clearInterval(backgroundIntervalId);
-                 backgroundIntervalId = setInterval(changeHeroBackground, 7000); // Rotate every 7 seconds
+            function fetchAndShowTrailer(movieId) {
+                const settings = { async: true, crossDomain: true, url: `https://api.themoviedb.org/3/movie/${movieId}/videos?language=pt-BR,en-US`, method: 'GET', headers: { accept: 'application/json', Authorization: tmdbApiKey } };
+                $videoIframe.attr('src', ''); $modalMessage.removeClass('hidden').text('Carregando trailer...'); openModal();
+                $.ajax(settings).done(function (response) {
+                    const videos = response.results; let trailerKey = null;
+                    const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && (v.official === true || videos.length === 1));
+                    trailerKey = trailer?.key || videos.find(v => v.site === 'YouTube' && v.type === 'Trailer')?.key || videos.find(v => v.site === 'YouTube')?.key;
+                    if (trailerKey) { $videoIframe.attr('src', `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`); $modalMessage.addClass('hidden'); }
+                    else { $modalMessage.text('Trailer não encontrado.'); setTimeout(closeModal, 2000); }
+                }).fail(function() { $modalMessage.text('Erro ao buscar o trailer.'); setTimeout(closeModal, 2000); });
             }
 
-            // Recalculate scroll padding if window resizes (header height might change)
-            window.addEventListener('resize', () => {
-                 const header = document.getElementById('main-header');
-                 const headerHeight = header ? header.offsetHeight : 70;
-                 document.documentElement.style.scrollPaddingTop = `${headerHeight}px`;
-            });
+            function createCard(item, type) {
+                const title = type === 'tv' ? item.name : item.title, posterPath = item.poster_path, rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A', itemId = item.id;
+                if (!posterPath) return '';
+                const clickableClass = type === 'movie' ? 'movie-card-clickable' : '';
+                const dataIdAttr = type === 'movie' ? `data-id="${itemId}"` : '';
+                const cursorStyle = type === 'movie' ? 'pointer' : 'default';
+                return `
+                    <div class="swiper-slide">
+                        <div class="show-card ${clickableClass}" ${dataIdAttr} style="cursor: ${cursorStyle};">
+                            <img src="${imageBaseUrl}${posterPath}" alt="${title}">
+                            <div class="show-info">
+                                <h4 class="text-nexus-heading dark:text-nexus-dark-heading" title="${title}">${title}</h4>
+                                <div class="rating text-nexus-gray dark:text-gray-400">
+                                    <svg class="w-3.5 h-3.5 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z"></path></svg>
+                                    <span>${rating}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            function initSwiper(selector) { return new Swiper(selector, { slidesPerView: 2, spaceBetween: 15, navigation: { nextEl: `${selector} .swiper-button-next`, prevEl: `${selector} .swiper-button-prev`, }, breakpoints: { 640: { slidesPerView: 3, spaceBetween: 20 }, 768: { slidesPerView: 4, spaceBetween: 25 }, 1024: { slidesPerView: 5, spaceBetween: 30 }, 1280: { slidesPerView: 6, spaceBetween: 30 }, } }); }
+
+            function loadAndInitSwiper(endpoint, containerId, swiperSelector, type) {
+                const container = $(`#${containerId}`), settings = { async: true, crossDomain: true, url: `https://api.themoviedb.org/3/${endpoint}?language=pt-BR&page=1`, method: 'GET', headers: { accept: 'application/json', Authorization: tmdbApiKey } };
+                $.ajax(settings).done(function (response) {
+                    container.empty(); const items = response.results;
+                    if (items && items.length > 0) { items.forEach(item => { container.append(createCard(item, type)); }); initSwiper(swiperSelector); }
+                    else { container.html('<p class="swiper-slide text-center w-full">Nenhum item encontrado.</p>'); }
+                }).fail(function() { container.html('<p class="swiper-slide text-center w-full text-red-500">Erro ao carregar.</p>'); });
+            }
+
+            // --- Carregar Conteúdo ---
+            loadAndInitSwiper('movie/now_playing', 'now-playing-movies-container', '.swiper-movies-now-playing', 'movie');
+            loadAndInitSwiper('movie/popular', 'popular-movies-container', '.swiper-movies-popular', 'movie');
+            loadAndInitSwiper('movie/upcoming', 'upcoming-movies-container', '.swiper-movies-upcoming', 'movie');
+            loadAndInitSwiper('movie/top_rated', 'top-rated-movies-container', '.swiper-movies-top-rated', 'movie');
+            loadAndInitSwiper('tv/top_rated', 'top-rated-tv-container', '.swiper-tv-top-rated', 'tv');
+
+            // --- Evento de Clique nos Cards de Filme ---
+            $('.container').on('click', '.movie-card-clickable', function() { const movieId = $(this).data('id'); if (movieId) fetchAndShowTrailer(movieId); });
         });
     </script>
 
